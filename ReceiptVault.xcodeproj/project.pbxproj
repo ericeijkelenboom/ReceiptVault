@@ -1,0 +1,590 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 63;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2196D0B5F7AD735D8515B873 /* SheetsLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A120344204560F2B6021FCC /* SheetsLogger.swift */; };
+		3376210519D86B6DD8161161 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D820FE50613A28A81997B9 /* ContentView.swift */; };
+		40CDB3A35DE34D20086F3493 /* ShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = E3F02C7772EA7B5E87DC03C9 /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		4EB830A006B8FA7DAD787239 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 3A7A4DA4124E98AECC47BD57 /* GoogleSignIn */; };
+		4F0D76B214B5FD9062D2F788 /* ReceiptParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7372227DFF1E12017F3F220C /* ReceiptParser.swift */; };
+		6530EF97917494D8B6F78DE1 /* LineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAFBFBCCD86CCBEAE272E859 /* LineItem.swift */; };
+		6F9A582EF40AE30E1FCDAB5D /* DriveUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A6AC2EEBDDDD2E5FC52C71 /* DriveUploader.swift */; };
+		723533886753F8F0EA5B45D7 /* ReceiptData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B044939A1194EC2FF3D1EE3 /* ReceiptData.swift */; };
+		8D0EDA03F6B17168C37D6B6A /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = DDD87772512C9363FBBF275B /* GoogleSignInSwift */; };
+		99526B8C9A083433A83A6BB0 /* PDFBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FC25E33DC3E51944B46AB1 /* PDFBuilder.swift */; };
+		9C7FCE8AADB7DA1F64F21A86 /* ReceiptVaultError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB09E8BBFD7F92810D878D4F /* ReceiptVaultError.swift */; };
+		AD0F006DAD7D0E642CE6078C /* ProcessingQueueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836315DD7D3B746D8C3BD9A7 /* ProcessingQueueView.swift */; };
+		D8B56E6D35E0AC39E7E51A1E /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADC10ACF69B8CB509BB095E /* ShareViewController.swift */; };
+		E64698C823ADBB60C53A1647 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33984DD05D73275FAA351925 /* SettingsView.swift */; };
+		EA3345E79DC3E14EFAF31969 /* ReceiptsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0F6B7A1B27504F3A01D915 /* ReceiptsView.swift */; };
+		F17E75CE9A071C7E142B5D7A /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35E17D7AB0EA911A1D74291F /* AuthManager.swift */; };
+		F5910914E24EE3DDFAA29513 /* ReceiptVaultApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D641B1F69B92F53FE251AD6 /* ReceiptVaultApp.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		0E01DEF84E13BB355AF54E1A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3242E86D5829BB5622DA3B84 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 700412307D392E376B7B6B5A;
+			remoteInfo = ShareExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		EBFFC39999276D1C674D845C /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				40CDB3A35DE34D20086F3493 /* ShareExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		18D820FE50613A28A81997B9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		267E1423D0EBF95D6ED5C4F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		33984DD05D73275FAA351925 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		3574448459825C316DD2D166 /* ReceiptVault.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReceiptVault.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		35E17D7AB0EA911A1D74291F /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
+		58A6AC2EEBDDDD2E5FC52C71 /* DriveUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriveUploader.swift; sourceTree = "<group>"; };
+		6B044939A1194EC2FF3D1EE3 /* ReceiptData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptData.swift; sourceTree = "<group>"; };
+		7372227DFF1E12017F3F220C /* ReceiptParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptParser.swift; sourceTree = "<group>"; };
+		836315DD7D3B746D8C3BD9A7 /* ProcessingQueueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessingQueueView.swift; sourceTree = "<group>"; };
+		8A120344204560F2B6021FCC /* SheetsLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetsLogger.swift; sourceTree = "<group>"; };
+		8D641B1F69B92F53FE251AD6 /* ReceiptVaultApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptVaultApp.swift; sourceTree = "<group>"; };
+		C1859798172C280AC41D2CDF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C27366E9E4D644452F0BE5A1 /* ShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareExtension.entitlements; sourceTree = "<group>"; };
+		CB09E8BBFD7F92810D878D4F /* ReceiptVaultError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptVaultError.swift; sourceTree = "<group>"; };
+		D1AA88EA9A576C95207E9BA2 /* ReceiptVault.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ReceiptVault.entitlements; sourceTree = "<group>"; };
+		DADC10ACF69B8CB509BB095E /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+		E3F02C7772EA7B5E87DC03C9 /* ShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		E5FC25E33DC3E51944B46AB1 /* PDFBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFBuilder.swift; sourceTree = "<group>"; };
+		EAFBFBCCD86CCBEAE272E859 /* LineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineItem.swift; sourceTree = "<group>"; };
+		FA0F6B7A1B27504F3A01D915 /* ReceiptsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptsView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		84F3BA4FC64C245EC8C135FE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4EB830A006B8FA7DAD787239 /* GoogleSignIn in Frameworks */,
+				8D0EDA03F6B17168C37D6B6A /* GoogleSignInSwift in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0583E0B8574E6D4126260FBE /* SheetsLogger */ = {
+			isa = PBXGroup;
+			children = (
+				8A120344204560F2B6021FCC /* SheetsLogger.swift */,
+			);
+			path = SheetsLogger;
+			sourceTree = "<group>";
+		};
+		09F72DDC73076A987078D0D2 /* ReceiptVault */ = {
+			isa = PBXGroup;
+			children = (
+				C1859798172C280AC41D2CDF /* Info.plist */,
+				D1AA88EA9A576C95207E9BA2 /* ReceiptVault.entitlements */,
+				545183937308D99275345AF2 /* App */,
+				C9AC6985B8439DE22B5E9FBE /* Sources */,
+				83E39BB009676231DAC6178E /* Views */,
+			);
+			path = ReceiptVault;
+			sourceTree = "<group>";
+		};
+		0AF4E5634BBB4342C32E347A /* AuthManager */ = {
+			isa = PBXGroup;
+			children = (
+				35E17D7AB0EA911A1D74291F /* AuthManager.swift */,
+			);
+			path = AuthManager;
+			sourceTree = "<group>";
+		};
+		0F873C48720BC3475BE0AD57 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3574448459825C316DD2D166 /* ReceiptVault.app */,
+				E3F02C7772EA7B5E87DC03C9 /* ShareExtension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		203D0347DC86BD6E7E7E426D /* ShareExtension */ = {
+			isa = PBXGroup;
+			children = (
+				267E1423D0EBF95D6ED5C4F8 /* Info.plist */,
+				C27366E9E4D644452F0BE5A1 /* ShareExtension.entitlements */,
+				DADC10ACF69B8CB509BB095E /* ShareViewController.swift */,
+			);
+			path = ShareExtension;
+			sourceTree = "<group>";
+		};
+		545183937308D99275345AF2 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				18D820FE50613A28A81997B9 /* ContentView.swift */,
+				8D641B1F69B92F53FE251AD6 /* ReceiptVaultApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		6B12F8E5CFA5904002A7135C /* ReceiptParser */ = {
+			isa = PBXGroup;
+			children = (
+				7372227DFF1E12017F3F220C /* ReceiptParser.swift */,
+			);
+			path = ReceiptParser;
+			sourceTree = "<group>";
+		};
+		71CCEFB19C0CB714352D3A04 /* DriveUploader */ = {
+			isa = PBXGroup;
+			children = (
+				58A6AC2EEBDDDD2E5FC52C71 /* DriveUploader.swift */,
+			);
+			path = DriveUploader;
+			sourceTree = "<group>";
+		};
+		83E39BB009676231DAC6178E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				836315DD7D3B746D8C3BD9A7 /* ProcessingQueueView.swift */,
+				FA0F6B7A1B27504F3A01D915 /* ReceiptsView.swift */,
+				33984DD05D73275FAA351925 /* SettingsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		C9AC6985B8439DE22B5E9FBE /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				0AF4E5634BBB4342C32E347A /* AuthManager */,
+				71CCEFB19C0CB714352D3A04 /* DriveUploader */,
+				E4FB489F448A53C030373A78 /* Models */,
+				DB66C8DC9DB65D5F34699923 /* PDFBuilder */,
+				6B12F8E5CFA5904002A7135C /* ReceiptParser */,
+				0583E0B8574E6D4126260FBE /* SheetsLogger */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		DB66C8DC9DB65D5F34699923 /* PDFBuilder */ = {
+			isa = PBXGroup;
+			children = (
+				E5FC25E33DC3E51944B46AB1 /* PDFBuilder.swift */,
+			);
+			path = PDFBuilder;
+			sourceTree = "<group>";
+		};
+		E4FB489F448A53C030373A78 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				EAFBFBCCD86CCBEAE272E859 /* LineItem.swift */,
+				6B044939A1194EC2FF3D1EE3 /* ReceiptData.swift */,
+				CB09E8BBFD7F92810D878D4F /* ReceiptVaultError.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		F7C07AFC7ADD3D6D31450708 = {
+			isa = PBXGroup;
+			children = (
+				09F72DDC73076A987078D0D2 /* ReceiptVault */,
+				203D0347DC86BD6E7E7E426D /* ShareExtension */,
+				0F873C48720BC3475BE0AD57 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2388413BB99D34CE8B69A417 /* ReceiptVault */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 931D5DC3AC7AC961654B38D3 /* Build configuration list for PBXNativeTarget "ReceiptVault" */;
+			buildPhases = (
+				244E965A0AAF717DA723B701 /* Sources */,
+				84F3BA4FC64C245EC8C135FE /* Frameworks */,
+				EBFFC39999276D1C674D845C /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4578CA041F63C51E099FCB0F /* PBXTargetDependency */,
+			);
+			name = ReceiptVault;
+			packageProductDependencies = (
+				3A7A4DA4124E98AECC47BD57 /* GoogleSignIn */,
+				DDD87772512C9363FBBF275B /* GoogleSignInSwift */,
+			);
+			productName = ReceiptVault;
+			productReference = 3574448459825C316DD2D166 /* ReceiptVault.app */;
+			productType = "com.apple.product-type.application";
+		};
+		700412307D392E376B7B6B5A /* ShareExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4734713A4C3EDFC5265FE705 /* Build configuration list for PBXNativeTarget "ShareExtension" */;
+			buildPhases = (
+				6D3E1B5B6DAA1B29AE7C3B09 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ShareExtension;
+			packageProductDependencies = (
+			);
+			productName = ShareExtension;
+			productReference = E3F02C7772EA7B5E87DC03C9 /* ShareExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3242E86D5829BB5622DA3B84 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					2388413BB99D34CE8B69A417 = {
+						ProvisioningStyle = Automatic;
+					};
+					700412307D392E376B7B6B5A = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 789E2E2CC620AA2F150C2DD7 /* Build configuration list for PBXProject "ReceiptVault" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = F7C07AFC7ADD3D6D31450708;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				E6C86C0CA5CF00E7D874B2C1 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+			);
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2388413BB99D34CE8B69A417 /* ReceiptVault */,
+				700412307D392E376B7B6B5A /* ShareExtension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		244E965A0AAF717DA723B701 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F17E75CE9A071C7E142B5D7A /* AuthManager.swift in Sources */,
+				3376210519D86B6DD8161161 /* ContentView.swift in Sources */,
+				6F9A582EF40AE30E1FCDAB5D /* DriveUploader.swift in Sources */,
+				6530EF97917494D8B6F78DE1 /* LineItem.swift in Sources */,
+				99526B8C9A083433A83A6BB0 /* PDFBuilder.swift in Sources */,
+				AD0F006DAD7D0E642CE6078C /* ProcessingQueueView.swift in Sources */,
+				723533886753F8F0EA5B45D7 /* ReceiptData.swift in Sources */,
+				4F0D76B214B5FD9062D2F788 /* ReceiptParser.swift in Sources */,
+				F5910914E24EE3DDFAA29513 /* ReceiptVaultApp.swift in Sources */,
+				9C7FCE8AADB7DA1F64F21A86 /* ReceiptVaultError.swift in Sources */,
+				EA3345E79DC3E14EFAF31969 /* ReceiptsView.swift in Sources */,
+				E64698C823ADBB60C53A1647 /* SettingsView.swift in Sources */,
+				2196D0B5F7AD735D8515B873 /* SheetsLogger.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6D3E1B5B6DAA1B29AE7C3B09 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D8B56E6D35E0AC39E7E51A1E /* ShareViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4578CA041F63C51E099FCB0F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 700412307D392E376B7B6B5A /* ShareExtension */;
+			targetProxy = 0E01DEF84E13BB355AF54E1A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		26C66B82B1716F20FBC91A54 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		4198838E9D22A2AE865B99DD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = ReceiptVault/ReceiptVault.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = KPFUVNMKM8;
+				INFOPLIST_FILE = ReceiptVault/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ericeijkelenboom.receiptvault;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		422E63BCF8B740E6A5658364 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = KPFUVNMKM8;
+				INFOPLIST_FILE = ShareExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ericeijkelenboom.receiptvault.shareextension;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		43E34E2B5505F7A847DF9945 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = ReceiptVault/ReceiptVault.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = KPFUVNMKM8;
+				INFOPLIST_FILE = ReceiptVault/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ericeijkelenboom.receiptvault;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		53D88BF0DA261AF755772132 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = KPFUVNMKM8;
+				INFOPLIST_FILE = ShareExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ericeijkelenboom.receiptvault.shareextension;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		576920F0896DDA1DF2CEB92B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4734713A4C3EDFC5265FE705 /* Build configuration list for PBXNativeTarget "ShareExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				422E63BCF8B740E6A5658364 /* Debug */,
+				53D88BF0DA261AF755772132 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		789E2E2CC620AA2F150C2DD7 /* Build configuration list for PBXProject "ReceiptVault" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				26C66B82B1716F20FBC91A54 /* Debug */,
+				576920F0896DDA1DF2CEB92B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		931D5DC3AC7AC961654B38D3 /* Build configuration list for PBXNativeTarget "ReceiptVault" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4198838E9D22A2AE865B99DD /* Debug */,
+				43E34E2B5505F7A847DF9945 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E6C86C0CA5CF00E7D874B2C1 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3A7A4DA4124E98AECC47BD57 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E6C86C0CA5CF00E7D874B2C1 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		DDD87772512C9363FBBF275B /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E6C86C0CA5CF00E7D874B2C1 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 3242E86D5829BB5622DA3B84 /* Project object */;
+}

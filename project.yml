@@ -1,0 +1,103 @@
+name: ReceiptVault
+
+options:
+  bundleIdPrefix: com.ericeijkelenboom
+  deploymentTarget:
+    iOS: "17.0"
+  xcodeVersion: "15.0"
+
+packages:
+  GoogleSignIn-iOS:
+    url: https://github.com/google/GoogleSignIn-iOS
+    from: "8.0.0"
+
+schemes:
+  ReceiptVault:
+    build:
+      targets:
+        ReceiptVault: all
+        ShareExtension: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+    archive:
+      config: Release
+
+targets:
+
+  ReceiptVault:
+    type: application
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: ReceiptVault
+    info:
+      path: ReceiptVault/Info.plist
+      properties:
+        NSPhotoLibraryUsageDescription: "ReceiptVault needs access to your photo library to import receipt images."
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+          UISceneConfigurations: {}
+        UILaunchScreen: {}
+        UIRequiredDeviceCapabilities:
+          - armv7
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        CFBundleURLTypes:
+          - CFBundleTypeRole: Editor
+            CFBundleURLSchemes:
+              - receiptvault
+          - CFBundleTypeRole: Editor
+            CFBundleURLSchemes:
+              - REPLACE_WITH_REVERSED_CLIENT_ID
+    entitlements:
+      path: ReceiptVault/ReceiptVault.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.ericeijkelenboom.receiptvault
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.ericeijkelenboom.receiptvault
+        SWIFT_VERSION: "5.9"
+        INFOPLIST_FILE: ReceiptVault/Info.plist
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: ""
+    dependencies:
+      - target: ShareExtension
+        embed: true
+      - package: GoogleSignIn-iOS
+        product: GoogleSignIn
+      - package: GoogleSignIn-iOS
+        product: GoogleSignInSwift
+
+  ShareExtension:
+    type: app-extension
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: ShareExtension
+    info:
+      path: ShareExtension/Info.plist
+      properties:
+        CFBundleDisplayName: "Save to ReceiptVault"
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.share-services
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).ShareViewController
+          NSExtensionActivationRule:
+            NSExtensionActivationSupportsImageWithMaxCount: 10
+            NSExtensionActivationSupportsFileWithMaxCount: 10
+    entitlements:
+      path: ShareExtension/ShareExtension.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.ericeijkelenboom.receiptvault
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.ericeijkelenboom.receiptvault.shareextension
+        SWIFT_VERSION: "5.9"
+        INFOPLIST_FILE: ShareExtension/Info.plist
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: ""
