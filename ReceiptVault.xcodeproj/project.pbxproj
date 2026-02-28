@@ -20,6 +20,7 @@
 		99526B8C9A083433A83A6BB0 /* PDFBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FC25E33DC3E51944B46AB1 /* PDFBuilder.swift */; };
 		9C7FCE8AADB7DA1F64F21A86 /* ReceiptVaultError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB09E8BBFD7F92810D878D4F /* ReceiptVaultError.swift */; };
 		AD0F006DAD7D0E642CE6078C /* ProcessingQueueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836315DD7D3B746D8C3BD9A7 /* ProcessingQueueView.swift */; };
+		C612C87CAAC1C6EEF4CFFAA8 /* ProcessingPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15F1EF69C25E71789CC5288 /* ProcessingPipeline.swift */; };
 		D8B56E6D35E0AC39E7E51A1E /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADC10ACF69B8CB509BB095E /* ShareViewController.swift */; };
 		E64698C823ADBB60C53A1647 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33984DD05D73275FAA351925 /* SettingsView.swift */; };
 		EA3345E79DC3E14EFAF31969 /* ReceiptsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0F6B7A1B27504F3A01D915 /* ReceiptsView.swift */; };
@@ -63,6 +64,7 @@
 		836315DD7D3B746D8C3BD9A7 /* ProcessingQueueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessingQueueView.swift; sourceTree = "<group>"; };
 		8A120344204560F2B6021FCC /* SheetsLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetsLogger.swift; sourceTree = "<group>"; };
 		8D641B1F69B92F53FE251AD6 /* ReceiptVaultApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptVaultApp.swift; sourceTree = "<group>"; };
+		A15F1EF69C25E71789CC5288 /* ProcessingPipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessingPipeline.swift; sourceTree = "<group>"; };
 		C1859798172C280AC41D2CDF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C27366E9E4D644452F0BE5A1 /* ShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareExtension.entitlements; sourceTree = "<group>"; };
 		CB09E8BBFD7F92810D878D4F /* ReceiptVaultError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptVaultError.swift; sourceTree = "<group>"; };
@@ -125,6 +127,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		15F9E7AA91E95AF8053B6AEE /* Pipeline */ = {
+			isa = PBXGroup;
+			children = (
+				A15F1EF69C25E71789CC5288 /* ProcessingPipeline.swift */,
+			);
+			path = Pipeline;
+			sourceTree = "<group>";
+		};
 		203D0347DC86BD6E7E7E426D /* ShareExtension */ = {
 			isa = PBXGroup;
 			children = (
@@ -177,6 +187,7 @@
 				71CCEFB19C0CB714352D3A04 /* DriveUploader */,
 				E4FB489F448A53C030373A78 /* Models */,
 				DB66C8DC9DB65D5F34699923 /* PDFBuilder */,
+				15F9E7AA91E95AF8053B6AEE /* Pipeline */,
 				6B12F8E5CFA5904002A7135C /* ReceiptParser */,
 				0583E0B8574E6D4126260FBE /* SheetsLogger */,
 			);
@@ -306,6 +317,7 @@
 				4ED4D3F84157C7267C97F16E /* KeychainHelper.swift in Sources */,
 				6530EF97917494D8B6F78DE1 /* LineItem.swift in Sources */,
 				99526B8C9A083433A83A6BB0 /* PDFBuilder.swift in Sources */,
+				C612C87CAAC1C6EEF4CFFAA8 /* ProcessingPipeline.swift in Sources */,
 				AD0F006DAD7D0E642CE6078C /* ProcessingQueueView.swift in Sources */,
 				723533886753F8F0EA5B45D7 /* ReceiptData.swift in Sources */,
 				4F0D76B214B5FD9062D2F788 /* ReceiptParser.swift in Sources */,
