@@ -27,8 +27,7 @@ struct SettingsView: View {
                     SecureField("API Key", text: $apiKey)
                         .textContentType(.password)
                     Button("Save to Keychain") {
-                        // TODO: write apiKey to Keychain under key "anthropic_api_key"
-                        _ = apiKey
+                        try? KeychainHelper.write(key: "anthropic_api_key", value: apiKey)
                     }
                 }
             }

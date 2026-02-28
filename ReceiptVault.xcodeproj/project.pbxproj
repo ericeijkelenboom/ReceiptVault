@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 63;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,6 +11,7 @@
 		3376210519D86B6DD8161161 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D820FE50613A28A81997B9 /* ContentView.swift */; };
 		40CDB3A35DE34D20086F3493 /* ShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = E3F02C7772EA7B5E87DC03C9 /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		4EB830A006B8FA7DAD787239 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 3A7A4DA4124E98AECC47BD57 /* GoogleSignIn */; };
+		4ED4D3F84157C7267C97F16E /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE524C073DE6860DA7CCE8A /* KeychainHelper.swift */; };
 		4F0D76B214B5FD9062D2F788 /* ReceiptParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7372227DFF1E12017F3F220C /* ReceiptParser.swift */; };
 		6530EF97917494D8B6F78DE1 /* LineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAFBFBCCD86CCBEAE272E859 /* LineItem.swift */; };
 		6F9A582EF40AE30E1FCDAB5D /* DriveUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A6AC2EEBDDDD2E5FC52C71 /* DriveUploader.swift */; };
@@ -54,7 +55,7 @@
 		18D820FE50613A28A81997B9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		267E1423D0EBF95D6ED5C4F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		33984DD05D73275FAA351925 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		3574448459825C316DD2D166 /* ReceiptVault.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReceiptVault.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3574448459825C316DD2D166 /* ReceiptVault.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ReceiptVault.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		35E17D7AB0EA911A1D74291F /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		58A6AC2EEBDDDD2E5FC52C71 /* DriveUploader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriveUploader.swift; sourceTree = "<group>"; };
 		6B044939A1194EC2FF3D1EE3 /* ReceiptData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptData.swift; sourceTree = "<group>"; };
@@ -67,7 +68,8 @@
 		CB09E8BBFD7F92810D878D4F /* ReceiptVaultError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptVaultError.swift; sourceTree = "<group>"; };
 		D1AA88EA9A576C95207E9BA2 /* ReceiptVault.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ReceiptVault.entitlements; sourceTree = "<group>"; };
 		DADC10ACF69B8CB509BB095E /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
-		E3F02C7772EA7B5E87DC03C9 /* ShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		DAE524C073DE6860DA7CCE8A /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
+		E3F02C7772EA7B5E87DC03C9 /* ShareExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = ShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5FC25E33DC3E51944B46AB1 /* PDFBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFBuilder.swift; sourceTree = "<group>"; };
 		EAFBFBCCD86CCBEAE272E859 /* LineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineItem.swift; sourceTree = "<group>"; };
 		FA0F6B7A1B27504F3A01D915 /* ReceiptsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptsView.swift; sourceTree = "<group>"; };
@@ -192,6 +194,7 @@
 		E4FB489F448A53C030373A78 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				DAE524C073DE6860DA7CCE8A /* KeychainHelper.swift */,
 				EAFBFBCCD86CCBEAE272E859 /* LineItem.swift */,
 				6B044939A1194EC2FF3D1EE3 /* ReceiptData.swift */,
 				CB09E8BBFD7F92810D878D4F /* ReceiptVaultError.swift */,
@@ -260,9 +263,11 @@
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					2388413BB99D34CE8B69A417 = {
+						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 					700412307D392E376B7B6B5A = {
+						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -280,6 +285,7 @@
 			packageReferences = (
 				E6C86C0CA5CF00E7D874B2C1 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 			);
+			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -297,6 +303,7 @@
 				F17E75CE9A071C7E142B5D7A /* AuthManager.swift in Sources */,
 				3376210519D86B6DD8161161 /* ContentView.swift in Sources */,
 				6F9A582EF40AE30E1FCDAB5D /* DriveUploader.swift in Sources */,
+				4ED4D3F84157C7267C97F16E /* KeychainHelper.swift in Sources */,
 				6530EF97917494D8B6F78DE1 /* LineItem.swift in Sources */,
 				99526B8C9A083433A83A6BB0 /* PDFBuilder.swift in Sources */,
 				AD0F006DAD7D0E642CE6078C /* ProcessingQueueView.swift in Sources */,
@@ -399,7 +406,7 @@
 				CODE_SIGN_ENTITLEMENTS = ReceiptVault/ReceiptVault.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = KPFUVNMKM8;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = ReceiptVault/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -418,7 +425,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = KPFUVNMKM8;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = ShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -440,7 +447,7 @@
 				CODE_SIGN_ENTITLEMENTS = ReceiptVault/ReceiptVault.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = KPFUVNMKM8;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = ReceiptVault/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -459,7 +466,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = KPFUVNMKM8;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = ShareExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
