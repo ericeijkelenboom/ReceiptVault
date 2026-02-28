@@ -3,6 +3,7 @@ import SwiftUI
 struct SettingsView: View {
     @EnvironmentObject private var authManager: AuthManager
     @State private var apiKey: String = ""
+    @State private var keySaved: Bool = false
 
     var body: some View {
         NavigationStack {
@@ -28,6 +29,12 @@ struct SettingsView: View {
                         .textContentType(.password)
                     Button("Save to Keychain") {
                         try? KeychainHelper.write(key: "anthropic_api_key", value: apiKey)
+                        keySaved = true
+                    }
+                    if keySaved || KeychainHelper.read(key: "anthropic_api_key") != nil {
+                        Label("Key stored in Keychain", systemImage: "checkmark.shield.fill")
+                            .foregroundStyle(.green)
+                            .font(.footnote)
                     }
                 }
             }
