@@ -32,16 +32,12 @@ final class ProcessingPipeline {
 
         for filename in jobs {
             do {
+                print("[ProcessingPipeline] Processing queued file: \(filename)")
                 let image = try loadImage(filename: filename)
-                let receiptData = try await receiptParser.parse(image: image)
-                let pdfData = try await pdfBuilder.build(image: image, receiptData: receiptData)
-                _ = try await driveUploader.upload(pdf: pdfData, receiptData: receiptData)
-
-                await notify(
-                    title: "Receipt saved ✓",
-                    body: "Receipt from \(receiptData.shopName) saved to Google Drive."
-                )
+                try await runPipeline(for: image)
+                print("[ProcessingPipeline] Finished queued file: \(filename)")
             } catch {
+                print("[ProcessingPipeline] Error processing queued file \(filename): \(error)")
                 await notify(
                     title: "Receipt failed",
                     body: error.localizedDescription
@@ -54,6 +50,46 @@ final class ProcessingPipeline {
             defaults.set(remaining, forKey: pendingJobsKey)
             deleteFile(filename: filename)
         }
+    }
+
+    func process(image: UIImage) async throws {
+        guard !isProcessing else { return }
+        isProcessing = true
+        defer { isProcessing = false }
+
+        do {
+            print("[ProcessingPipeline] Starting in-app pipeline for image…")
+            try await runPipeline(for: image)
+            print("[ProcessingPipeline] In-app pipeline completed successfully.")
+        } catch {
+            print("[ProcessingPipeline] In-app pipeline failed with error: \(error)")
+            await notify(
+                title: "Receipt failed",
+                body: error.localizedDescription
+            )
+            throw error
+        }
+    }
+
+    // MARK: - Shared pipeline
+
+    private func runPipeline(for image: UIImage) async throws {
+        print("[ProcessingPipeline] Step 1/3 – calling ReceiptParser.parse(image:)")
+        let receiptData = try await receiptParser.parse(image: image)
+        print("[ProcessingPipeline] Step 1/3 complete – parsed receipt for shop: \(receiptData.shopName)")
+
+        print("[ProcessingPipeline] Step 2/3 – building PDF")
+        let pdfData = try await pdfBuilder.build(image: image, receiptData: receiptData)
+        print("[ProcessingPipeline] Step 2/3 complete – PDF built (\(pdfData.count) bytes)")
+
+        print("[ProcessingPipeline] Step 3/3 – uploading PDF to Drive")
+        _ = try await driveUploader.upload(pdf: pdfData, receiptData: receiptData)
+        print("[ProcessingPipeline] Step 3/3 complete – upload finished")
+
+        await notify(
+            title: "Receipt saved ✓",
+            body: "Receipt from \(receiptData.shopName) saved to Google Drive."
+        )
     }
 
     // MARK: - App Group I/O
@@ -95,3 +131,4 @@ final class ProcessingPipeline {
         try? await UNUserNotificationCenter.current().add(request)
     }
 }
+
