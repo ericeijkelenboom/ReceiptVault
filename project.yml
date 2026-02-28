@@ -36,7 +36,7 @@ targets:
       path: ReceiptVault/Info.plist
       properties:
         NSPhotoLibraryUsageDescription: "ReceiptVault needs access to your photo library to import receipt images."
-        GIDClientID: "REPLACE_WITH_GOOGLE_CLIENT_ID"
+        GIDClientID: "95385201718-j13q0tdmkapqr2ugmta5u2g3edgpl22k.apps.googleusercontent.com"
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
           UISceneConfigurations: {}
@@ -53,7 +53,7 @@ targets:
               - receiptvault
           - CFBundleTypeRole: Editor
             CFBundleURLSchemes:
-              - REPLACE_WITH_REVERSED_CLIENT_ID
+              - com.googleusercontent.apps.95385201718-j13q0tdmkapqr2ugmta5u2g3edgpl22k
     entitlements:
       path: ReceiptVault/ReceiptVault.entitlements
       properties:

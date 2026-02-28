@@ -31,14 +31,14 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>REPLACE_WITH_REVERSED_CLIENT_ID</string>
+				<string>com.googleusercontent.apps.95385201718-j13q0tdmkapqr2ugmta5u2g3edgpl22k</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>GIDClientID</key>
-	<string>REPLACE_WITH_GOOGLE_CLIENT_ID</string>
+	<string>95385201718-j13q0tdmkapqr2ugmta5u2g3edgpl22k.apps.googleusercontent.com</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>ReceiptVault needs access to your photo library to import receipt images.</string>
 	<key>UIApplicationSceneManifest</key>
