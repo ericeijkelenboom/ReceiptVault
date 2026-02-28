@@ -1,4 +1,5 @@
 import SwiftUI
+import GoogleSignIn
 
 @main
 struct ReceiptVaultApp: App {
@@ -9,8 +10,11 @@ struct ReceiptVaultApp: App {
             ContentView()
                 .environmentObject(authManager)
                 .onOpenURL { url in
+                    // Handle Google Sign-In OAuth redirect
+                    if GIDSignIn.sharedInstance.handle(url) {
+                        return
+                    }
                     // TODO: drain pending receipt queue when opened via receiptvault://process-queue
-                    _ = url
                 }
         }
     }

@@ -37,6 +37,8 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>GIDClientID</key>
+	<string>REPLACE_WITH_GOOGLE_CLIENT_ID</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>ReceiptVault needs access to your photo library to import receipt images.</string>
 	<key>UIApplicationSceneManifest</key>
