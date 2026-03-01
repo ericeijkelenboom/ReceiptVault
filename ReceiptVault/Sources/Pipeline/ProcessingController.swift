@@ -5,6 +5,7 @@ import UIKit
 final class ProcessingController: ObservableObject {
     @Published private(set) var isProcessing = false
     @Published private(set) var pendingCount = 0
+    @Published private(set) var totalInBatch = 0
     @Published private(set) var processingStep: String?
     @Published var lastErrorMessage: String?
 
@@ -16,6 +17,9 @@ final class ProcessingController: ObservableObject {
     func process(image: UIImage) {
         queue.append(image)
         pendingCount = queue.count
+        if isProcessing {
+            totalInBatch += 1  // extend the running batch
+        }
         guard !isProcessing else { return }
         Task { await processQueue() }
     }
@@ -51,9 +55,11 @@ final class ProcessingController: ObservableObject {
 
         isProcessing = true
         lastErrorMessage = nil
+        totalInBatch = queue.count
         defer {
             isProcessing = false
             processingStep = nil
+            totalInBatch = 0
         }
 
         while !queue.isEmpty {

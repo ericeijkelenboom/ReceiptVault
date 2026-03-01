@@ -5,7 +5,7 @@ struct ReceiptsView: View {
     @EnvironmentObject private var processingController: ProcessingController
     @EnvironmentObject private var receiptStore: ReceiptStore
     @EnvironmentObject private var authManager: AuthManager
-    @State private var selectedItem: PhotosPickerItem?
+    @State private var selectedItems: [PhotosPickerItem] = []
     @State private var showPhotoPicker = false
     @State private var showCamera = false
     @State private var syncError: String?
@@ -49,7 +49,6 @@ struct ReceiptsView: View {
                         Image(systemName: "plus")
                             .foregroundStyle(Color.brandPrimary)
                     }
-                    .disabled(processingController.isProcessing)
                 }
             }
             // Auto-sync when already signed in on first appear (cache empty after reinstall)
@@ -65,24 +64,27 @@ struct ReceiptsView: View {
                 }
             }
         }
-        .photosPicker(isPresented: $showPhotoPicker, selection: $selectedItem, matching: .images)
+        .photosPicker(isPresented: $showPhotoPicker, selection: $selectedItems, maxSelectionCount: 20, matching: .images)
         .sheet(isPresented: $showCamera) {
             CameraPickerView { image in
                 processingController.process(image: image)
             }
             .ignoresSafeArea()
         }
-        .onChange(of: selectedItem) { _, newItem in
-            guard let newItem else { return }
+        .onChange(of: selectedItems) { _, newItems in
+            guard !newItems.isEmpty else { return }
+            let items = newItems
+            selectedItems = []
             Task {
-                defer { Task { @MainActor in selectedItem = nil } }
-                do {
-                    if let data = try await newItem.loadTransferable(type: Data.self),
-                       let image = UIImage(data: data) {
-                        processingController.process(image: image)
+                for item in items {
+                    do {
+                        if let data = try await item.loadTransferable(type: Data.self),
+                           let image = UIImage(data: data) {
+                            processingController.process(image: image)
+                        }
+                    } catch {
+                        await MainActor.run { processingController.lastErrorMessage = error.localizedDescription }
                     }
-                } catch {
-                    await MainActor.run { processingController.lastErrorMessage = error.localizedDescription }
                 }
             }
         }
@@ -119,14 +121,14 @@ struct ReceiptsView: View {
                 if processingController.isProcessing {
                     VStack(spacing: 6) {
                         ProgressView()
+                        if processingController.totalInBatch > 1 {
+                            Text("Receipt \(processingController.totalInBatch - processingController.pendingCount) of \(processingController.totalInBatch)")
+                                .font(.subheadline)
+                                .fontWeight(.medium)
+                        }
                         Text(processingController.processingStep ?? "Processing receipt…")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
-                        if processingController.pendingCount > 0 {
-                            Text("\(processingController.pendingCount) more queued")
-                                .font(.caption)
-                                .foregroundStyle(.tertiary)
-                        }
                     }
                     .padding(.top)
                 }
@@ -157,13 +159,12 @@ struct ReceiptsView: View {
                     HStack(spacing: 12) {
                         ProgressView()
                         VStack(alignment: .leading, spacing: 2) {
+                            if processingController.totalInBatch > 1 {
+                                Text("Receipt \(processingController.totalInBatch - processingController.pendingCount) of \(processingController.totalInBatch)")
+                                    .fontWeight(.medium)
+                            }
                             Text(processingController.processingStep ?? "Processing receipt…")
                                 .foregroundStyle(.secondary)
-                            if processingController.pendingCount > 0 {
-                                Text("\(processingController.pendingCount) more queued")
-                                    .font(.caption)
-                                    .foregroundStyle(.tertiary)
-                            }
                         }
                     }
                 }
