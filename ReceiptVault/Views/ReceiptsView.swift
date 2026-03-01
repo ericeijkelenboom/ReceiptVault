@@ -8,6 +8,7 @@ struct ReceiptsView: View {
     @State private var selectedItems: [PhotosPickerItem] = []
     @State private var showPhotoPicker = false
     @State private var showCamera = false
+    @State private var showSettings = false
     @State private var syncError: String?
     @State private var searchText = ""
 
@@ -34,6 +35,14 @@ struct ReceiptsView: View {
                     Text("Receipts")
                         .font(.title3)
                         .fontWeight(.semibold)
+                }
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        showSettings = true
+                    } label: {
+                        Image(systemName: "gearshape")
+                            .foregroundStyle(Color.brandPrimary)
+                    }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {
@@ -67,6 +76,10 @@ struct ReceiptsView: View {
                     Task { await sync() }
                 }
             }
+        }
+        .sheet(isPresented: $showSettings) {
+            SettingsView()
+                .environmentObject(authManager)
         }
         .photosPicker(isPresented: $showPhotoPicker, selection: $selectedItems, maxSelectionCount: 20, matching: .images)
         .sheet(isPresented: $showCamera) {

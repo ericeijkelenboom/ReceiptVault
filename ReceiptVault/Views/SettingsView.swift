@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @EnvironmentObject private var authManager: AuthManager
+    @Environment(\.dismiss) private var dismiss
     @State private var apiKey: String = ""
     @State private var keySaved: Bool = false
 
@@ -39,7 +40,14 @@ struct SettingsView: View {
                 }
             }
             .navigationTitle("Settings")
+            .navigationBarTitleDisplayMode(.inline)
             .tint(.brandPrimary)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Done") { dismiss() }
+                        .fontWeight(.semibold)
+                }
+            }
         }
     }
 }
