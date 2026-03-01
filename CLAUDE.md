@@ -128,3 +128,17 @@ When ready to add a backend proxy:
 - Errors typed with custom `ReceiptVaultError` enum
 - No force unwraps
 - All API interaction wrapped so it can be unit tested with a mock
+
+---
+
+## Development Workflow
+
+### xcodegen
+- Run `xcodegen generate` whenever a Swift file is **added or deleted** — Xcode won't see it otherwise
+- Do **not** run it when only editing existing files
+- All custom Info.plist keys live in `project.yml` under `info.properties` — never edit the plist files directly, xcodegen overwrites them on regeneration
+- Entitlements work the same way via `entitlements.properties` in `project.yml`
+
+### Git / GitHub
+- Remote: `https://github.com/ericeijkelenboom/ReceiptVault`
+- Push via: `git -c credential.helper='!/opt/homebrew/bin/gh auth git-credential' push origin main`
