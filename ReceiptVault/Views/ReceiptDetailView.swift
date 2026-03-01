@@ -77,6 +77,7 @@ struct ReceiptDetailView: View {
                 Task { await loadPDF() }
             } label: {
                 ReceiptThumbnailView(driveFileId: detail.driveFileId, authManager: authManager)
+                    .frame(maxWidth: .infinity)
             }
             .buttonStyle(.plain)
         }
@@ -133,6 +134,7 @@ struct ReceiptDetailView: View {
             Spacer()
             Text(value)
                 .fontWeight(.medium)
+                .monospacedDigit()
         }
     }
 
@@ -198,7 +200,6 @@ private struct ReceiptThumbnailView: View {
                     }
             }
         }
-        .frame(maxHeight: 200)
         .task { await loadThumbnail() }
     }
 
@@ -250,6 +251,7 @@ private struct LineItemRow: View {
                 Text((price as NSDecimalNumber as Decimal).formatted(.currency(code: code)))
                     .font(.subheadline)
                     .fontWeight(.medium)
+                    .monospacedDigit()
             }
         }
     }

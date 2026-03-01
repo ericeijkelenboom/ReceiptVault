@@ -114,12 +114,17 @@ struct ReceiptsView: View {
                 }
             }
             ForEach(receiptStore.groupedByMonth, id: \.title) { group in
-                Section(group.title) {
+                Section {
                     ForEach(group.receipts) { receipt in
                         NavigationLink(value: receipt) {
                             ReceiptRow(receipt: receipt)
                         }
                     }
+                } header: {
+                    Text(group.title)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .textCase(nil)
                 }
             }
         }
@@ -137,7 +142,8 @@ private struct ReceiptRow: View {
     let receipt: CachedReceipt
 
     var body: some View {
-        HStack {
+        HStack(spacing: 12) {
+            StoreAvatar(name: receipt.shopName)
             VStack(alignment: .leading, spacing: 3) {
                 Text(receipt.shopName)
                     .font(.headline)
@@ -149,9 +155,35 @@ private struct ReceiptRow: View {
             if let total = receipt.total, let currency = receipt.currency {
                 Text(total as NSDecimalNumber as Decimal, format: .currency(code: currency))
                     .font(.headline)
+                    .monospacedDigit()
             }
         }
         .padding(.vertical, 2)
+    }
+}
+
+// MARK: - Store Avatar
+
+private struct StoreAvatar: View {
+    let name: String
+
+    private static let palette: [Color] = [
+        .teal, .cyan, .indigo, .blue, .purple, .mint, .orange, .pink
+    ]
+
+    private var color: Color {
+        let hash = name.unicodeScalars.reduce(0) { $0 &+ Int($1.value) }
+        return Self.palette[abs(hash) % Self.palette.count]
+    }
+
+    var body: some View {
+        Text(String(name.prefix(1)).uppercased())
+            .font(.headline)
+            .fontWeight(.semibold)
+            .foregroundStyle(.white)
+            .frame(width: 40, height: 40)
+            .background(color)
+            .clipShape(Circle())
     }
 }
 
