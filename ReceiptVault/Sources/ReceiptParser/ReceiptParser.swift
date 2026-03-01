@@ -112,7 +112,7 @@ final class ReceiptParser {
                 let totalPrice: Double?
             }
             let shopName: String
-            let date: String
+            let date: String?
             let total: Double?
             let currency: String?
             let lineItems: [LineItemDTO]
@@ -128,8 +128,14 @@ final class ReceiptParser {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        guard let date = dateFormatter.date(from: dto.date) else {
-            throw ReceiptVaultError.parseFailure("Could not read receipt date: \(dto.date)")
+        let date: Date
+        if let dateString = dto.date {
+            guard let parsed = dateFormatter.date(from: dateString) else {
+                throw ReceiptVaultError.parseFailure("Could not read receipt date: \(dateString)")
+            }
+            date = parsed
+        } else {
+            date = Date() // no date visible on receipt; fall back to today
         }
 
         let lineItems = dto.lineItems.map {
@@ -187,7 +193,7 @@ final class ReceiptParser {
     }
 
     Rules:
-    - date: use the date printed on the receipt in YYYY-MM-DD format
+    - date: use the date printed on the receipt in YYYY-MM-DD format; use null if no date is visible
     - total: the final amount paid (after tax and discounts), as a number
     - currency: 3-letter ISO 4217 code (USD, EUR, GBP, etc.) — infer from symbol or locale if not explicit
     - lineItems: individual product/service lines only; omit subtotals, taxes, tips, and fees
