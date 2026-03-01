@@ -12,6 +12,7 @@ final class ProcessingPipeline {
     private let receiptParser = ReceiptParser()
     private let pdfBuilder = PDFBuilder()
     private lazy var driveUploader = DriveUploader(authManager: authManager)
+    private lazy var sheetsLogger = SheetsLogger(authManager: authManager)
 
     init(authManager: AuthManager) {
         self.authManager = authManager
@@ -83,8 +84,12 @@ final class ProcessingPipeline {
         print("[ProcessingPipeline] Step 2/3 complete – PDF built (\(pdfData.count) bytes)")
 
         print("[ProcessingPipeline] Step 3/3 – uploading PDF to Drive")
-        _ = try await driveUploader.upload(pdf: pdfData, receiptData: receiptData)
-        print("[ProcessingPipeline] Step 3/3 complete – upload finished")
+        let uploadResult = try await driveUploader.upload(pdf: pdfData, receiptData: receiptData)
+        print("[ProcessingPipeline] Step 3/3 complete – fileId: \(uploadResult.fileId)")
+
+        print("[ProcessingPipeline] Logging to Sheets index")
+        try await sheetsLogger.log(receiptData: receiptData, driveFileId: uploadResult.fileId, driveFilePath: uploadResult.filePath)
+        print("[ProcessingPipeline] Sheets log complete")
 
         await notify(
             title: "Receipt saved ✓",

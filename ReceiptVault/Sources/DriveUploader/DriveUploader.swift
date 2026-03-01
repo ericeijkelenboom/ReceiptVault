@@ -13,7 +13,7 @@ final class DriveUploader {
 
     /// Uploads a PDF to Google Drive, creates folder hierarchy if needed,
     /// updates manifest.json, and returns the Drive file ID.
-    func upload(pdf: Data, receiptData: ReceiptData) async throws -> String {
+    func upload(pdf: Data, receiptData: ReceiptData) async throws -> (fileId: String, filePath: String) {
         let calendar = Calendar(identifier: .gregorian)
         let year = String(calendar.component(.year, from: receiptData.date))
         let month = String(format: "%02d", calendar.component(.month, from: receiptData.date))
@@ -23,7 +23,7 @@ final class DriveUploader {
         let filename = makeFilename(for: receiptData)
         let fileId = try await uploadFile(name: filename, data: pdf, mimeType: "application/pdf", parentId: monthFolderId)
         try await updateManifest(folderId: monthFolderId, receiptData: receiptData, filename: filename, driveFileId: fileId)
-        return fileId
+        return (fileId: fileId, filePath: "\(folderPath)/\(filename)")
     }
 
     /// Traverses (and creates) each component of a slash-separated folder path,
