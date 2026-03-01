@@ -16,7 +16,6 @@ schemes:
     build:
       targets:
         ReceiptVault: all
-        ShareExtension: all
     run:
       config: Debug
     test:
@@ -67,37 +66,7 @@ targets:
         CODE_SIGN_STYLE: Automatic
         DEVELOPMENT_TEAM: "4BAV7733D8"
     dependencies:
-      - target: ShareExtension
-        embed: true
       - package: GoogleSignIn-iOS
         product: GoogleSignIn
       - package: GoogleSignIn-iOS
         product: GoogleSignInSwift
-
-  ShareExtension:
-    type: app-extension
-    platform: iOS
-    deploymentTarget: "17.0"
-    sources:
-      - path: ShareExtension
-    info:
-      path: ShareExtension/Info.plist
-      properties:
-        CFBundleDisplayName: "Save to ReceiptVault"
-        NSExtension:
-          NSExtensionPointIdentifier: com.apple.share-services
-          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).ShareViewController
-          NSExtensionActivationRule:
-            NSExtensionActivationSupportsImageWithMaxCount: 10
-    entitlements:
-      path: ShareExtension/ShareExtension.entitlements
-      properties:
-        com.apple.security.application-groups:
-          - group.com.ericeijkelenboom.receiptvault
-    settings:
-      base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.ericeijkelenboom.receiptvault.shareextension
-        SWIFT_VERSION: "5.9"
-        INFOPLIST_FILE: ShareExtension/Info.plist
-        CODE_SIGN_STYLE: Automatic
-        DEVELOPMENT_TEAM: "4BAV7733D8"

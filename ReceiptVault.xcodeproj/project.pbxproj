@@ -10,7 +10,6 @@
 		1EF122D4006918C44D9FE680 /* BrandColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26642D9FE4DABE2C7DB3C6F /* BrandColors.swift */; };
 		2196D0B5F7AD735D8515B873 /* SheetsLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A120344204560F2B6021FCC /* SheetsLogger.swift */; };
 		3376210519D86B6DD8161161 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D820FE50613A28A81997B9 /* ContentView.swift */; };
-		40CDB3A35DE34D20086F3493 /* ShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = E3F02C7772EA7B5E87DC03C9 /* ShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		4EB830A006B8FA7DAD787239 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 3A7A4DA4124E98AECC47BD57 /* GoogleSignIn */; };
 		4ED4D3F84157C7267C97F16E /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE524C073DE6860DA7CCE8A /* KeychainHelper.swift */; };
 		4F0D76B214B5FD9062D2F788 /* ReceiptParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7372227DFF1E12017F3F220C /* ReceiptParser.swift */; };
@@ -26,7 +25,6 @@
 		AD0F006DAD7D0E642CE6078C /* ProcessingQueueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836315DD7D3B746D8C3BD9A7 /* ProcessingQueueView.swift */; };
 		BE9BD88042922BD51A20AB7B /* ReceiptDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B4386EE4D5655BB7F5996B /* ReceiptDetailView.swift */; };
 		C612C87CAAC1C6EEF4CFFAA8 /* ProcessingPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15F1EF69C25E71789CC5288 /* ProcessingPipeline.swift */; };
-		D8B56E6D35E0AC39E7E51A1E /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADC10ACF69B8CB509BB095E /* ShareViewController.swift */; };
 		D9CA10101F2C85B4844B7166 /* ReceiptDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912EF8A2C1D08158A49D73CA /* ReceiptDetail.swift */; };
 		DBE43FAD0B950811A41B5E25 /* ReceiptStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13B282EAE6CA2816DC237134 /* ReceiptStore.swift */; };
 		DC9F62BDC328AAD8F0EF45FF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4E14D4F5E82FE995DC8CAA65 /* Assets.xcassets */; };
@@ -36,34 +34,9 @@
 		F5910914E24EE3DDFAA29513 /* ReceiptVaultApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D641B1F69B92F53FE251AD6 /* ReceiptVaultApp.swift */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		0E01DEF84E13BB355AF54E1A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3242E86D5829BB5622DA3B84 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 700412307D392E376B7B6B5A;
-			remoteInfo = ShareExtension;
-		};
-/* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		EBFFC39999276D1C674D845C /* Embed Foundation Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-				40CDB3A35DE34D20086F3493 /* ShareExtension.appex in Embed Foundation Extensions */,
-			);
-			name = "Embed Foundation Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
 		13B282EAE6CA2816DC237134 /* ReceiptStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptStore.swift; sourceTree = "<group>"; };
 		18D820FE50613A28A81997B9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		267E1423D0EBF95D6ED5C4F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		33984DD05D73275FAA351925 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		3574448459825C316DD2D166 /* ReceiptVault.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ReceiptVault.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		35E17D7AB0EA911A1D74291F /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
@@ -80,14 +53,11 @@
 		A15F1EF69C25E71789CC5288 /* ProcessingPipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessingPipeline.swift; sourceTree = "<group>"; };
 		A26642D9FE4DABE2C7DB3C6F /* BrandColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandColors.swift; sourceTree = "<group>"; };
 		C1859798172C280AC41D2CDF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		C27366E9E4D644452F0BE5A1 /* ShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareExtension.entitlements; sourceTree = "<group>"; };
 		CB09E8BBFD7F92810D878D4F /* ReceiptVaultError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptVaultError.swift; sourceTree = "<group>"; };
 		D1AA88EA9A576C95207E9BA2 /* ReceiptVault.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ReceiptVault.entitlements; sourceTree = "<group>"; };
 		D4355F7B15264C7B3D65A1AA /* CachedReceipt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedReceipt.swift; sourceTree = "<group>"; };
 		DAD37240D14C29C9B08CDF3F /* ProcessingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessingController.swift; sourceTree = "<group>"; };
-		DADC10ACF69B8CB509BB095E /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		DAE524C073DE6860DA7CCE8A /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
-		E3F02C7772EA7B5E87DC03C9 /* ShareExtension.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = ShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5FC25E33DC3E51944B46AB1 /* PDFBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFBuilder.swift; sourceTree = "<group>"; };
 		EAFBFBCCD86CCBEAE272E859 /* LineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineItem.swift; sourceTree = "<group>"; };
 		FA0F6B7A1B27504F3A01D915 /* ReceiptsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptsView.swift; sourceTree = "<group>"; };
@@ -139,7 +109,6 @@
 			isa = PBXGroup;
 			children = (
 				3574448459825C316DD2D166 /* ReceiptVault.app */,
-				E3F02C7772EA7B5E87DC03C9 /* ShareExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -151,16 +120,6 @@
 				A15F1EF69C25E71789CC5288 /* ProcessingPipeline.swift */,
 			);
 			path = Pipeline;
-			sourceTree = "<group>";
-		};
-		203D0347DC86BD6E7E7E426D /* ShareExtension */ = {
-			isa = PBXGroup;
-			children = (
-				267E1423D0EBF95D6ED5C4F8 /* Info.plist */,
-				C27366E9E4D644452F0BE5A1 /* ShareExtension.entitlements */,
-				DADC10ACF69B8CB509BB095E /* ShareViewController.swift */,
-			);
-			path = ShareExtension;
 			sourceTree = "<group>";
 		};
 		545183937308D99275345AF2 /* App */ = {
@@ -249,7 +208,6 @@
 			isa = PBXGroup;
 			children = (
 				09F72DDC73076A987078D0D2 /* ReceiptVault */,
-				203D0347DC86BD6E7E7E426D /* ShareExtension */,
 				0F873C48720BC3475BE0AD57 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -264,12 +222,10 @@
 				244E965A0AAF717DA723B701 /* Sources */,
 				B67893F7F61029B3CAF2E403 /* Resources */,
 				84F3BA4FC64C245EC8C135FE /* Frameworks */,
-				EBFFC39999276D1C674D845C /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				4578CA041F63C51E099FCB0F /* PBXTargetDependency */,
 			);
 			name = ReceiptVault;
 			packageProductDependencies = (
@@ -279,23 +235,6 @@
 			productName = ReceiptVault;
 			productReference = 3574448459825C316DD2D166 /* ReceiptVault.app */;
 			productType = "com.apple.product-type.application";
-		};
-		700412307D392E376B7B6B5A /* ShareExtension */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 4734713A4C3EDFC5265FE705 /* Build configuration list for PBXNativeTarget "ShareExtension" */;
-			buildPhases = (
-				6D3E1B5B6DAA1B29AE7C3B09 /* Sources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = ShareExtension;
-			packageProductDependencies = (
-			);
-			productName = ShareExtension;
-			productReference = E3F02C7772EA7B5E87DC03C9 /* ShareExtension.appex */;
-			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -307,10 +246,6 @@
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					2388413BB99D34CE8B69A417 = {
-						DevelopmentTeam = 4BAV7733D8;
-						ProvisioningStyle = Automatic;
-					};
-					700412307D392E376B7B6B5A = {
 						DevelopmentTeam = 4BAV7733D8;
 						ProvisioningStyle = Automatic;
 					};
@@ -334,7 +269,6 @@
 			projectRoot = "";
 			targets = (
 				2388413BB99D34CE8B69A417 /* ReceiptVault */,
-				700412307D392E376B7B6B5A /* ShareExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -380,23 +314,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		6D3E1B5B6DAA1B29AE7C3B09 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D8B56E6D35E0AC39E7E51A1E /* ShareViewController.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		4578CA041F63C51E099FCB0F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 700412307D392E376B7B6B5A /* ShareExtension */;
-			targetProxy = 0E01DEF84E13BB355AF54E1A /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		26C66B82B1716F20FBC91A54 /* Debug */ = {
@@ -483,26 +401,6 @@
 			};
 			name = Debug;
 		};
-		422E63BCF8B740E6A5658364 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 4BAV7733D8;
-				INFOPLIST_FILE = ShareExtension/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.ericeijkelenboom.receiptvault.shareextension;
-				SDKROOT = iphoneos;
-				SWIFT_VERSION = 5.9;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
 		43E34E2B5505F7A847DF9945 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -518,26 +416,6 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.ericeijkelenboom.receiptvault;
-				SDKROOT = iphoneos;
-				SWIFT_VERSION = 5.9;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		53D88BF0DA261AF755772132 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = ShareExtension/ShareExtension.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 4BAV7733D8;
-				INFOPLIST_FILE = ShareExtension/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.ericeijkelenboom.receiptvault.shareextension;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.9;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -603,15 +481,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		4734713A4C3EDFC5265FE705 /* Build configuration list for PBXNativeTarget "ShareExtension" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				422E63BCF8B740E6A5658364 /* Debug */,
-				53D88BF0DA261AF755772132 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
 		789E2E2CC620AA2F150C2DD7 /* Build configuration list for PBXProject "ReceiptVault" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

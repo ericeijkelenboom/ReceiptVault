@@ -21,20 +21,6 @@
                ReferencedContainer = "container:ReceiptVault.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "700412307D392E376B7B6B5A"
-               BuildableName = "ShareExtension.appex"
-               BlueprintName = "ShareExtension"
-               ReferencedContainer = "container:ReceiptVault.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
