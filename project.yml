@@ -65,7 +65,7 @@ targets:
         SWIFT_VERSION: "5.9"
         INFOPLIST_FILE: ReceiptVault/Info.plist
         CODE_SIGN_STYLE: Automatic
-        DEVELOPMENT_TEAM: ""
+        DEVELOPMENT_TEAM: "4BAV7733D8"
     dependencies:
       - target: ShareExtension
         embed: true
@@ -101,4 +101,4 @@ targets:
         SWIFT_VERSION: "5.9"
         INFOPLIST_FILE: ShareExtension/Info.plist
         CODE_SIGN_STYLE: Automatic
-        DEVELOPMENT_TEAM: ""
+        DEVELOPMENT_TEAM: "4BAV7733D8"
