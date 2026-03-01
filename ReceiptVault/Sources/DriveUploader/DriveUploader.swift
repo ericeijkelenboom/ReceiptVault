@@ -345,6 +345,7 @@ final class DriveUploader {
                 let total: Double?
                 let currency: String?
                 let driveFileId: String
+                let lineItems: [ManifestLineItem]?
             }
             let receipts: [Entry]
         }
@@ -354,13 +355,20 @@ final class DriveUploader {
         df.locale = Locale(identifier: "en_US_POSIX")
         return dto.receipts.compactMap { entry in
             guard let date = df.date(from: entry.date) else { return nil }
+            let items = (entry.lineItems ?? []).map { item in
+                LineItem(name: item.name,
+                         quantity: item.quantity.map { Decimal($0) },
+                         unitPrice: item.unitPrice.map { Decimal($0) },
+                         totalPrice: item.totalPrice.map { Decimal($0) })
+            }
             return CachedReceipt(
                 driveFileId: entry.driveFileId,
                 shopName: entry.shopName,
                 date: date,
                 total: entry.total.map { Decimal($0) },
                 currency: entry.currency,
-                scannedAt: date
+                scannedAt: date,
+                lineItems: items
             )
         }
     }

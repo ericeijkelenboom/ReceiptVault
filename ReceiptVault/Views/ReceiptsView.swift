@@ -9,6 +9,7 @@ struct ReceiptsView: View {
     @State private var showPhotoPicker = false
     @State private var showCamera = false
     @State private var syncError: String?
+    @State private var searchText = ""
 
     var body: some View {
         NavigationStack {
@@ -19,6 +20,9 @@ struct ReceiptsView: View {
                     receiptList
                 }
             }
+            .searchable(text: $searchText,
+                        placement: .navigationBarDrawer(displayMode: .always),
+                        prompt: "Shop, item, or date")
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(Color.brandPrimary.opacity(0.08), for: .navigationBar)
             .navigationDestination(for: CachedReceipt.self) { receipt in
@@ -183,7 +187,11 @@ struct ReceiptsView: View {
                         .foregroundStyle(.red)
                 }
             }
-            ForEach(receiptStore.groupedByMonth, id: \.title) { group in
+            let groups = receiptStore.grouped(searchText: searchText)
+            if groups.isEmpty && !searchText.isEmpty {
+                ContentUnavailableView.search(text: searchText)
+            }
+            ForEach(groups, id: \.title) { group in
                 Section {
                     ForEach(group.receipts) { receipt in
                         NavigationLink(value: receipt) {

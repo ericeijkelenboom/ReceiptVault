@@ -1,6 +1,6 @@
 import Foundation
 
-struct LineItem: Codable {
+struct LineItem: Codable, Hashable {
     let name: String
     let quantity: Decimal?
     let unitPrice: Decimal?

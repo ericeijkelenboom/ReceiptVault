@@ -103,7 +103,8 @@ final class ProcessingPipeline {
             date: receiptData.date,
             total: receiptData.total,
             currency: receiptData.currency,
-            scannedAt: Date()
+            scannedAt: Date(),
+            lineItems: receiptData.lineItems
         ))
 
         await notify(
