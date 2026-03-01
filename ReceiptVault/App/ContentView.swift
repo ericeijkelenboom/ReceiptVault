@@ -8,12 +8,7 @@ struct ContentView: View {
                     Label("Receipts", systemImage: "receipt")
                 }
 
-            ProcessingQueueView()
-                .tabItem {
-                    Label("Queue", systemImage: "tray.and.arrow.down")
-                }
-
-            SettingsView()
+SettingsView()
                 .tabItem {
                     Label("Settings", systemImage: "gearshape")
                 }

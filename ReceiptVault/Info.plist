@@ -39,6 +39,8 @@
 	<string>1</string>
 	<key>GIDClientID</key>
 	<string>95385201718-j13q0tdmkapqr2ugmta5u2g3edgpl22k.apps.googleusercontent.com</string>
+	<key>NSCameraUsageDescription</key>
+	<string>ReceiptVault uses the camera to photograph receipts.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>ReceiptVault needs access to your photo library to import receipt images.</string>
 	<key>UIApplicationSceneManifest</key>

@@ -73,7 +73,7 @@ struct ReceiptsView: View {
         .photosPicker(isPresented: $showPhotoPicker, selection: $selectedItem, matching: .images)
         .sheet(isPresented: $showCamera) {
             CameraPickerView { image in
-                Task { await processingController.process(image: image) }
+                processingController.process(image: image)
             }
             .ignoresSafeArea()
         }
@@ -84,7 +84,7 @@ struct ReceiptsView: View {
                 do {
                     if let data = try await newItem.loadTransferable(type: Data.self),
                        let image = UIImage(data: data) {
-                        await processingController.process(image: image)
+                        processingController.process(image: image)
                     }
                 } catch {
                     await MainActor.run { processingController.lastErrorMessage = error.localizedDescription }
@@ -124,7 +124,9 @@ struct ReceiptsView: View {
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
                 if processingController.isProcessing {
-                    ProgressView("Processing receipt…")
+                    ProgressView(processingController.pendingCount > 0
+                        ? "Processing receipt… (\(processingController.pendingCount) more queued)"
+                        : "Processing receipt…")
                         .padding(.top)
                 }
                 if let message = processingController.lastErrorMessage {
@@ -153,7 +155,9 @@ struct ReceiptsView: View {
                 Section {
                     HStack(spacing: 12) {
                         ProgressView()
-                        Text("Processing receipt…")
+                        Text(processingController.pendingCount > 0
+                            ? "Processing receipt… (\(processingController.pendingCount) more queued)"
+                            : "Processing receipt…")
                             .foregroundStyle(.secondary)
                     }
                 }
