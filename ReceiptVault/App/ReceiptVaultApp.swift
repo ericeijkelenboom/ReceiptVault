@@ -17,7 +17,7 @@ struct ReceiptVaultApp: App {
                 .task {
                     guard processingController.pipeline == nil else { return }
                     // Request notification permission once on first launch
-                    try? await UNUserNotificationCenter.current()
+                    _ = try? await UNUserNotificationCenter.current()
                         .requestAuthorization(options: [.alert, .sound])
                     processingController.pipeline = ProcessingPipeline(authManager: authManager, receiptStore: receiptStore)
                 }

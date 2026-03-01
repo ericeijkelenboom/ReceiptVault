@@ -241,7 +241,7 @@ private struct LineItemRow: View {
                 Text(item.name)
                     .font(.subheadline)
                 if let qty = item.quantity, qty != 1 {
-                    Text("Qty: \(qty)")
+                    Text(verbatim: "Qty: \(qty)")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }

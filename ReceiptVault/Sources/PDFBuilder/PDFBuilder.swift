@@ -5,23 +5,18 @@ final class PDFBuilder {
     /// Builds a searchable PDF: the receipt image as the visual layer,
     /// with an invisible CoreText layer so the text is selectable/searchable.
     func build(image: UIImage, receiptData: ReceiptData) async throws -> Data {
-        // Downscale before embedding. Camera photos are 12MP+; receipts are
-        // readable at ~200 DPI on a 3.5" wide slip, so 1200px on the long
-        // edge is more than sufficient and keeps the PDF well under 300 KB.
-        let scaledImage = resized(image, maxDimension: 1200)
-        let pageRect = CGRect(origin: .zero, size: scaledImage.size)
+        // Resize to ≤1200px and re-encode as JPEG. When a JPEG-backed CGImage
+        // is drawn into a PDF context, Core Graphics embeds the JPEG stream
+        // directly rather than a raw bitmap, keeping file size small.
+        let embeddedImage = jpegScaled(image, maxDimension: 1200, quality: 0.75)
+        let pageRect = CGRect(origin: .zero, size: embeddedImage.size)
 
-        // Force 1× scale so UIGraphicsPDFRenderer doesn't apply the device's
-        // 2× or 3× Retina multiplier to the embedded raster data.
-        let format = UIGraphicsPDFRendererFormat.default()
-        format.scale = 1.0
-
-        let renderer = UIGraphicsPDFRenderer(bounds: pageRect, format: format)
+        let renderer = UIGraphicsPDFRenderer(bounds: pageRect)
         return renderer.pdfData { ctx in
             ctx.beginPage()
 
             // Layer 1: image
-            scaledImage.draw(in: pageRect)
+            embeddedImage.draw(in: pageRect)
 
             // Layer 2: invisible text for search and copy
             drawInvisibleText(receiptData.rawText, in: pageRect, context: ctx.cgContext)
@@ -30,22 +25,30 @@ final class PDFBuilder {
 
     // MARK: - Private
 
-    /// Returns a copy of `image` scaled so its longest edge is at most `maxDimension`
-    /// pixels. Uses an explicit 1× renderer so the result has no Retina multiplier.
-    private func resized(_ image: UIImage, maxDimension: CGFloat) -> UIImage {
+    /// Resizes `image` so its longest edge is at most `maxDimension` pixels (using a
+    /// 1× renderer to avoid a Retina multiplier), then re-encodes as JPEG at `quality`
+    /// and wraps the result in a CGImage backed by that JPEG data provider.
+    private func jpegScaled(_ image: UIImage, maxDimension: CGFloat, quality: CGFloat) -> UIImage {
         let size = image.size
-        let longestEdge = max(size.width, size.height)
-        guard longestEdge > maxDimension else { return image }
-
-        let scale = maxDimension / longestEdge
+        let scale = min(maxDimension / max(size.width, size.height), 1.0)
         let newSize = CGSize(width: (size.width * scale).rounded(),
                              height: (size.height * scale).rounded())
 
         let format = UIGraphicsImageRendererFormat()
         format.scale = 1.0
-        return UIGraphicsImageRenderer(size: newSize, format: format).image { _ in
+        let resized = UIGraphicsImageRenderer(size: newSize, format: format).image { _ in
             image.draw(in: CGRect(origin: .zero, size: newSize))
         }
+
+        guard let jpegData = resized.jpegData(compressionQuality: quality),
+              let provider = CGDataProvider(data: jpegData as CFData),
+              let cgImage = CGImage(jpegDataProviderSource: provider,
+                                    decode: nil,
+                                    shouldInterpolate: true,
+                                    intent: .defaultIntent) else {
+            return resized
+        }
+        return UIImage(cgImage: cgImage)
     }
 
     private func drawInvisibleText(_ text: String, in rect: CGRect, context: CGContext) {
