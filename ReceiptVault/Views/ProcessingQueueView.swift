@@ -8,7 +8,7 @@ struct ProcessingQueueView: View {
             VStack(spacing: 16) {
                 Image(systemName: processingController.isProcessing ? "tray.and.arrow.down.fill" : "tray")
                     .font(.system(size: 60))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.brandPrimary)
                 Text(processingController.isProcessing ? "Processing items..." : "No pending items.")
                     .font(.headline)
                     .foregroundStyle(.secondary)

@@ -18,6 +18,7 @@ struct ReceiptsView: View {
                 }
             }
             .navigationTitle("Receipts")
+            .toolbarBackground(Color.brandPrimary.opacity(0.08), for: .navigationBar)
             .navigationDestination(for: CachedReceipt.self) { receipt in
                 ReceiptDetailView(receipt: receipt)
                     .environmentObject(authManager)
@@ -26,6 +27,7 @@ struct ReceiptsView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     PhotosPicker(selection: $selectedItem, matching: .images) {
                         Image(systemName: "plus")
+                            .foregroundStyle(Color.brandPrimary)
                     }
                     .disabled(processingController.isProcessing)
                 }
@@ -34,6 +36,7 @@ struct ReceiptsView: View {
                         Task { try? await receiptStore.syncFromDrive(authManager: authManager) }
                     } label: {
                         Image(systemName: isSyncing ? "arrow.triangle.2.circlepath" : "arrow.clockwise")
+                            .foregroundStyle(Color.brandPrimary)
                     }
                     .disabled(isSyncing)
                 }
@@ -62,9 +65,10 @@ struct ReceiptsView: View {
             VStack(spacing: 16) {
                 Image(systemName: "doc.text.image")
                     .font(.system(size: 60))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.brandPrimary)
                 Text("No receipts yet.")
                     .font(.headline)
+                    .foregroundStyle(Color.brandPrimary)
                 Text("Tap + to add a receipt from your photo library.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)

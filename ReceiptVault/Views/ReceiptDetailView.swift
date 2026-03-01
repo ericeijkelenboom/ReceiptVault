@@ -39,6 +39,7 @@ struct ReceiptDetailView: View {
                     Color.black.ignoresSafeArea()
                     ProgressView("Loading receipt…")
                         .tint(.white)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
                 Button {
                     showPDFFullScreen = false
@@ -70,6 +71,7 @@ struct ReceiptDetailView: View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Receipt")
                 .font(.headline)
+                .foregroundStyle(Color.brandPrimary)
             Button {
                 showPDFFullScreen = true
                 Task { await loadPDF() }
@@ -84,6 +86,7 @@ struct ReceiptDetailView: View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Details")
                 .font(.headline)
+                .foregroundStyle(Color.brandPrimary)
             VStack(alignment: .leading, spacing: 8) {
                 infoRow("Shop", detail.shopName)
                 infoRow("Date", detail.date.formatted(date: .long, time: .omitted))
@@ -101,6 +104,7 @@ struct ReceiptDetailView: View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Line Items")
                 .font(.headline)
+                .foregroundStyle(Color.brandPrimary)
             if detail.lineItems.isEmpty {
                 Text("No line items")
                     .font(.subheadline)

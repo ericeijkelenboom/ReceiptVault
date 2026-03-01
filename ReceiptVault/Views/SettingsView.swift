@@ -33,12 +33,13 @@ struct SettingsView: View {
                     }
                     if keySaved || KeychainHelper.read(key: "anthropic_api_key") != nil {
                         Label("Key stored in Keychain", systemImage: "checkmark.shield.fill")
-                            .foregroundStyle(.green)
+                            .foregroundStyle(Color.brandAccent)
                             .font(.footnote)
                     }
                 }
             }
             .navigationTitle("Settings")
+            .tint(.brandPrimary)
         }
     }
 }
