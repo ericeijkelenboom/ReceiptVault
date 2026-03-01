@@ -8,7 +8,6 @@ struct ReceiptsView: View {
     @State private var selectedItem: PhotosPickerItem?
     @State private var showPhotoPicker = false
     @State private var showCamera = false
-    @State private var isSyncing = false
     @State private var syncError: String?
 
     var body: some View {
@@ -46,15 +45,6 @@ struct ReceiptsView: View {
                             .foregroundStyle(Color.brandPrimary)
                     }
                     .disabled(processingController.isProcessing)
-                }
-                ToolbarItem(placement: .topBarLeading) {
-                    Button {
-                        Task { await sync() }
-                    } label: {
-                        Image(systemName: isSyncing ? "arrow.triangle.2.circlepath" : "arrow.clockwise")
-                            .foregroundStyle(Color.brandPrimary)
-                    }
-                    .disabled(isSyncing)
                 }
             }
             // Auto-sync when already signed in on first appear (cache empty after reinstall)
@@ -97,9 +87,7 @@ struct ReceiptsView: View {
 
     private func sync() async {
         guard authManager.isSignedIn else { return }
-        isSyncing = true
         syncError = nil
-        defer { isSyncing = false }
         do {
             try await receiptStore.syncFromDrive(authManager: authManager)
         } catch {
