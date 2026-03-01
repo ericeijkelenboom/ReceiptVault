@@ -5,6 +5,7 @@ import UIKit
 final class ProcessingController: ObservableObject {
     @Published private(set) var isProcessing = false
     @Published private(set) var pendingCount = 0
+    @Published private(set) var processingStep: String?
     @Published var lastErrorMessage: String?
 
     var pipeline: ProcessingPipeline?
@@ -50,20 +51,24 @@ final class ProcessingController: ObservableObject {
 
         isProcessing = true
         lastErrorMessage = nil
+        defer {
+            isProcessing = false
+            processingStep = nil
+        }
 
         while !queue.isEmpty {
             let image = queue.removeFirst()
             pendingCount = queue.count
             print("[ProcessingController] Processing image; \(pendingCount) remaining in queue.")
             do {
-                try await pipeline.process(image: image)
+                try await pipeline.process(image: image) { [weak self] step in
+                    self?.processingStep = step
+                }
                 print("[ProcessingController] Image processed successfully.")
             } catch {
                 print("[ProcessingController] Processing failed: \(error)")
                 lastErrorMessage = error.localizedDescription
             }
         }
-
-        isProcessing = false
     }
 }

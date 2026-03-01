@@ -112,10 +112,18 @@ struct ReceiptsView: View {
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
                 if processingController.isProcessing {
-                    ProgressView(processingController.pendingCount > 0
-                        ? "Processing receipt… (\(processingController.pendingCount) more queued)"
-                        : "Processing receipt…")
-                        .padding(.top)
+                    VStack(spacing: 6) {
+                        ProgressView()
+                        Text(processingController.processingStep ?? "Processing receipt…")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                        if processingController.pendingCount > 0 {
+                            Text("\(processingController.pendingCount) more queued")
+                                .font(.caption)
+                                .foregroundStyle(.tertiary)
+                        }
+                    }
+                    .padding(.top)
                 }
                 if let message = processingController.lastErrorMessage {
                     Text(message)
@@ -143,10 +151,15 @@ struct ReceiptsView: View {
                 Section {
                     HStack(spacing: 12) {
                         ProgressView()
-                        Text(processingController.pendingCount > 0
-                            ? "Processing receipt… (\(processingController.pendingCount) more queued)"
-                            : "Processing receipt…")
-                            .foregroundStyle(.secondary)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(processingController.processingStep ?? "Processing receipt…")
+                                .foregroundStyle(.secondary)
+                            if processingController.pendingCount > 0 {
+                                Text("\(processingController.pendingCount) more queued")
+                                    .font(.caption)
+                                    .foregroundStyle(.tertiary)
+                            }
+                        }
                     }
                 }
             }

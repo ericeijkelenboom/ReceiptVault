@@ -37,7 +37,7 @@ final class ProcessingPipeline {
             do {
                 print("[ProcessingPipeline] Processing queued file: \(filename)")
                 let image = try loadImage(filename: filename)
-                try await runPipeline(for: image)
+                try await runPipeline(for: image, onStep: { _ in })
                 print("[ProcessingPipeline] Finished queued file: \(filename)")
             } catch {
                 print("[ProcessingPipeline] Error processing queued file \(filename): \(error)")
@@ -55,14 +55,14 @@ final class ProcessingPipeline {
         }
     }
 
-    func process(image: UIImage) async throws {
+    func process(image: UIImage, onStep: (String) -> Void = { _ in }) async throws {
         guard !isProcessing else { return }
         isProcessing = true
         defer { isProcessing = false }
 
         do {
             print("[ProcessingPipeline] Starting in-app pipeline for image…")
-            try await runPipeline(for: image)
+            try await runPipeline(for: image, onStep: onStep)
             print("[ProcessingPipeline] In-app pipeline completed successfully.")
         } catch {
             print("[ProcessingPipeline] In-app pipeline failed with error: \(error)")
@@ -76,22 +76,26 @@ final class ProcessingPipeline {
 
     // MARK: - Shared pipeline
 
-    private func runPipeline(for image: UIImage) async throws {
-        print("[ProcessingPipeline] Step 1/3 – calling ReceiptParser.parse(image:)")
+    private func runPipeline(for image: UIImage, onStep: (String) -> Void) async throws {
+        onStep("Reading receipt…")
+        print("[ProcessingPipeline] Step 1/4 – calling ReceiptParser.parse(image:)")
         let receiptData = try await receiptParser.parse(image: image)
-        print("[ProcessingPipeline] Step 1/3 complete – parsed receipt for shop: \(receiptData.shopName)")
+        print("[ProcessingPipeline] Step 1/4 complete – parsed receipt for shop: \(receiptData.shopName)")
 
-        print("[ProcessingPipeline] Step 2/3 – building PDF")
+        onStep("Building PDF…")
+        print("[ProcessingPipeline] Step 2/4 – building PDF")
         let pdfData = try await pdfBuilder.build(image: image, receiptData: receiptData)
-        print("[ProcessingPipeline] Step 2/3 complete – PDF built (\(pdfData.count) bytes)")
+        print("[ProcessingPipeline] Step 2/4 complete – PDF built (\(pdfData.count) bytes)")
 
-        print("[ProcessingPipeline] Step 3/3 – uploading PDF to Drive")
+        onStep("Uploading to Drive…")
+        print("[ProcessingPipeline] Step 3/4 – uploading PDF to Drive")
         let uploadResult = try await driveUploader.upload(pdf: pdfData, receiptData: receiptData)
-        print("[ProcessingPipeline] Step 3/3 complete – fileId: \(uploadResult.fileId)")
+        print("[ProcessingPipeline] Step 3/4 complete – fileId: \(uploadResult.fileId)")
 
-        print("[ProcessingPipeline] Logging to Sheets index")
+        onStep("Logging to index…")
+        print("[ProcessingPipeline] Step 4/4 – logging to Sheets index")
         try await sheetsLogger.log(receiptData: receiptData, driveFileId: uploadResult.fileId, driveFilePath: uploadResult.filePath)
-        print("[ProcessingPipeline] Sheets log complete")
+        print("[ProcessingPipeline] Step 4/4 complete")
 
         receiptStore.add(CachedReceipt(
             driveFileId: uploadResult.fileId,
