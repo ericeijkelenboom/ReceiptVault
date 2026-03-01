@@ -11,6 +11,7 @@ struct ReceiptsView: View {
     @State private var showSettings = false
     @State private var syncError: String?
     @State private var searchText = ""
+    @State private var receiptToDelete: CachedReceipt?
 
     var body: some View {
         NavigationStack {
@@ -210,16 +211,11 @@ struct ReceiptsView: View {
                         NavigationLink(value: receipt) {
                             ReceiptRow(receipt: receipt)
                         }
-                    }
-                    .onDelete { indexSet in
-                        for index in indexSet {
-                            let receipt = group.receipts[index]
-                            Task {
-                                do {
-                                    try await receiptStore.delete(receipt, authManager: authManager)
-                                } catch {
-                                    await MainActor.run { syncError = error.localizedDescription }
-                                }
+                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                            Button(role: .destructive) {
+                                receiptToDelete = receipt
+                            } label: {
+                                Label("Delete", systemImage: "trash")
                             }
                         }
                     }
@@ -232,6 +228,27 @@ struct ReceiptsView: View {
             }
         }
         .refreshable { await sync() }
+        .alert("Delete Receipt?", isPresented: Binding(
+            get: { receiptToDelete != nil },
+            set: { if !$0 { receiptToDelete = nil } }
+        )) {
+            Button("Delete", role: .destructive) {
+                guard let receipt = receiptToDelete else { return }
+                receiptToDelete = nil
+                Task {
+                    do {
+                        try await receiptStore.delete(receipt, authManager: authManager)
+                    } catch {
+                        await MainActor.run { syncError = error.localizedDescription }
+                    }
+                }
+            }
+            Button("Cancel", role: .cancel) { receiptToDelete = nil }
+        } message: {
+            if let receipt = receiptToDelete {
+                Text("\"\(receipt.shopName)\" will be permanently deleted from Drive.")
+            }
+        }
     }
 }
 
