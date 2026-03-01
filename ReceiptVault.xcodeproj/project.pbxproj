@@ -15,6 +15,7 @@
 		4F0D76B214B5FD9062D2F788 /* ReceiptParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7372227DFF1E12017F3F220C /* ReceiptParser.swift */; };
 		5BF976882BF0C1F741A54BA1 /* ProcessingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD37240D14C29C9B08CDF3F /* ProcessingController.swift */; };
 		6530EF97917494D8B6F78DE1 /* LineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAFBFBCCD86CCBEAE272E859 /* LineItem.swift */; };
+		66DB48E55CE7694AFB5A5EB7 /* CachedReceipt.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4355F7B15264C7B3D65A1AA /* CachedReceipt.swift */; };
 		6F9A582EF40AE30E1FCDAB5D /* DriveUploader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A6AC2EEBDDDD2E5FC52C71 /* DriveUploader.swift */; };
 		723533886753F8F0EA5B45D7 /* ReceiptData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B044939A1194EC2FF3D1EE3 /* ReceiptData.swift */; };
 		8D0EDA03F6B17168C37D6B6A /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = DDD87772512C9363FBBF275B /* GoogleSignInSwift */; };
@@ -23,6 +24,7 @@
 		AD0F006DAD7D0E642CE6078C /* ProcessingQueueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836315DD7D3B746D8C3BD9A7 /* ProcessingQueueView.swift */; };
 		C612C87CAAC1C6EEF4CFFAA8 /* ProcessingPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15F1EF69C25E71789CC5288 /* ProcessingPipeline.swift */; };
 		D8B56E6D35E0AC39E7E51A1E /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADC10ACF69B8CB509BB095E /* ShareViewController.swift */; };
+		DBE43FAD0B950811A41B5E25 /* ReceiptStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13B282EAE6CA2816DC237134 /* ReceiptStore.swift */; };
 		E64698C823ADBB60C53A1647 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33984DD05D73275FAA351925 /* SettingsView.swift */; };
 		EA3345E79DC3E14EFAF31969 /* ReceiptsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0F6B7A1B27504F3A01D915 /* ReceiptsView.swift */; };
 		F17E75CE9A071C7E142B5D7A /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35E17D7AB0EA911A1D74291F /* AuthManager.swift */; };
@@ -54,6 +56,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		13B282EAE6CA2816DC237134 /* ReceiptStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptStore.swift; sourceTree = "<group>"; };
 		18D820FE50613A28A81997B9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		267E1423D0EBF95D6ED5C4F8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		33984DD05D73275FAA351925 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -70,6 +73,7 @@
 		C27366E9E4D644452F0BE5A1 /* ShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareExtension.entitlements; sourceTree = "<group>"; };
 		CB09E8BBFD7F92810D878D4F /* ReceiptVaultError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptVaultError.swift; sourceTree = "<group>"; };
 		D1AA88EA9A576C95207E9BA2 /* ReceiptVault.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ReceiptVault.entitlements; sourceTree = "<group>"; };
+		D4355F7B15264C7B3D65A1AA /* CachedReceipt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedReceipt.swift; sourceTree = "<group>"; };
 		DAD37240D14C29C9B08CDF3F /* ProcessingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessingController.swift; sourceTree = "<group>"; };
 		DADC10ACF69B8CB509BB095E /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		DAE524C073DE6860DA7CCE8A /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
@@ -183,6 +187,14 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		A442CEC58083EAA441F99EAB /* ReceiptStore */ = {
+			isa = PBXGroup;
+			children = (
+				13B282EAE6CA2816DC237134 /* ReceiptStore.swift */,
+			);
+			path = ReceiptStore;
+			sourceTree = "<group>";
+		};
 		C9AC6985B8439DE22B5E9FBE /* Sources */ = {
 			isa = PBXGroup;
 			children = (
@@ -192,6 +204,7 @@
 				DB66C8DC9DB65D5F34699923 /* PDFBuilder */,
 				15F9E7AA91E95AF8053B6AEE /* Pipeline */,
 				6B12F8E5CFA5904002A7135C /* ReceiptParser */,
+				A442CEC58083EAA441F99EAB /* ReceiptStore */,
 				0583E0B8574E6D4126260FBE /* SheetsLogger */,
 			);
 			path = Sources;
@@ -208,6 +221,7 @@
 		E4FB489F448A53C030373A78 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				D4355F7B15264C7B3D65A1AA /* CachedReceipt.swift */,
 				DAE524C073DE6860DA7CCE8A /* KeychainHelper.swift */,
 				EAFBFBCCD86CCBEAE272E859 /* LineItem.swift */,
 				6B044939A1194EC2FF3D1EE3 /* ReceiptData.swift */,
@@ -315,6 +329,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F17E75CE9A071C7E142B5D7A /* AuthManager.swift in Sources */,
+				66DB48E55CE7694AFB5A5EB7 /* CachedReceipt.swift in Sources */,
 				3376210519D86B6DD8161161 /* ContentView.swift in Sources */,
 				6F9A582EF40AE30E1FCDAB5D /* DriveUploader.swift in Sources */,
 				4ED4D3F84157C7267C97F16E /* KeychainHelper.swift in Sources */,
@@ -325,6 +340,7 @@
 				AD0F006DAD7D0E642CE6078C /* ProcessingQueueView.swift in Sources */,
 				723533886753F8F0EA5B45D7 /* ReceiptData.swift in Sources */,
 				4F0D76B214B5FD9062D2F788 /* ReceiptParser.swift in Sources */,
+				DBE43FAD0B950811A41B5E25 /* ReceiptStore.swift in Sources */,
 				F5910914E24EE3DDFAA29513 /* ReceiptVaultApp.swift in Sources */,
 				9C7FCE8AADB7DA1F64F21A86 /* ReceiptVaultError.swift in Sources */,
 				EA3345E79DC3E14EFAF31969 /* ReceiptsView.swift in Sources */,

@@ -26,6 +26,31 @@ final class DriveUploader {
         return (fileId: fileId, filePath: "\(folderPath)/\(filename)")
     }
 
+    /// Downloads all manifest.json files from Drive and returns their entries as CachedReceipts.
+    func fetchAllReceipts() async throws -> [CachedReceipt] {
+        let query = "name='manifest.json' and trashed=false"
+        var components = URLComponents(url: filesURL, resolvingAgainstBaseURL: false)!
+        components.queryItems = [
+            URLQueryItem(name: "q", value: query),
+            URLQueryItem(name: "fields", value: "files(id)"),
+            URLQueryItem(name: "pageSize", value: "100")
+        ]
+        let data = try await perform(try await authorizedRequest(url: components.url!, method: "GET"))
+        struct FilesResponse: Decodable {
+            struct File: Decodable { let id: String }
+            let files: [File]
+        }
+        let filesList = try JSONDecoder().decode(FilesResponse.self, from: data).files
+
+        var results: [CachedReceipt] = []
+        for file in filesList {
+            if let manifestData = try? await downloadFile(fileId: file.id) {
+                results.append(contentsOf: parseCachedReceipts(from: manifestData))
+            }
+        }
+        return results
+    }
+
     /// Traverses (and creates) each component of a slash-separated folder path,
     /// starting from root, and returns the ID of the deepest folder.
     func createFolderIfNeeded(path: String) async throws -> String {
@@ -187,6 +212,36 @@ final class DriveUploader {
         case "JPY": return "¥"
         case .none: return ""
         default: return "\(code!) "
+        }
+    }
+
+    // MARK: - Manifest parsing for sync
+
+    private func parseCachedReceipts(from data: Data) -> [CachedReceipt] {
+        struct DTO: Decodable {
+            struct Entry: Decodable {
+                let shopName: String
+                let date: String
+                let total: Double?
+                let currency: String?
+                let driveFileId: String
+            }
+            let receipts: [Entry]
+        }
+        guard let dto = try? JSONDecoder().decode(DTO.self, from: data) else { return [] }
+        let df = DateFormatter()
+        df.dateFormat = "yyyy-MM-dd"
+        df.locale = Locale(identifier: "en_US_POSIX")
+        return dto.receipts.compactMap { entry in
+            guard let date = df.date(from: entry.date) else { return nil }
+            return CachedReceipt(
+                driveFileId: entry.driveFileId,
+                shopName: entry.shopName,
+                date: date,
+                total: entry.total.map { Decimal($0) },
+                currency: entry.currency,
+                scannedAt: date
+            )
         }
     }
 

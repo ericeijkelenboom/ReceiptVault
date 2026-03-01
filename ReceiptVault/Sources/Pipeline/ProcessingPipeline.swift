@@ -4,6 +4,7 @@ import UserNotifications
 @MainActor
 final class ProcessingPipeline {
     private let authManager: AuthManager
+    private let receiptStore: ReceiptStore
     private let appGroupIdentifier = "group.com.ericeijkelenboom.receiptvault"
     private let pendingJobsKey = "pendingReceiptJobs"
 
@@ -14,8 +15,9 @@ final class ProcessingPipeline {
     private lazy var driveUploader = DriveUploader(authManager: authManager)
     private lazy var sheetsLogger = SheetsLogger(authManager: authManager)
 
-    init(authManager: AuthManager) {
+    init(authManager: AuthManager, receiptStore: ReceiptStore) {
         self.authManager = authManager
+        self.receiptStore = receiptStore
     }
 
     // MARK: - Public
@@ -90,6 +92,15 @@ final class ProcessingPipeline {
         print("[ProcessingPipeline] Logging to Sheets index")
         try await sheetsLogger.log(receiptData: receiptData, driveFileId: uploadResult.fileId, driveFilePath: uploadResult.filePath)
         print("[ProcessingPipeline] Sheets log complete")
+
+        receiptStore.add(CachedReceipt(
+            driveFileId: uploadResult.fileId,
+            shopName: receiptData.shopName,
+            date: receiptData.date,
+            total: receiptData.total,
+            currency: receiptData.currency,
+            scannedAt: Date()
+        ))
 
         await notify(
             title: "Receipt saved ✓",

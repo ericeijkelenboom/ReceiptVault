@@ -25,4 +25,5 @@ struct ContentView: View {
     ContentView()
         .environmentObject(AuthManager())
         .environmentObject(ProcessingController())
+        .environmentObject(ReceiptStore())
 }
