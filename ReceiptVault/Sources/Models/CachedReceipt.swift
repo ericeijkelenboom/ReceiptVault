@@ -1,6 +1,6 @@
 import Foundation
 
-struct CachedReceipt: Codable, Identifiable {
+struct CachedReceipt: Codable, Identifiable, Hashable {
     let driveFileId: String
     let shopName: String
     let date: Date

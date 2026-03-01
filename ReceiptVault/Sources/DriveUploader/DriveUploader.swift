@@ -26,6 +26,44 @@ final class DriveUploader {
         return (fileId: fileId, filePath: "\(folderPath)/\(filename)")
     }
 
+    /// Fetches full receipt details (including line items) for a given Drive file ID.
+    /// Searches all manifest.json files on Drive to find the matching receipt.
+    func fetchReceiptDetails(driveFileId: String) async throws -> ReceiptDetail? {
+        let query = "name='manifest.json' and trashed=false"
+        var components = URLComponents(url: filesURL, resolvingAgainstBaseURL: false)!
+        components.queryItems = [
+            URLQueryItem(name: "q", value: query),
+            URLQueryItem(name: "fields", value: "files(id)"),
+            URLQueryItem(name: "pageSize", value: "100")
+        ]
+        let data = try await perform(try await authorizedRequest(url: components.url!, method: "GET"))
+        struct FilesResponse: Decodable {
+            struct File: Decodable { let id: String }
+            let files: [File]
+        }
+        let filesList = try JSONDecoder().decode(FilesResponse.self, from: data).files
+
+        let df = DateFormatter()
+        df.dateFormat = "yyyy-MM-dd"
+        df.locale = Locale(identifier: "en_US_POSIX")
+
+        for file in filesList {
+            guard let manifestData = try? await downloadFile(fileId: file.id) else { continue }
+            if let detail = parseReceiptDetail(from: manifestData, driveFileId: driveFileId, dateFormatter: df) {
+                return detail
+            }
+        }
+        return nil
+    }
+
+    /// Downloads a file from Drive by its file ID. Use for PDF receipt files.
+    func downloadFile(fileId: String) async throws -> Data {
+        var components = URLComponents(url: filesURL.appendingPathComponent(fileId), resolvingAgainstBaseURL: false)!
+        components.queryItems = [URLQueryItem(name: "alt", value: "media")]
+        let request = try await authorizedRequest(url: components.url!, method: "GET")
+        return try await perform(request)
+    }
+
     /// Downloads all manifest.json files from Drive and returns their entries as CachedReceipts.
     func fetchAllReceipts() async throws -> [CachedReceipt] {
         let query = "name='manifest.json' and trashed=false"
@@ -147,13 +185,6 @@ final class DriveUploader {
         _ = try await perform(request)
     }
 
-    private func downloadFile(fileId: String) async throws -> Data {
-        var components = URLComponents(url: filesURL.appendingPathComponent(fileId), resolvingAgainstBaseURL: false)!
-        components.queryItems = [URLQueryItem(name: "alt", value: "media")]
-        let request = try await authorizedRequest(url: components.url!, method: "GET")
-        return try await perform(request)
-    }
-
     // MARK: - Manifest
 
     private func updateManifest(folderId: String, receiptData: ReceiptData, filename: String, driveFileId: String) async throws {
@@ -216,6 +247,40 @@ final class DriveUploader {
     }
 
     // MARK: - Manifest parsing for sync
+
+    private func parseReceiptDetail(from data: Data, driveFileId: String, dateFormatter: DateFormatter) -> ReceiptDetail? {
+        struct DTO: Decodable {
+            struct Entry: Decodable {
+                let filename: String
+                let date: String
+                let shopName: String
+                let total: Double?
+                let currency: String?
+                let driveFileId: String
+                let lineItems: [ManifestLineItem]
+            }
+            let receipts: [Entry]
+        }
+        guard let dto = try? JSONDecoder().decode(DTO.self, from: data),
+              let entry = dto.receipts.first(where: { $0.driveFileId == driveFileId }),
+              let date = dateFormatter.date(from: entry.date) else { return nil }
+        return ReceiptDetail(
+            driveFileId: entry.driveFileId,
+            filename: entry.filename,
+            shopName: entry.shopName,
+            date: date,
+            total: entry.total.map { Decimal($0) },
+            currency: entry.currency,
+            lineItems: entry.lineItems.map { item in
+                ReceiptDetailLineItem(
+                    name: item.name,
+                    quantity: item.quantity.map { Decimal($0) },
+                    unitPrice: item.unitPrice.map { Decimal($0) },
+                    totalPrice: item.totalPrice.map { Decimal($0) }
+                )
+            }
+        )
+    }
 
     private func parseCachedReceipts(from data: Data) -> [CachedReceipt] {
         struct DTO: Decodable {

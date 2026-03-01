@@ -18,12 +18,24 @@ struct ReceiptsView: View {
                 }
             }
             .navigationTitle("Receipts")
+            .navigationDestination(for: CachedReceipt.self) { receipt in
+                ReceiptDetailView(receipt: receipt)
+                    .environmentObject(authManager)
+            }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     PhotosPicker(selection: $selectedItem, matching: .images) {
                         Image(systemName: "plus")
                     }
                     .disabled(processingController.isProcessing)
+                }
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        Task { try? await receiptStore.syncFromDrive(authManager: authManager) }
+                    } label: {
+                        Image(systemName: isSyncing ? "arrow.triangle.2.circlepath" : "arrow.clockwise")
+                    }
+                    .disabled(isSyncing)
                 }
             }
         }
@@ -46,30 +58,37 @@ struct ReceiptsView: View {
     // MARK: - Subviews
 
     private var emptyState: some View {
-        VStack(spacing: 16) {
-            Image(systemName: "doc.text.image")
-                .font(.system(size: 60))
-                .foregroundStyle(.secondary)
-            Text("No receipts yet.")
-                .font(.headline)
-            Text("Tap + to add a receipt from your photo library.")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal)
-            if processingController.isProcessing {
-                ProgressView("Processing receipt…")
-                    .padding(.top)
-            }
-            if let message = processingController.lastErrorMessage {
-                Text(message)
-                    .font(.footnote)
-                    .foregroundStyle(.red)
+        ScrollView {
+            VStack(spacing: 16) {
+                Image(systemName: "doc.text.image")
+                    .font(.system(size: 60))
+                    .foregroundStyle(.secondary)
+                Text("No receipts yet.")
+                    .font(.headline)
+                Text("Tap + to add a receipt from your photo library.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
+                if processingController.isProcessing {
+                    ProgressView("Processing receipt…")
+                        .padding(.top)
+                }
+                if let message = processingController.lastErrorMessage {
+                    Text(message)
+                        .font(.footnote)
+                        .foregroundStyle(.red)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+                }
             }
+            .frame(maxWidth: .infinity, minHeight: UIScreen.main.bounds.height * 0.7)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .refreshable {
+            isSyncing = true
+            defer { isSyncing = false }
+            try? await receiptStore.syncFromDrive(authManager: authManager)
+        }
     }
 
     private var receiptList: some View {
@@ -93,7 +112,9 @@ struct ReceiptsView: View {
             ForEach(receiptStore.groupedByMonth, id: \.title) { group in
                 Section(group.title) {
                     ForEach(group.receipts) { receipt in
-                        ReceiptRow(receipt: receipt)
+                        NavigationLink(value: receipt) {
+                            ReceiptRow(receipt: receipt)
+                        }
                     }
                 }
             }
