@@ -1,19 +1,53 @@
 # ReceiptVault — Project Blueprint
 
+---
+
+## Rules
+
+These rules must always be followed, no exceptions.
+
+### Build & Commit
+- **Always build before committing.** Fix every error and warning before running `git commit`.
+- Build command: `xcodebuild -scheme ReceiptVault -destination 'platform=iOS Simulator,name=iPhone 17 Pro' -configuration Debug build`
+- Push command: `git -c credential.helper='!/opt/homebrew/bin/gh auth git-credential' push origin main`
+
+### xcodegen
+- Run `xcodegen generate` whenever a Swift file is **added or deleted** — Xcode won't see it otherwise.
+- Do **not** run it when only editing existing files — unnecessary and wastes time.
+- All custom Info.plist keys live in `project.yml` under `info.properties` — never edit the plist files directly; xcodegen overwrites them on every regeneration.
+- Entitlements are defined via `entitlements.properties` in `project.yml`, not in the entitlements files directly.
+
+### Coding
+- Async/await throughout — no completion handlers.
+- No force unwraps.
+- All errors typed using the `ReceiptVaultError` enum.
+- Each module lives in its own folder under `Sources/`.
+- All external API calls wrapped in a class so they can be unit-tested with a mock.
+
+### Secrets
+- Never hardcode secrets. Never commit them.
+- Claude API key: stored in iOS Keychain under key `anthropic_api_key`.
+- Google OAuth client ID: stored in `Config.xcconfig` (gitignored), injected into Info.plist via `project.yml`.
+
+### Architecture
+- `ReceiptParser` is the only module that knows about the Claude API.
+- Never change the public signature `func parse(image: UIImage) async throws -> ReceiptData` — callers must stay unaffected when the implementation is swapped for a backend proxy.
+
+---
+
 ## What This App Does
-An iOS app that lets the user share receipt photos from the Photos library directly into the app via a Share Extension. The app extracts structured data from the receipt using the Claude Vision API, saves the receipt as a PDF to Google Drive in an organized folder structure, logs metadata to a Google Sheet index, and writes a manifest JSON per folder.
+An iOS app for managing receipts. The user adds receipt photos via the camera or photo library. The app extracts structured data using the Claude Vision API, saves the receipt as a searchable PDF to Google Drive in an organised folder structure, and logs metadata to a Google Sheet index.
 
 ---
 
 ## Architecture Overview
 
 ### Modules
-- **ShareExtension** — iOS Share Extension that accepts images from Photos/Files and hands off to the main app via App Group
-- **ReceiptParser** — Isolated service that takes a UIImage and returns structured ReceiptData. Currently calls Claude API directly; designed so internals can be swapped for a backend proxy later without changing callers
-- **DriveUploader** — Handles all Google Drive API interactions: folder creation, PDF upload, manifest read/write
-- **SheetsLogger** — Appends receipt metadata rows to a central Google Sheet index
-- **PDFBuilder** — Converts UIImage + extracted text into a searchable PDF (image layer + invisible text layer)
-- **AuthManager** — Manages Google Sign-In and OAuth token lifecycle for Drive + Sheets scopes
+- **ReceiptParser** — Isolated service that takes a `UIImage` and returns `ReceiptData`. Currently calls Claude API directly; designed so internals can be swapped for a backend proxy later without changing callers.
+- **DriveUploader** — Handles all Google Drive API interactions: folder creation, PDF upload, manifest read/write.
+- **SheetsLogger** — Appends receipt metadata rows to a central Google Sheet index.
+- **PDFBuilder** — Converts `UIImage` + extracted text into a searchable PDF (image layer + invisible CoreText layer).
+- **AuthManager** — Manages Google Sign-In and OAuth token lifecycle for Drive + Sheets scopes.
 
 ### Key Design Principle
 `ReceiptParser` is the only module that knows about the Claude API. It exposes a single async function:
@@ -82,63 +116,20 @@ Columns: `date | shopName | total | currency | lineItems (JSON) | driveFileId | 
 
 ---
 
-## Share Extension Flow
-
-1. User shares image from Photos → ShareExtension receives `NSItemProvider`
-2. Extension saves image to shared App Group container (`group.com.yourname.receiptvault`)
-3. Extension enqueues a job in UserDefaults (App Group) and triggers main app via `openURL`
-4. Main app (or background task) picks up queued image, runs full pipeline:
-   - `ReceiptParser.parse(image:)` → `ReceiptData`
-   - `PDFBuilder.build(image:receiptData:)` → PDF with embedded text layer
-   - `DriveUploader.upload(pdf:receiptData:)` → creates folders if needed, uploads PDF, updates manifest
-   - `SheetsLogger.log(receiptData:driveFileId:)` → appends row to index Sheet
-5. Local notification fires: "Receipt from {ShopName} saved ✓"
-
----
-
-## API Keys & Secrets
-- Claude API key: stored in iOS Keychain under key `anthropic_api_key`
-- Google OAuth client ID: stored in `Config.xcconfig` (gitignored), injected into Info.plist
-- Never hardcode secrets or commit them
-
 ## Backend Migration Path
 When ready to add a backend proxy:
-- `ReceiptParser` sends image to `POST /parse-receipt` on your server instead of Claude API directly
-- Server holds the Anthropic API key
-- No other files change
-- Backend can be a Cloudflare Worker, Vercel function, or lightweight Express app
+- `ReceiptParser` sends image to `POST /parse-receipt` on your server instead of Claude API directly.
+- Server holds the Anthropic API key.
+- No other files change.
+- Backend can be a Cloudflare Worker, Vercel function, or lightweight Express app.
 
 ---
 
 ## Tech Stack
 - **UI:** SwiftUI
-- **Camera/Scan:** VisionKit (optional, secondary to Share Extension)
 - **OCR/Extraction:** Claude API — `claude-sonnet-4-20250514`, vision input
 - **Storage:** Google Drive API v3
 - **Index:** Google Sheets API v4
 - **Auth:** Google Sign-In SDK for iOS
-- **PDF generation:** PDFKit (native iOS)
+- **PDF generation:** PDFKit + CoreText (native iOS)
 - **Minimum iOS:** 17.0
-
----
-
-## Coding Conventions
-- Async/await throughout, no completion handlers
-- Each module in its own folder under `Sources/`
-- Errors typed with custom `ReceiptVaultError` enum
-- No force unwraps
-- All API interaction wrapped so it can be unit tested with a mock
-
----
-
-## Development Workflow
-
-### xcodegen
-- Run `xcodegen generate` whenever a Swift file is **added or deleted** — Xcode won't see it otherwise
-- Do **not** run it when only editing existing files
-- All custom Info.plist keys live in `project.yml` under `info.properties` — never edit the plist files directly, xcodegen overwrites them on regeneration
-- Entitlements work the same way via `entitlements.properties` in `project.yml`
-
-### Git / GitHub
-- Remote: `https://github.com/ericeijkelenboom/ReceiptVault`
-- Push via: `git -c credential.helper='!/opt/homebrew/bin/gh auth git-credential' push origin main`
