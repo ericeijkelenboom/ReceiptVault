@@ -19,13 +19,18 @@ struct ReceiptsView: View {
                     receiptList
                 }
             }
-            .navigationTitle("Receipts")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(Color.brandPrimary.opacity(0.08), for: .navigationBar)
             .navigationDestination(for: CachedReceipt.self) { receipt in
                 ReceiptDetailView(receipt: receipt)
                     .environmentObject(authManager)
             }
             .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("Receipts")
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {
                         Button {
