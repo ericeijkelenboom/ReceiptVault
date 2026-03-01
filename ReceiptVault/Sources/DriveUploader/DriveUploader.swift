@@ -15,9 +15,17 @@ final class DriveUploader {
     /// updates manifest.json, and returns the Drive file ID.
     func upload(pdf: Data, receiptData: ReceiptData) async throws -> (fileId: String, filePath: String) {
         let calendar = Calendar(identifier: .gregorian)
-        let year = String(calendar.component(.year, from: receiptData.date))
+        let yearInt = calendar.component(.year, from: receiptData.date)
+        let currentYear = calendar.component(.year, from: Date())
+        guard yearInt >= 1980, yearInt <= currentYear + 1 else {
+            throw ReceiptVaultError.uploadFailure(
+                "Receipt date year \(yearInt) is outside the expected range (1980–\(currentYear + 1))."
+            )
+        }
+        let year = String(yearInt)
         let month = String(format: "%02d", calendar.component(.month, from: receiptData.date))
-        let folderPath = "Receipts/\(receiptData.shopName)/\(year)/\(month)"
+        let safeName = sanitizedFolderName(receiptData.shopName)
+        let folderPath = "Receipts/\(safeName)/\(year)/\(month)"
 
         let monthFolderId = try await createFolderIfNeeded(path: folderPath)
         let filename = makeFilename(for: receiptData)
@@ -221,12 +229,29 @@ final class DriveUploader {
 
     // MARK: - Filename
 
+    /// Returns a sanitised version of `name` safe to use as a Drive folder or file name component.
+    /// - Replaces `/` and `\` with `-` so they don't split the folder path.
+    /// - Strips ASCII control characters (< 0x20).
+    /// - Trims surrounding whitespace.
+    /// - Falls back to "Unknown" if the result is empty.
+    private func sanitizedFolderName(_ name: String) -> String {
+        let cleaned = name
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .replacingOccurrences(of: "/", with: "-")
+            .replacingOccurrences(of: "\\", with: "-")
+            .unicodeScalars
+            .filter { $0.value >= 32 }
+            .reduce(into: "") { $0.append(Character($1)) }
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+        return cleaned.isEmpty ? "Unknown" : cleaned
+    }
+
     private func makeFilename(for receiptData: ReceiptData) -> String {
         let df = DateFormatter()
         df.dateFormat = "yyyy-MM-dd"
         df.locale = Locale(identifier: "en_US_POSIX")
         let dateStr = df.string(from: receiptData.date)
-        let safeName = receiptData.shopName.replacingOccurrences(of: "/", with: "-")
+        let safeName = sanitizedFolderName(receiptData.shopName)
 
         if let total = receiptData.total {
             let symbol = currencySymbol(for: receiptData.currency)
