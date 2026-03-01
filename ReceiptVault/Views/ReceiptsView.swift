@@ -13,7 +13,7 @@ struct ReceiptsView: View {
     var body: some View {
         NavigationStack {
             Group {
-                if receiptStore.receipts.isEmpty {
+                if receiptStore.receipts.isEmpty && !processingController.isProcessing {
                     emptyState
                 } else {
                     receiptList
