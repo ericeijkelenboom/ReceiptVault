@@ -6,6 +6,8 @@ struct ReceiptsView: View {
     @EnvironmentObject private var receiptStore: ReceiptStore
     @EnvironmentObject private var authManager: AuthManager
     @State private var selectedItem: PhotosPickerItem?
+    @State private var showPhotoPicker = false
+    @State private var showCamera = false
     @State private var isSyncing = false
     @State private var syncError: String?
 
@@ -26,7 +28,20 @@ struct ReceiptsView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    PhotosPicker(selection: $selectedItem, matching: .images) {
+                    Menu {
+                        Button {
+                            showCamera = true
+                        } label: {
+                            Label("Take Photo", systemImage: "camera")
+                        }
+                        .disabled(!UIImagePickerController.isSourceTypeAvailable(.camera))
+
+                        Button {
+                            showPhotoPicker = true
+                        } label: {
+                            Label("Choose from Library", systemImage: "photo.on.rectangle")
+                        }
+                    } label: {
                         Image(systemName: "plus")
                             .foregroundStyle(Color.brandPrimary)
                     }
@@ -54,6 +69,13 @@ struct ReceiptsView: View {
                     Task { await sync() }
                 }
             }
+        }
+        .photosPicker(isPresented: $showPhotoPicker, selection: $selectedItem, matching: .images)
+        .sheet(isPresented: $showCamera) {
+            CameraPickerView { image in
+                Task { await processingController.process(image: image) }
+            }
+            .ignoresSafeArea()
         }
         .onChange(of: selectedItem) { _, newItem in
             guard let newItem else { return }
@@ -217,6 +239,41 @@ private struct StoreAvatar: View {
             .frame(width: 40, height: 40)
             .background(color)
             .clipShape(Circle())
+    }
+}
+
+// MARK: - Camera Picker
+
+private struct CameraPickerView: UIViewControllerRepresentable {
+    let onCapture: (UIImage) -> Void
+    @Environment(\.dismiss) private var dismiss
+
+    func makeCoordinator() -> Coordinator { Coordinator(self) }
+
+    func makeUIViewController(context: Context) -> UIImagePickerController {
+        let picker = UIImagePickerController()
+        picker.sourceType = .camera
+        picker.delegate = context.coordinator
+        return picker
+    }
+
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
+
+    final class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+        let parent: CameraPickerView
+        init(_ parent: CameraPickerView) { self.parent = parent }
+
+        func imagePickerController(_ picker: UIImagePickerController,
+                                   didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+            if let image = info[.originalImage] as? UIImage {
+                parent.onCapture(image)
+            }
+            parent.dismiss()
+        }
+
+        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+            parent.dismiss()
+        }
     }
 }
 

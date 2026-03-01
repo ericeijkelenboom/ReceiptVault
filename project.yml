@@ -35,6 +35,7 @@ targets:
       path: ReceiptVault/Info.plist
       properties:
         NSPhotoLibraryUsageDescription: "ReceiptVault needs access to your photo library to import receipt images."
+        NSCameraUsageDescription: "ReceiptVault uses the camera to photograph receipts."
         GIDClientID: "95385201718-j13q0tdmkapqr2ugmta5u2g3edgpl22k.apps.googleusercontent.com"
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
