@@ -195,7 +195,10 @@ final class ReceiptParser {
     Rules:
     - date: use the date printed on the receipt in YYYY-MM-DD format; use null if no date is visible
     - total: the final amount paid (after tax and discounts), as a number
-    - currency: 3-letter ISO 4217 code (USD, EUR, GBP, etc.) — infer from symbol or locale if not explicit
+    - currency: 3-letter ISO 4217 code (USD, EUR, GBP, etc.) — infer from ALL available signals: \
+      currency symbol, store address/city, receipt language, VAT label format, and payment method name. \
+      Many symbols are ambiguous (kr = DKK/NOK/SEK, $ = USD/CAD/AUD/etc.) so use the full context. \
+      Example: "Dankort" or a Danish address means DKK; "Dankort" outweighs the bare "kr." symbol.
     - lineItems: individual product/service lines only; omit subtotals, taxes, tips, and fees
     - quantity/unitPrice/totalPrice: use null if not shown on the receipt
     - rawText: verbatim transcription of every visible character on the receipt
