@@ -21,6 +21,15 @@ final class ReceiptStore: ObservableObject {
         save()
     }
 
+    func delete(_ receipt: CachedReceipt, authManager: AuthManager) async throws {
+        receipts.removeAll { $0.driveFileId == receipt.driveFileId }
+        save()
+        let uploader = DriveUploader(authManager: authManager)
+        try await uploader.deleteReceipt(driveFileId: receipt.driveFileId)
+        let logger = SheetsLogger(authManager: authManager)
+        try await logger.deleteRow(driveFileId: receipt.driveFileId)
+    }
+
     func syncFromDrive(authManager: AuthManager) async throws {
         let uploader = DriveUploader(authManager: authManager)
         let fetched = try await uploader.fetchAllReceipts()

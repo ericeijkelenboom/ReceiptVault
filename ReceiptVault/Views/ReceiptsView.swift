@@ -190,6 +190,18 @@ struct ReceiptsView: View {
                             ReceiptRow(receipt: receipt)
                         }
                     }
+                    .onDelete { indexSet in
+                        for index in indexSet {
+                            let receipt = group.receipts[index]
+                            Task {
+                                do {
+                                    try await receiptStore.delete(receipt, authManager: authManager)
+                                } catch {
+                                    await MainActor.run { syncError = error.localizedDescription }
+                                }
+                            }
+                        }
+                    }
                 } header: {
                     Text(group.title)
                         .font(.subheadline)

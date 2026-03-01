@@ -64,6 +64,25 @@ final class DriveUploader {
         return nil
     }
 
+    /// Deletes the PDF for a receipt from Drive and removes it from the folder's manifest.json.
+    func deleteReceipt(driveFileId: String) async throws {
+        // Fetch the parent folder ID before deleting the file
+        var metaComponents = URLComponents(url: filesURL.appendingPathComponent(driveFileId), resolvingAgainstBaseURL: false)!
+        metaComponents.queryItems = [URLQueryItem(name: "fields", value: "parents")]
+        let metaData = try await perform(try await authorizedRequest(url: metaComponents.url!, method: "GET"))
+        struct FileMeta: Decodable { let parents: [String]? }
+        let parentId = (try? JSONDecoder().decode(FileMeta.self, from: metaData))?.parents?.first
+
+        // Delete the PDF file
+        let deleteURL = filesURL.appendingPathComponent(driveFileId)
+        _ = try await perform(try await authorizedRequest(url: deleteURL, method: "DELETE"))
+
+        // Remove the entry from the parent folder's manifest.json
+        if let parentId {
+            try await removeFromManifest(driveFileId: driveFileId, folderId: parentId)
+        }
+    }
+
     /// Downloads a file from Drive by its file ID. Use for PDF receipt files.
     func downloadFile(fileId: String) async throws -> Data {
         var components = URLComponents(url: filesURL.appendingPathComponent(fileId), resolvingAgainstBaseURL: false)!
@@ -225,6 +244,17 @@ final class DriveUploader {
             manifest.lastUpdated = ISO8601DateFormatter().string(from: Date())
             _ = try await uploadFile(name: "manifest.json", data: try encoder.encode(manifest), mimeType: "application/json", parentId: folderId)
         }
+    }
+
+    private func removeFromManifest(driveFileId: String, folderId: String) async throws {
+        guard let manifestId = try await findItem(name: "manifest.json", parentId: folderId) else { return }
+        let existing = try await downloadFile(fileId: manifestId)
+        var manifest = (try? JSONDecoder().decode(Manifest.self, from: existing)) ?? Manifest()
+        manifest.receipts.removeAll { $0.driveFileId == driveFileId }
+        manifest.lastUpdated = ISO8601DateFormatter().string(from: Date())
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        try await updateFileContent(fileId: manifestId, data: try encoder.encode(manifest), mimeType: "application/json")
     }
 
     // MARK: - Filename

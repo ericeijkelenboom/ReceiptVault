@@ -19,6 +19,42 @@ final class SheetsLogger {
         try await appendRow(to: spreadsheetId, receiptData: receiptData, driveFileId: driveFileId, driveFilePath: driveFilePath)
     }
 
+    /// Finds the row in the index sheet whose driveFileId column matches and deletes it.
+    /// Silently returns if the spreadsheet or row doesn't exist.
+    func deleteRow(driveFileId: String) async throws {
+        guard let spreadsheetId = try await findSpreadsheet() else { return }
+
+        // Read all rows to locate the one matching driveFileId (column F = index 5)
+        guard let readURL = URL(string: "https://sheets.googleapis.com/v4/spreadsheets/\(spreadsheetId)/values/Sheet1") else { return }
+        let data = try await perform(try await authorizedRequest(url: readURL, method: "GET"))
+        struct ValuesResponse: Decodable { let values: [[String]]? }
+        let rows = (try? JSONDecoder().decode(ValuesResponse.self, from: data))?.values ?? []
+
+        guard let rowIndex = rows.firstIndex(where: { $0.count > 5 && $0[5] == driveFileId }) else {
+            return
+        }
+
+        // Delete the row via batchUpdate (sheetId 0 = default Sheet1)
+        // Note: Google Sheets API methods use colon syntax, e.g. :batchUpdate
+        guard let batchURL = URL(string: "https://sheets.googleapis.com/v4/spreadsheets/\(spreadsheetId):batchUpdate") else { return }
+        let body: [String: Any] = [
+            "requests": [[
+                "deleteDimension": [
+                    "range": [
+                        "sheetId": 0,
+                        "dimension": "ROWS",
+                        "startIndex": rowIndex,
+                        "endIndex": rowIndex + 1
+                    ]
+                ]
+            ]]
+        ]
+        var request = try await authorizedRequest(url: batchURL, method: "POST")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+        _ = try await perform(request)
+    }
+
     // MARK: - Spreadsheet management
 
     private func findOrCreateSpreadsheet() async throws -> String {
