@@ -4,7 +4,7 @@ import Social
 
 final class ShareViewController: UIViewController {
 
-    private let appGroupIdentifier = "group.com.PLACEHOLDER.receiptvault"
+    private let appGroupIdentifier = "group.com.ericeijkelenboom.receiptvault"
     private let pendingJobsKey = "pendingReceiptJobs"
 
     // MARK: - Lifecycle
