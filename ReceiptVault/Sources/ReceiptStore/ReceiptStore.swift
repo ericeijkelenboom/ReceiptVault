@@ -24,17 +24,8 @@ final class ReceiptStore: ObservableObject {
     func syncFromDrive(authManager: AuthManager) async throws {
         let uploader = DriveUploader(authManager: authManager)
         let fetched = try await uploader.fetchAllReceipts()
-        var changed = false
-        for receipt in fetched {
-            if !receipts.contains(where: { $0.driveFileId == receipt.driveFileId }) {
-                receipts.append(receipt)
-                changed = true
-            }
-        }
-        if changed {
-            receipts.sort { $0.date > $1.date }
-            save()
-        }
+        receipts = fetched.sorted { $0.date > $1.date }
+        save()
     }
 
     // MARK: - Grouped
