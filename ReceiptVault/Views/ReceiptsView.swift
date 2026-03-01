@@ -7,6 +7,7 @@ struct ReceiptsView: View {
     @EnvironmentObject private var authManager: AuthManager
     @State private var selectedItem: PhotosPickerItem?
     @State private var isSyncing = false
+    @State private var syncError: String?
 
     var body: some View {
         NavigationStack {
@@ -33,7 +34,7 @@ struct ReceiptsView: View {
                 }
                 ToolbarItem(placement: .topBarLeading) {
                     Button {
-                        Task { try? await receiptStore.syncFromDrive(authManager: authManager) }
+                        Task { await sync() }
                     } label: {
                         Image(systemName: isSyncing ? "arrow.triangle.2.circlepath" : "arrow.clockwise")
                             .foregroundStyle(Color.brandPrimary)
@@ -41,8 +42,20 @@ struct ReceiptsView: View {
                     .disabled(isSyncing)
                 }
             }
+            // Auto-sync when already signed in on first appear (cache empty after reinstall)
+            .task {
+                if authManager.isSignedIn && receiptStore.receipts.isEmpty {
+                    await sync()
+                }
+            }
+            // Auto-sync when auth restore completes after view has already appeared
+            .onChange(of: authManager.isSignedIn) { _, isSignedIn in
+                if isSignedIn && receiptStore.receipts.isEmpty {
+                    Task { await sync() }
+                }
+            }
         }
-        .onChange(of: selectedItem) { newItem in
+        .onChange(of: selectedItem) { _, newItem in
             guard let newItem else { return }
             Task {
                 defer { Task { @MainActor in selectedItem = nil } }
@@ -55,6 +68,20 @@ struct ReceiptsView: View {
                     await MainActor.run { processingController.lastErrorMessage = error.localizedDescription }
                 }
             }
+        }
+    }
+
+    // MARK: - Sync
+
+    private func sync() async {
+        guard authManager.isSignedIn else { return }
+        isSyncing = true
+        syncError = nil
+        defer { isSyncing = false }
+        do {
+            try await receiptStore.syncFromDrive(authManager: authManager)
+        } catch {
+            syncError = error.localizedDescription
         }
     }
 
@@ -85,14 +112,17 @@ struct ReceiptsView: View {
                         .multilineTextAlignment(.center)
                         .padding(.horizontal)
                 }
+                if let error = syncError {
+                    Text(error)
+                        .font(.footnote)
+                        .foregroundStyle(.red)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+                }
             }
             .frame(maxWidth: .infinity, minHeight: UIScreen.main.bounds.height * 0.7)
         }
-        .refreshable {
-            isSyncing = true
-            defer { isSyncing = false }
-            try? await receiptStore.syncFromDrive(authManager: authManager)
-        }
+        .refreshable { await sync() }
     }
 
     private var receiptList: some View {
@@ -113,6 +143,13 @@ struct ReceiptsView: View {
                         .foregroundStyle(.red)
                 }
             }
+            if let error = syncError {
+                Section {
+                    Text(error)
+                        .font(.footnote)
+                        .foregroundStyle(.red)
+                }
+            }
             ForEach(receiptStore.groupedByMonth, id: \.title) { group in
                 Section {
                     ForEach(group.receipts) { receipt in
@@ -128,11 +165,7 @@ struct ReceiptsView: View {
                 }
             }
         }
-        .refreshable {
-            isSyncing = true
-            defer { isSyncing = false }
-            try? await receiptStore.syncFromDrive(authManager: authManager)
-        }
+        .refreshable { await sync() }
     }
 }
 
