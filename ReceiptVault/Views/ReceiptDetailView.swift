@@ -4,32 +4,21 @@ import PDFKit
 struct ReceiptDetailView: View {
     let receipt: CachedReceipt
     @EnvironmentObject private var authManager: AuthManager
-    @State private var detail: ReceiptDetail?
-    @State private var isLoading = true
-    @State private var errorMessage: String?
     @State private var showPDFFullScreen = false
     @State private var pdfData: Data?
+    @State private var pdfError: String?
 
     var body: some View {
-        Group {
-            if isLoading {
-                ProgressView("Loading receipt…")
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else if let error = errorMessage {
-                ContentUnavailableView {
-                    Label("Could not load receipt", systemImage: "exclamationmark.triangle")
-                } description: {
-                    Text(error)
-                }
-            } else if let detail {
-                detailContent(detail)
-            } else {
-                ContentUnavailableView("Receipt not found", systemImage: "doc.questionmark")
+        ScrollView {
+            VStack(alignment: .leading, spacing: 24) {
+                thumbnailSection
+                infoSection
+                lineItemsSection
             }
+            .padding()
         }
         .navigationTitle(receipt.shopName)
         .navigationBarTitleDisplayMode(.inline)
-        .task { await loadDetail() }
         .fullScreenCover(isPresented: $showPDFFullScreen) {
             ZStack(alignment: .topTrailing) {
                 if let data = pdfData {
@@ -37,7 +26,7 @@ struct ReceiptDetailView: View {
                         .ignoresSafeArea()
                 } else {
                     Color.black.ignoresSafeArea()
-                    ProgressView("Loading receipt…")
+                    ProgressView("Loading PDF…")
                         .tint(.white)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
@@ -55,19 +44,9 @@ struct ReceiptDetailView: View {
         }
     }
 
-    @ViewBuilder
-    private func detailContent(_ detail: ReceiptDetail) -> some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
-                receiptThumbnailSection(detail)
-                receiptInfoSection(detail)
-                lineItemsSection(detail)
-            }
-            .padding()
-        }
-    }
+    // MARK: - Sections
 
-    private func receiptThumbnailSection(_ detail: ReceiptDetail) -> some View {
+    private var thumbnailSection: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Receipt")
                 .font(.headline)
@@ -76,22 +55,22 @@ struct ReceiptDetailView: View {
                 showPDFFullScreen = true
                 Task { await loadPDF() }
             } label: {
-                ReceiptThumbnailView(driveFileId: detail.driveFileId, authManager: authManager)
+                ReceiptThumbnailView(driveFileId: receipt.driveFileId, authManager: authManager)
                     .frame(maxWidth: .infinity)
             }
             .buttonStyle(.plain)
         }
     }
 
-    private func receiptInfoSection(_ detail: ReceiptDetail) -> some View {
+    private var infoSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Details")
                 .font(.headline)
                 .foregroundStyle(Color.brandPrimary)
             VStack(alignment: .leading, spacing: 8) {
-                infoRow("Shop", detail.shopName)
-                infoRow("Date", detail.date.formatted(date: .long, time: .omitted))
-                if let total = detail.total, let currency = detail.currency {
+                infoRow("Shop", receipt.shopName)
+                infoRow("Date", receipt.date.formatted(date: .long, time: .omitted))
+                if let total = receipt.total, let currency = receipt.currency {
                     infoRow("Total", (total as NSDecimalNumber as Decimal).formatted(.currency(code: currency)))
                 }
             }
@@ -101,20 +80,20 @@ struct ReceiptDetailView: View {
         }
     }
 
-    private func lineItemsSection(_ detail: ReceiptDetail) -> some View {
+    private var lineItemsSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Line Items")
                 .font(.headline)
                 .foregroundStyle(Color.brandPrimary)
-            if detail.lineItems.isEmpty {
+            if receipt.lineItems.isEmpty {
                 Text("No line items")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             } else {
                 VStack(spacing: 0) {
-                    ForEach(detail.lineItems) { item in
-                        LineItemRow(item: item, currency: detail.currency)
-                        if item.id != detail.lineItems.last?.id {
+                    ForEach(Array(receipt.lineItems.enumerated()), id: \.offset) { index, item in
+                        LineItemRow(item: item, currency: receipt.currency)
+                        if index < receipt.lineItems.count - 1 {
                             Divider()
                                 .padding(.vertical, 4)
                         }
@@ -138,27 +117,16 @@ struct ReceiptDetailView: View {
         }
     }
 
-    @MainActor
-    private func loadDetail() async {
-        isLoading = true
-        errorMessage = nil
-        defer { isLoading = false }
-        do {
-            let uploader = DriveUploader(authManager: authManager)
-            detail = try await uploader.fetchReceiptDetails(driveFileId: receipt.driveFileId)
-        } catch {
-            errorMessage = error.localizedDescription
-        }
-    }
+    // MARK: - PDF
 
     @MainActor
     private func loadPDF() async {
+        guard pdfData == nil else { return }
         do {
             let uploader = DriveUploader(authManager: authManager)
-            let data = try await uploader.downloadFile(fileId: receipt.driveFileId)
-            pdfData = data
+            pdfData = try await uploader.downloadFile(fileId: receipt.driveFileId)
         } catch {
-            errorMessage = error.localizedDescription
+            pdfError = error.localizedDescription
         }
     }
 }
@@ -177,9 +145,7 @@ private struct ReceiptThumbnailView: View {
                 RoundedRectangle(cornerRadius: 12)
                     .fill(Color(.tertiarySystemFill))
                     .aspectRatio(3/4, contentMode: .fit)
-                    .overlay {
-                        ProgressView()
-                    }
+                    .overlay { ProgressView() }
             } else if let image = thumbnailImage {
                 Image(uiImage: image)
                     .resizable()
@@ -232,7 +198,7 @@ private struct ReceiptThumbnailView: View {
 // MARK: - Line Item Row
 
 private struct LineItemRow: View {
-    let item: ReceiptDetailLineItem
+    let item: LineItem
     let currency: String?
 
     var body: some View {
@@ -265,7 +231,11 @@ private struct LineItemRow: View {
             date: .now,
             total: 47.20,
             currency: "USD",
-            scannedAt: .now
+            scannedAt: .now,
+            lineItems: [
+                LineItem(name: "Organic Milk", quantity: 1, unitPrice: 4.99, totalPrice: 4.99),
+                LineItem(name: "Sourdough Bread", quantity: 2, unitPrice: 6.49, totalPrice: 12.98)
+            ]
         ))
         .environmentObject(AuthManager())
     }
