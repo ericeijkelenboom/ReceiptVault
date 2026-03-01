@@ -193,7 +193,12 @@ final class ReceiptParser {
     }
 
     Rules:
-    - date: use the date printed on the receipt in YYYY-MM-DD format; use null if no date is visible
+    - date: read the raw date string printed on the receipt, then convert it to YYYY-MM-DD output. \
+      Date formats vary by locale — infer the correct interpretation from ALL available context: \
+      receipt language, store address/country, currency signals, and payment method name. \
+      Examples: Danish/Nordic receipts use DD-MM-YY or DD-MM-YYYY ("20-07-25" on a Danish receipt \
+      = 2025-07-20, not 2020-07-25); US receipts use MM/DD/YYYY; ISO-format receipts use YYYY-MM-DD. \
+      Apply the same locale-inference approach you use for currency. Use null if no date is visible.
     - total: the final amount paid (after tax and discounts), as a number
     - currency: 3-letter ISO 4217 code (USD, EUR, GBP, etc.) — infer from ALL available signals: \
       currency symbol, store address/city, receipt language, VAT label format, and payment method name. \
