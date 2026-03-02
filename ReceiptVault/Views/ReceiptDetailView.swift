@@ -2,11 +2,18 @@ import SwiftUI
 import PDFKit
 
 struct ReceiptDetailView: View {
-    let receipt: CachedReceipt
     @EnvironmentObject private var authManager: AuthManager
+    @EnvironmentObject private var receiptStore: ReceiptStore
+    @State private var receipt: CachedReceipt
     @State private var showPDFFullScreen = false
+    @State private var showEdit = false
     @State private var pdfData: Data?
     @State private var pdfError: String?
+    @State private var editError: String?
+
+    init(receipt: CachedReceipt) {
+        _receipt = State(initialValue: receipt)
+    }
 
     var body: some View {
         ScrollView {
@@ -19,6 +26,45 @@ struct ReceiptDetailView: View {
         }
         .navigationTitle(receipt.shopName)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("Edit") { showEdit = true }
+            }
+        }
+        .sheet(isPresented: $showEdit) {
+            ReceiptEditView(receipt: receipt) { updated in
+                receipt = updated
+                receiptStore.update(updated)
+                Task {
+                    do {
+                        let uploader = DriveUploader(authManager: authManager)
+                        let driveFilePath = try await uploader.updateManifestEntry(
+                            driveFileId: updated.driveFileId,
+                            shopName: updated.shopName,
+                            date: updated.date,
+                            total: updated.total,
+                            currency: updated.currency
+                        )
+                        let logger = SheetsLogger(authManager: authManager)
+                        try await logger.updateRow(
+                            driveFileId: updated.driveFileId,
+                            receipt: updated,
+                            driveFilePath: driveFilePath
+                        )
+                    } catch {
+                        await MainActor.run { editError = error.localizedDescription }
+                    }
+                }
+            }
+        }
+        .alert("Sync Failed", isPresented: Binding(
+            get: { editError != nil },
+            set: { if !$0 { editError = nil } }
+        )) {
+            Button("OK", role: .cancel) { editError = nil }
+        } message: {
+            Text(editError ?? "")
+        }
         .fullScreenCover(isPresented: $showPDFFullScreen) {
             ZStack(alignment: .topTrailing) {
                 if let data = pdfData {
@@ -238,5 +284,6 @@ private struct LineItemRow: View {
             ]
         ))
         .environmentObject(AuthManager())
+        .environmentObject(ReceiptStore())
     }
 }

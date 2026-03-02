@@ -19,6 +19,20 @@ final class SheetsLogger {
         try await appendRow(to: spreadsheetId, receiptData: receiptData, driveFileId: driveFileId, driveFilePath: driveFilePath)
     }
 
+    /// Updates the Sheets row for an edited receipt: deletes the old row and appends a new one.
+    func updateRow(driveFileId: String, receipt: CachedReceipt, driveFilePath: String) async throws {
+        try await deleteRow(driveFileId: driveFileId)
+        let receiptData = ReceiptData(
+            shopName: receipt.shopName,
+            date: receipt.date,
+            total: receipt.total,
+            currency: receipt.currency,
+            lineItems: receipt.lineItems,
+            rawText: ""
+        )
+        try await log(receiptData: receiptData, driveFileId: driveFileId, driveFilePath: driveFilePath)
+    }
+
     /// Finds the row in the index sheet whose driveFileId column matches and deletes it.
     /// Silently returns if the spreadsheet or row doesn't exist.
     func deleteRow(driveFileId: String) async throws {

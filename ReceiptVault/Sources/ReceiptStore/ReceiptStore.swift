@@ -21,6 +21,13 @@ final class ReceiptStore: ObservableObject {
         save()
     }
 
+    func update(_ receipt: CachedReceipt) {
+        guard let idx = receipts.firstIndex(where: { $0.driveFileId == receipt.driveFileId }) else { return }
+        receipts[idx] = receipt
+        receipts.sort { $0.date > $1.date }
+        save()
+    }
+
     func delete(_ receipt: CachedReceipt, authManager: AuthManager) async throws {
         receipts.removeAll { $0.driveFileId == receipt.driveFileId }
         save()

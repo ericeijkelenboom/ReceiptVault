@@ -64,6 +64,56 @@ final class DriveUploader {
         return nil
     }
 
+    /// Updates the manifest entry for a receipt in-place on Drive.
+    /// Preserves the PDF filename, folder, and line items — only metadata fields change.
+    /// Returns the reconstructed driveFilePath (using original filename/folder) for Sheets sync.
+    @discardableResult
+    func updateManifestEntry(driveFileId: String, shopName: String, date: Date,
+                             total: Decimal?, currency: String?) async throws -> String {
+        // Get the PDF file's parent folder ID (same pattern as deleteReceipt)
+        var metaComponents = URLComponents(url: filesURL.appendingPathComponent(driveFileId),
+                                           resolvingAgainstBaseURL: false)!
+        metaComponents.queryItems = [URLQueryItem(name: "fields", value: "parents")]
+        let metaData = try await perform(try await authorizedRequest(url: metaComponents.url!, method: "GET"))
+        struct FileMeta: Decodable { let parents: [String]? }
+        guard let parentId = (try? JSONDecoder().decode(FileMeta.self, from: metaData))?.parents?.first else {
+            throw ReceiptVaultError.uploadFailure("Could not find receipt folder on Drive")
+        }
+
+        guard let manifestId = try await findItem(name: "manifest.json", parentId: parentId) else { return "" }
+        let existing = try await downloadFile(fileId: manifestId)
+        var manifest = (try? JSONDecoder().decode(Manifest.self, from: existing)) ?? Manifest()
+
+        let df = DateFormatter()
+        df.dateFormat = "yyyy-MM-dd"
+        df.locale = Locale(identifier: "en_US_POSIX")
+        guard let idx = manifest.receipts.firstIndex(where: { $0.driveFileId == driveFileId }) else { return "" }
+        let old = manifest.receipts[idx]
+        manifest.receipts[idx] = ManifestEntry(
+            filename: old.filename,
+            date: df.string(from: date),
+            shopName: shopName,
+            total: (total as NSDecimalNumber?)?.doubleValue,
+            currency: currency,
+            driveFileId: driveFileId,
+            lineItems: old.lineItems
+        )
+        manifest.lastUpdated = ISO8601DateFormatter().string(from: Date())
+
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        try await updateFileContent(fileId: manifestId, data: try encoder.encode(manifest),
+                                    mimeType: "application/json")
+
+        // Reconstruct the driveFilePath from the original entry (file was not moved/renamed)
+        let calendar = Calendar(identifier: .gregorian)
+        let originalDate = df.date(from: old.date) ?? date
+        let year = String(calendar.component(.year, from: originalDate))
+        let month = String(format: "%02d", calendar.component(.month, from: originalDate))
+        let safeName = sanitizedFolderName(old.shopName)
+        return "Receipts/\(safeName)/\(year)/\(month)/\(old.filename)"
+    }
+
     /// Deletes the PDF for a receipt from Drive and removes it from the folder's manifest.json.
     func deleteReceipt(driveFileId: String) async throws {
         // Fetch the parent folder ID before deleting the file
