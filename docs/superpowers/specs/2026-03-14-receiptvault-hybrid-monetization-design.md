@@ -16,14 +16,14 @@ The hybrid monetization model uses a free tier (5 receipts/month) to drive conve
 
 ## 1. Monetization Model
 
-### Free Tier (5 receipts/month)
+### Free Tier (3 receipts/month)
 - Upload receipts via camera or photo library
 - Full-featured search (shop name, date range, amount, text content from receipt)
 - iCloud sync across all devices (iPhone, iPad, Mac)
 - Local archive, organized by date
-- All premium features accessible on the 5 free receipts (users experience the full product)
+- All premium features accessible on the 3 free receipts (users experience the full product)
 
-**Rationale:** Users hit the limit before they fall in love with the product, creating a conversion moment. Access to all features on free receipts prevents artificial restrictions that would frustrate users.
+**Rationale:** Tighter limit creates faster conversion pressure while still allowing users to experience the product. Access to all features on free receipts prevents artificial restrictions that would frustrate users.
 
 ### Paid Tier: Subscription ($0.99/month)
 - Unlimited receipts/month
@@ -40,9 +40,9 @@ The hybrid monetization model uses a free tier (5 receipts/month) to drive conve
 
 ### Paywall & Quota Reset
 - **Monthly reset:** Calendar month (Jan 1–31, etc.)
-- **Trigger:** After uploading 5th receipt in a calendar month, friendly banner appears: "You've used your 5 free receipts this month. Upgrade to add more."
-- **Display:** Home screen shows remaining quota ("3 of 5 receipts used")
-- **Behavior:** Free users can still search, view, and manage their 5 receipts; they just can't add more until the next month or they upgrade
+- **Trigger:** After uploading 3rd receipt in a calendar month, friendly banner appears: "You've used your 3 free receipts this month. Upgrade to add more."
+- **Display:** Home screen shows remaining quota ("1 of 3 receipts used")
+- **Behavior:** Free users can still search, view, and manage their 3 receipts; they just can't add more until the next month or they upgrade
 
 ---
 
@@ -167,9 +167,9 @@ iCloud keeps device cache in sync with other devices
 
 ## 4. Feature Matrix
 
-| Feature | Free (5/mo) | Paid Sub | Paid One-Time |
+| Feature | Free (3/mo) | Paid Sub | Paid One-Time |
 |---------|-------------|----------|---------------|
-| Upload receipts | 5/month | Unlimited | Unlimited |
+| Upload receipts | 3/month | Unlimited | Unlimited |
 | Search (shop, date, amount, text) | ✓ | ✓ | ✓ |
 | iCloud sync | ✓ | ✓ | ✓ |
 | PDF generation | ✓ | ✓ | ✓ |
@@ -215,11 +215,11 @@ iCloud keeps device cache in sync with other devices
 3. First screen: "Add your first receipt"
 
 ### Free Tier Limit Experience
-1. User uploads 5th receipt in January
-2. 6th upload triggers banner: "You've used your 5 free receipts this month. Upgrade to add more."
+1. User uploads 3rd receipt in January
+2. 4th upload triggers banner: "You've used your 3 free receipts this month. Upgrade to add more."
 3. Two CTAs: "Subscribe $0.99/mo" or "Unlock Permanently $4.99"
-4. User can still search, view, and manage their 5 receipts
-5. February 1st: Quota resets; user can add 5 more free receipts
+4. User can still search, view, and manage their 3 receipts
+5. February 1st: Quota resets; user can add 3 more free receipts
 
 ### Conversion Triggers
 - **Subscription:** User wants unlimited access but prefers flexibility (monthly renewal)
