@@ -16,9 +16,12 @@ schemes:
     build:
       targets:
         ReceiptVault: all
+        ReceiptVaultTests: all
     run:
       config: Debug
     test:
+      targets:
+        - ReceiptVaultTests
       config: Debug
     archive:
       config: Release
