@@ -12,9 +12,39 @@ final class ProcessingController: ObservableObject {
     var pipeline: ProcessingPipeline?
     private var queue: [UIImage] = []
 
+    let quotaManager = QuotaManager()
+    let receiptStore = ReceiptStoreCore()
+
     // Clears the last error state.
     func clearError() {
         lastError = nil
+    }
+
+    // Process a receipt and save to Core Data with quota checking
+    func processReceipt(_ receiptData: ReceiptData, jpgPath: String) async {
+        isProcessing = true
+        defer { isProcessing = false }
+        clearError()
+
+        // Check quota
+        guard quotaManager.canAddReceipt() else {
+            lastError = .parseFailure("Free tier limit reached. Upgrade to add more receipts.")
+            return
+        }
+
+        do {
+            // Save to Core Data
+            try await receiptStore.saveReceipt(data: receiptData, jpgPath: jpgPath)
+
+            // Record quota usage
+            quotaManager.recordReceiptAdded()
+
+            print("[ProcessingController] Receipt saved to Core Data and quota recorded.")
+        } catch let error as ReceiptVaultError {
+            lastError = error
+        } catch {
+            lastError = .parseFailure("Failed to save receipt: \(error.localizedDescription)")
+        }
     }
 
     // Enqueues `image` for processing. If nothing is currently running,

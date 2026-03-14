@@ -5,6 +5,8 @@ struct ReceiptsView: View {
     @EnvironmentObject private var processingController: ProcessingController
     @EnvironmentObject private var receiptStore: ReceiptStore
     @EnvironmentObject private var authManager: AuthManager
+    @StateObject private var quotaManager = QuotaManager()
+    @StateObject private var storeKitManager = StoreKitManager.shared
     @State private var selectedItems: [PhotosPickerItem] = []
     @State private var showPhotoPicker = false
     @State private var showCamera = false
@@ -63,6 +65,39 @@ struct ReceiptsView: View {
                         Image(systemName: "plus")
                             .foregroundStyle(Color.brandPrimary)
                     }
+                }
+            }
+            .overlay(alignment: .bottom) {
+                if !quotaManager.canAddReceipt() && !storeKitManager.isPremiumUser {
+                    VStack {
+                        Text("📦 You've used \(3 - quotaManager.getRemainingReceipts()) of 3 free receipts this month")
+                            .font(.headline)
+                            .multilineTextAlignment(.center)
+
+                        HStack(spacing: 12) {
+                            if !storeKitManager.products.isEmpty {
+                                Button("Subscribe $0.99/mo") {
+                                    if let product = storeKitManager.products.first(where: { $0.id == "com.receiptvault.subscription.monthly" }) {
+                                        Task {
+                                            await storeKitManager.purchase(product)
+                                        }
+                                    }
+                                }
+                                .buttonStyle(.borderedProminent)
+
+                                Button("Unlock $4.99") {
+                                    if let product = storeKitManager.products.first(where: { $0.id == "com.receiptvault.unlimited" }) {
+                                        Task {
+                                            await storeKitManager.purchase(product)
+                                        }
+                                    }
+                                }
+                                .buttonStyle(.bordered)
+                            }
+                        }
+                    }
+                    .padding()
+                    .background(Color(.systemGray6))
                 }
             }
             // Auto-sync when already signed in on first appear (cache empty after reinstall)
