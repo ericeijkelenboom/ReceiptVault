@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 63;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -34,11 +34,22 @@
 		F5910914E24EE3DDFAA29513 /* ReceiptVaultApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D641B1F69B92F53FE251AD6 /* ReceiptVaultApp.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		2DE99789D502F79845379B24 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3242E86D5829BB5622DA3B84 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2388413BB99D34CE8B69A417;
+			remoteInfo = ReceiptVault;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		13B282EAE6CA2816DC237134 /* ReceiptStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptStore.swift; sourceTree = "<group>"; };
 		18D820FE50613A28A81997B9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		2345AE07E722DBF91586BBDB /* ReceiptVaultTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ReceiptVaultTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		33984DD05D73275FAA351925 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		3574448459825C316DD2D166 /* ReceiptVault.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReceiptVault.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3574448459825C316DD2D166 /* ReceiptVault.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ReceiptVault.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		35E17D7AB0EA911A1D74291F /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		39B4386EE4D5655BB7F5996B /* ReceiptDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptDetailView.swift; sourceTree = "<group>"; };
 		4E14D4F5E82FE995DC8CAA65 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -109,6 +120,7 @@
 			isa = PBXGroup;
 			children = (
 				3574448459825C316DD2D166 /* ReceiptVault.app */,
+				2345AE07E722DBF91586BBDB /* ReceiptVaultTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -182,6 +194,13 @@
 			path = Sources;
 			sourceTree = "<group>";
 		};
+		CC05422755EBB95D9BE76DEE /* ReceiptVaultTests */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ReceiptVaultTests;
+			sourceTree = "<group>";
+		};
 		DB66C8DC9DB65D5F34699923 /* PDFBuilder */ = {
 			isa = PBXGroup;
 			children = (
@@ -208,6 +227,7 @@
 			isa = PBXGroup;
 			children = (
 				09F72DDC73076A987078D0D2 /* ReceiptVault */,
+				CC05422755EBB95D9BE76DEE /* ReceiptVaultTests */,
 				0F873C48720BC3475BE0AD57 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -236,6 +256,24 @@
 			productReference = 3574448459825C316DD2D166 /* ReceiptVault.app */;
 			productType = "com.apple.product-type.application";
 		};
+		884DF9523CDD72D71E8A11D1 /* ReceiptVaultTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 17D3E7B9150140E0F2831176 /* Build configuration list for PBXNativeTarget "ReceiptVaultTests" */;
+			buildPhases = (
+				0E02D40F139E96C2DEEB70AA /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7EC5F7A30820C523F74A881D /* PBXTargetDependency */,
+			);
+			name = ReceiptVaultTests;
+			packageProductDependencies = (
+			);
+			productName = ReceiptVaultTests;
+			productReference = 2345AE07E722DBF91586BBDB /* ReceiptVaultTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -246,6 +284,7 @@
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					2388413BB99D34CE8B69A417 = {
+						DevelopmentTeam = 4BAV7733D8;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -263,10 +302,12 @@
 			packageReferences = (
 				E6C86C0CA5CF00E7D874B2C1 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 			);
+			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				2388413BB99D34CE8B69A417 /* ReceiptVault */,
+				884DF9523CDD72D71E8A11D1 /* ReceiptVaultTests */,
 			);
 		};
 /* End PBXProject section */
@@ -283,6 +324,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		0E02D40F139E96C2DEEB70AA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		244E965A0AAF717DA723B701 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -314,7 +362,32 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		7EC5F7A30820C523F74A881D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2388413BB99D34CE8B69A417 /* ReceiptVault */;
+			targetProxy = 2DE99789D502F79845379B24 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		062CEFA9073BFC4AAFD23BBF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ericeijkelenboom.ReceiptVaultTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ReceiptVault.app/ReceiptVault";
+			};
+			name = Debug;
+		};
 		26C66B82B1716F20FBC91A54 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -378,6 +451,23 @@
 			};
 			name = Debug;
 		};
+		2CBEEE3836BCC158057E8681 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ericeijkelenboom.ReceiptVaultTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ReceiptVault.app/ReceiptVault";
+			};
+			name = Release;
+		};
 		4198838E9D22A2AE865B99DD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -385,7 +475,7 @@
 				CODE_SIGN_ENTITLEMENTS = ReceiptVault/ReceiptVault.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = KPFUVNMKM8;
+				DEVELOPMENT_TEAM = 4BAV7733D8;
 				INFOPLIST_FILE = ReceiptVault/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -406,7 +496,7 @@
 				CODE_SIGN_ENTITLEMENTS = ReceiptVault/ReceiptVault.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = KPFUVNMKM8;
+				DEVELOPMENT_TEAM = 4BAV7733D8;
 				INFOPLIST_FILE = ReceiptVault/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -479,6 +569,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		17D3E7B9150140E0F2831176 /* Build configuration list for PBXNativeTarget "ReceiptVaultTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				062CEFA9073BFC4AAFD23BBF /* Debug */,
+				2CBEEE3836BCC158057E8681 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		789E2E2CC620AA2F150C2DD7 /* Build configuration list for PBXProject "ReceiptVault" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
