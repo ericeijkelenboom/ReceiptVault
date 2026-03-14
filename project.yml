@@ -16,9 +16,12 @@ schemes:
     build:
       targets:
         ReceiptVault: all
+        ReceiptVaultTests: all
     run:
       config: Debug
     test:
+      targets:
+        - ReceiptVaultTests
       config: Debug
     archive:
       config: Release
@@ -38,6 +41,7 @@ targets:
         NSPhotoLibraryUsageDescription: "ReceiptVault needs access to your photo library to import receipt images."
         NSCameraUsageDescription: "ReceiptVault uses the camera to photograph receipts."
         GIDClientID: "95385201718-j13q0tdmkapqr2ugmta5u2g3edgpl22k.apps.googleusercontent.com"
+        RECEIPT_PARSER_LAMBDA_ENDPOINT: "https://your-api-gateway-endpoint.execute-api.us-east-1.amazonaws.com/parse-receipt"
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
           UISceneConfigurations: {}
@@ -72,3 +76,21 @@ targets:
         product: GoogleSignIn
       - package: GoogleSignIn-iOS
         product: GoogleSignInSwift
+
+  ReceiptVaultTests:
+    type: bundle.unit-test
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: ReceiptVaultTests
+    info:
+      path: ReceiptVaultTests/Info.plist
+    dependencies:
+      - target: ReceiptVault
+    settings:
+      base:
+        BUNDLE_LOADER: "$(TEST_HOST)"
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/ReceiptVault.app/ReceiptVault"
+        INFOPLIST_FILE: ReceiptVaultTests/Info.plist
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: "4BAV7733D8"

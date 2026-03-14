@@ -7,10 +7,45 @@ final class ProcessingController: ObservableObject {
     @Published private(set) var pendingCount = 0
     @Published private(set) var totalInBatch = 0
     @Published private(set) var processingStep: String?
-    @Published var lastErrorMessage: String?
+    @Published var lastError: ReceiptVaultError?
 
     var pipeline: ProcessingPipeline?
     private var queue: [UIImage] = []
+
+    let quotaManager = QuotaManager()
+    let receiptStore = ReceiptStoreCore()
+
+    // Clears the last error state.
+    func clearError() {
+        lastError = nil
+    }
+
+    // Process a receipt and save to Core Data with quota checking
+    func processReceipt(_ receiptData: ReceiptData, jpgPath: String) async {
+        isProcessing = true
+        defer { isProcessing = false }
+        clearError()
+
+        // Check quota
+        guard quotaManager.canAddReceipt() else {
+            lastError = .parseFailure("Free tier limit reached. Upgrade to add more receipts.")
+            return
+        }
+
+        do {
+            // Save to Core Data
+            try await receiptStore.saveReceipt(data: receiptData, jpgPath: jpgPath)
+
+            // Record quota usage
+            quotaManager.recordReceiptAdded()
+
+            print("[ProcessingController] Receipt saved to Core Data and quota recorded.")
+        } catch let error as ReceiptVaultError {
+            lastError = error
+        } catch {
+            lastError = .parseFailure("Failed to save receipt: \(error.localizedDescription)")
+        }
+    }
 
     // Enqueues `image` for processing. If nothing is currently running,
     // kicks off the processing loop immediately.
@@ -35,7 +70,7 @@ final class ProcessingController: ObservableObject {
         }
 
         isProcessing = true
-        lastErrorMessage = nil
+        clearError()
         defer { isProcessing = false }
 
         print("[ProcessingController] Starting drainQueue() from App Group jobs…")
@@ -54,7 +89,7 @@ final class ProcessingController: ObservableObject {
         }
 
         isProcessing = true
-        lastErrorMessage = nil
+        clearError()
         totalInBatch = queue.count
         defer {
             isProcessing = false
@@ -71,9 +106,12 @@ final class ProcessingController: ObservableObject {
                     self?.processingStep = step
                 }
                 print("[ProcessingController] Image processed successfully.")
+            } catch let error as ReceiptVaultError {
+                print("[ProcessingController] Processing failed: \(error)")
+                lastError = error
             } catch {
                 print("[ProcessingController] Processing failed: \(error)")
-                lastErrorMessage = error.localizedDescription
+                lastError = .parseFailure("An unexpected error occurred: \(error.localizedDescription)")
             }
         }
     }

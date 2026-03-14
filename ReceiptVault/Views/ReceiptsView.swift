@@ -5,6 +5,8 @@ struct ReceiptsView: View {
     @EnvironmentObject private var processingController: ProcessingController
     @EnvironmentObject private var receiptStore: ReceiptStore
     @EnvironmentObject private var authManager: AuthManager
+    @StateObject private var quotaManager = QuotaManager()
+    @StateObject private var storeKitManager = StoreKitManager.shared
     @State private var selectedItems: [PhotosPickerItem] = []
     @State private var showPhotoPicker = false
     @State private var showCamera = false
@@ -65,6 +67,39 @@ struct ReceiptsView: View {
                     }
                 }
             }
+            .overlay(alignment: .bottom) {
+                if !quotaManager.canAddReceipt() && !storeKitManager.isPremiumUser {
+                    VStack {
+                        Text("📦 You've used \(3 - quotaManager.getRemainingReceipts()) of 3 free receipts this month")
+                            .font(.headline)
+                            .multilineTextAlignment(.center)
+
+                        HStack(spacing: 12) {
+                            if !storeKitManager.products.isEmpty {
+                                Button("Subscribe $0.99/mo") {
+                                    if let product = storeKitManager.products.first(where: { $0.id == "com.receiptvault.subscription.monthly" }) {
+                                        Task {
+                                            await storeKitManager.purchase(product)
+                                        }
+                                    }
+                                }
+                                .buttonStyle(.borderedProminent)
+
+                                Button("Unlock $4.99") {
+                                    if let product = storeKitManager.products.first(where: { $0.id == "com.receiptvault.unlimited" }) {
+                                        Task {
+                                            await storeKitManager.purchase(product)
+                                        }
+                                    }
+                                }
+                                .buttonStyle(.bordered)
+                            }
+                        }
+                    }
+                    .padding()
+                    .background(Color(.systemGray6))
+                }
+            }
             // Auto-sync when already signed in on first appear (cache empty after reinstall)
             .task {
                 if authManager.isSignedIn && receiptStore.receipts.isEmpty {
@@ -101,7 +136,13 @@ struct ReceiptsView: View {
                             processingController.process(image: image)
                         }
                     } catch {
-                        await MainActor.run { processingController.lastErrorMessage = error.localizedDescription }
+                        await MainActor.run {
+                            if let vaultError = error as? ReceiptVaultError {
+                                processingController.lastError = vaultError
+                            } else {
+                                processingController.lastError = .parseFailure("An unexpected error occurred: \(error.localizedDescription)")
+                            }
+                        }
                     }
                 }
             }
@@ -150,8 +191,8 @@ struct ReceiptsView: View {
                     }
                     .padding(.top)
                 }
-                if let message = processingController.lastErrorMessage {
-                    Text(message)
+                if let error = processingController.lastError {
+                    Text(error.errorDescription ?? "Unknown error")
                         .font(.footnote)
                         .foregroundStyle(.red)
                         .multilineTextAlignment(.center)
@@ -187,9 +228,9 @@ struct ReceiptsView: View {
                     }
                 }
             }
-            if let message = processingController.lastErrorMessage {
+            if let error = processingController.lastError {
                 Section {
-                    Text(message)
+                    Text(error.errorDescription ?? "Unknown error")
                         .font(.footnote)
                         .foregroundStyle(.red)
                 }

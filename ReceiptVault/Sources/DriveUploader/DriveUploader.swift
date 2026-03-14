@@ -340,14 +340,14 @@ final class DriveUploader {
         return "\(dateStr)_\(safeName).pdf"
     }
 
-    private func currencySymbol(for code: String?) -> String {
+    func currencySymbol(for code: String?) -> String {
         switch code?.uppercased() {
         case "USD": return "$"
         case "EUR": return "€"
         case "GBP": return "£"
         case "JPY": return "¥"
         case .none: return ""
-        default: return "\(code!) "
+        default: return (code ?? "") + " "
         }
     }
 

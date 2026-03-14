@@ -21,6 +21,20 @@
                ReferencedContainer = "container:ReceiptVault.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "884DF9523CDD72D71E8A11D1"
+               BuildableName = "ReceiptVaultTests.xctest"
+               BlueprintName = "ReceiptVaultTests"
+               ReferencedContainer = "container:ReceiptVault.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -39,6 +53,17 @@
          </BuildableReference>
       </MacroExpansion>
       <Testables>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "884DF9523CDD72D71E8A11D1"
+               BuildableName = "ReceiptVaultTests.xctest"
+               BlueprintName = "ReceiptVaultTests"
+               ReferencedContainer = "container:ReceiptVault.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <CommandLineArguments>
       </CommandLineArguments>

@@ -1,0 +1,11 @@
+{
+  "name": "receipt-vault-lambda",
+  "version": "1.0.0",
+  "description": "Receipt parsing Lambda function",
+  "main": "parse-receipt.js",
+  "dependencies": {
+    "@google-cloud/vision": "^4.6.0",
+    "@anthropic-ai/sdk": "^0.16.0",
+    "axios": "^1.6.0"
+  }
+}
