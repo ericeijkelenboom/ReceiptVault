@@ -41,6 +41,7 @@ targets:
         NSPhotoLibraryUsageDescription: "ReceiptVault needs access to your photo library to import receipt images."
         NSCameraUsageDescription: "ReceiptVault uses the camera to photograph receipts."
         GIDClientID: "95385201718-j13q0tdmkapqr2ugmta5u2g3edgpl22k.apps.googleusercontent.com"
+        RECEIPT_PARSER_LAMBDA_ENDPOINT: "https://your-api-gateway-endpoint.execute-api.us-east-1.amazonaws.com/parse-receipt"
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
           UISceneConfigurations: {}

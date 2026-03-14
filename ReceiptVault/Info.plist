@@ -45,6 +45,8 @@
 	<string>ReceiptVault uses the camera to photograph receipts.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>ReceiptVault needs access to your photo library to import receipt images.</string>
+	<key>RECEIPT_PARSER_LAMBDA_ENDPOINT</key>
+	<string>https://your-api-gateway-endpoint.execute-api.us-east-1.amazonaws.com/parse-receipt</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
