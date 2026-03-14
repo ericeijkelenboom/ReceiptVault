@@ -1,12 +1,14 @@
 import SwiftUI
 import GoogleSignIn
 import UserNotifications
+import CoreData
 
 @main
 struct ReceiptVaultApp: App {
     @StateObject private var authManager = AuthManager()
     @StateObject private var processingController = ProcessingController()
     @StateObject private var receiptStore = ReceiptStore()
+    @Environment(\.managedObjectContext) private var viewContext
 
     var body: some Scene {
         WindowGroup {
@@ -14,6 +16,7 @@ struct ReceiptVaultApp: App {
                 .environmentObject(authManager)
                 .environmentObject(processingController)
                 .environmentObject(receiptStore)
+                .environment(\.managedObjectContext, CoreDataStack.shared.viewContext)
                 .task {
                     guard processingController.pipeline == nil else { return }
                     // Request notification permission once on first launch
