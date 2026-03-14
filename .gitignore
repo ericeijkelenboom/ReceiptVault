@@ -24,3 +24,6 @@ DerivedData/
 Config.xcconfig
 *.xcconfig
 GoogleService-Info.plist
+
+# Git worktrees
+.worktrees/
