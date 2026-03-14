@@ -7,10 +7,15 @@ final class ProcessingController: ObservableObject {
     @Published private(set) var pendingCount = 0
     @Published private(set) var totalInBatch = 0
     @Published private(set) var processingStep: String?
-    @Published var lastErrorMessage: String?
+    @Published var lastError: ReceiptVaultError?
 
     var pipeline: ProcessingPipeline?
     private var queue: [UIImage] = []
+
+    // Clears the last error state.
+    func clearError() {
+        lastError = nil
+    }
 
     // Enqueues `image` for processing. If nothing is currently running,
     // kicks off the processing loop immediately.
@@ -35,7 +40,7 @@ final class ProcessingController: ObservableObject {
         }
 
         isProcessing = true
-        lastErrorMessage = nil
+        clearError()
         defer { isProcessing = false }
 
         print("[ProcessingController] Starting drainQueue() from App Group jobs…")
@@ -54,7 +59,7 @@ final class ProcessingController: ObservableObject {
         }
 
         isProcessing = true
-        lastErrorMessage = nil
+        clearError()
         totalInBatch = queue.count
         defer {
             isProcessing = false
@@ -71,9 +76,12 @@ final class ProcessingController: ObservableObject {
                     self?.processingStep = step
                 }
                 print("[ProcessingController] Image processed successfully.")
+            } catch let error as ReceiptVaultError {
+                print("[ProcessingController] Processing failed: \(error)")
+                lastError = error
             } catch {
                 print("[ProcessingController] Processing failed: \(error)")
-                lastErrorMessage = error.localizedDescription
+                lastError = .parseFailure("An unexpected error occurred: \(error.localizedDescription)")
             }
         }
     }

@@ -101,7 +101,13 @@ struct ReceiptsView: View {
                             processingController.process(image: image)
                         }
                     } catch {
-                        await MainActor.run { processingController.lastErrorMessage = error.localizedDescription }
+                        await MainActor.run {
+                            if let vaultError = error as? ReceiptVaultError {
+                                processingController.lastError = vaultError
+                            } else {
+                                processingController.lastError = .parseFailure("An unexpected error occurred: \(error.localizedDescription)")
+                            }
+                        }
                     }
                 }
             }
@@ -150,8 +156,8 @@ struct ReceiptsView: View {
                     }
                     .padding(.top)
                 }
-                if let message = processingController.lastErrorMessage {
-                    Text(message)
+                if let error = processingController.lastError {
+                    Text(error.errorDescription ?? "Unknown error")
                         .font(.footnote)
                         .foregroundStyle(.red)
                         .multilineTextAlignment(.center)
@@ -187,9 +193,9 @@ struct ReceiptsView: View {
                     }
                 }
             }
-            if let message = processingController.lastErrorMessage {
+            if let error = processingController.lastError {
                 Section {
-                    Text(message)
+                    Text(error.errorDescription ?? "Unknown error")
                         .font(.footnote)
                         .foregroundStyle(.red)
                 }
