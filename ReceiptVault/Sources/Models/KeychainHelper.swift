@@ -47,3 +47,42 @@ enum KeychainHelper {
         SecItemDelete(query as CFDictionary)
     }
 }
+
+#if DEBUG
+// For testing: allow swapping Security framework for a mock
+protocol KeychainService {
+    func read(key: String) -> String?
+    func write(key: String, value: String) throws
+    func delete(key: String)
+}
+
+class RealKeychainService: KeychainService {
+    func read(key: String) -> String? {
+        KeychainHelper.read(key: key)
+    }
+
+    func write(key: String, value: String) throws {
+        try KeychainHelper.write(key: key, value: value)
+    }
+
+    func delete(key: String) {
+        KeychainHelper.delete(key: key)
+    }
+}
+
+class MockKeychainService: KeychainService {
+    private var storage: [String: String] = [:]
+
+    func read(key: String) -> String? {
+        storage[key]
+    }
+
+    func write(key: String, value: String) throws {
+        storage[key] = value
+    }
+
+    func delete(key: String) {
+        storage.removeValue(forKey: key)
+    }
+}
+#endif

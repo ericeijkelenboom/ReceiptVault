@@ -79,9 +79,14 @@ targets:
     deploymentTarget: "17.0"
     sources:
       - path: ReceiptVaultTests
+    info:
+      path: ReceiptVaultTests/Info.plist
     dependencies:
       - target: ReceiptVault
     settings:
       base:
         BUNDLE_LOADER: "$(TEST_HOST)"
         TEST_HOST: "$(BUILT_PRODUCTS_DIR)/ReceiptVault.app/ReceiptVault"
+        INFOPLIST_FILE: ReceiptVaultTests/Info.plist
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: "4BAV7733D8"
