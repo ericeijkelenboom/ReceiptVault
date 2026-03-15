@@ -26,18 +26,19 @@ BLOCKED_PATTERNS=(
     "\.env\.secret$"
 )
 
-# Patterns to warn about (only match if they look like actual credentials, not documentation)
+# Patterns to warn about (grep regex format)
 CREDENTIAL_PATTERNS=(
-    "ANTHROPIC_API_KEY\s*=\s*['\"]"
-    "ANTHROPIC_API_KEY:\s*['\"]"
-    "aws_access_key_id\s*=\s*"
-    "aws_secret_access_key\s*=\s*"
-    "-----BEGIN\s(PRIVATE|RSA|OPENSSH)"
-    "password\s*=\s*['\"]"
+    "ANTHROPIC_API_KEY[[:space:]]*[=:]"
+    "aws_access_key_id"
+    "aws_secret_access_key"
+    "-----BEGIN.*PRIVATE"
+    "-----BEGIN.*RSA"
+    "[Aa][Pp][Ii][_-]?[Kk][Ee][Yy][[:space:]]*="
+    "[Ss][Ee][Cc][Rr][Ee][Tt][_-]?[Kk][Ee][Yy][[:space:]]*="
 )
 
-# Get staged files
-STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM 2>/dev/null || true)
+# Get staged files (exclude hook files from credential check)
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM 2>/dev/null | grep -v "\.githooks\|\.git/hooks" || true)
 
 if [ -n "$STAGED_FILES" ]; then
     # Check for blocked files
@@ -50,12 +51,13 @@ if [ -n "$STAGED_FILES" ]; then
         fi
     done
 
-    # Check for credential patterns in staged content (skip hook files)
+    # Check for credential patterns in staged content
     for pattern in "${CREDENTIAL_PATTERNS[@]}"; do
-        matches=$(git diff --cached -S "$pattern" --name-only 2>/dev/null | grep -v "\.githooks\|\.git/hooks" || true)
+        matches=$(git diff --cached -- $STAGED_FILES 2>/dev/null | grep -E -- "$pattern" || true)
         if [ -n "$matches" ]; then
-            echo -e "${RED}✗ BLOCKED: Credential pattern '$pattern' detected in:${NC}"
-            echo "$matches" | sed 's/^/  /'
+            echo -e "${RED}✗ BLOCKED: Credential pattern detected:${NC}"
+            # Don't show the actual credential value - just indicate detection
+            echo "$matches" | sed 's/^[+]/  +/' | head -1
             SECURITY_FAILED=1
         fi
     done
