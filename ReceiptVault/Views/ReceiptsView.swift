@@ -3,7 +3,7 @@ import PhotosUI
 
 struct ReceiptsView: View {
     @EnvironmentObject private var processingController: ProcessingController
-    @EnvironmentObject private var receiptStore: ReceiptStore
+    @EnvironmentObject private var receiptStore: ReceiptStoreCore
     @EnvironmentObject private var authManager: AuthManager
     @StateObject private var quotaManager = QuotaManager()
     @StateObject private var storeKitManager = StoreKitManager.shared
@@ -155,7 +155,7 @@ struct ReceiptsView: View {
         guard authManager.isSignedIn else { return }
         syncError = nil
         do {
-            try await receiptStore.syncFromDrive(authManager: authManager)
+            _ = try await receiptStore.fetchAllReceipts()
         } catch {
             syncError = error.localizedDescription
         }
@@ -278,7 +278,9 @@ struct ReceiptsView: View {
                 receiptToDelete = nil
                 Task {
                     do {
-                        try await receiptStore.delete(receipt, authManager: authManager)
+                        if let uuid = UUID(uuidString: receipt.driveFileId) {
+                            try await receiptStore.deleteReceipt(id: uuid)
+                        }
                     } catch {
                         await MainActor.run { syncError = error.localizedDescription }
                     }

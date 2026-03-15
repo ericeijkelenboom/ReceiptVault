@@ -3,7 +3,7 @@ import PDFKit
 
 struct ReceiptDetailView: View {
     @EnvironmentObject private var authManager: AuthManager
-    @EnvironmentObject private var receiptStore: ReceiptStore
+    @EnvironmentObject private var receiptStore: ReceiptStoreCore
     @State private var receipt: CachedReceipt
     @State private var showPDFFullScreen = false
     @State private var showEdit = false
@@ -34,23 +34,9 @@ struct ReceiptDetailView: View {
         .sheet(isPresented: $showEdit) {
             ReceiptEditView(receipt: receipt) { updated in
                 receipt = updated
-                receiptStore.update(updated)
                 Task {
                     do {
-                        let uploader = DriveUploader(authManager: authManager)
-                        let driveFilePath = try await uploader.updateManifestEntry(
-                            driveFileId: updated.driveFileId,
-                            shopName: updated.shopName,
-                            date: updated.date,
-                            total: updated.total,
-                            currency: updated.currency
-                        )
-                        let logger = SheetsLogger(authManager: authManager)
-                        try await logger.updateRow(
-                            driveFileId: updated.driveFileId,
-                            receipt: updated,
-                            driveFilePath: driveFilePath
-                        )
+                        try await receiptStore.update(updated)
                     } catch {
                         await MainActor.run { editError = error.localizedDescription }
                     }

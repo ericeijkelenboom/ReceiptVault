@@ -1,6 +1,9 @@
 import Foundation
 import CoreData
 
+// MARK: - Import all model types needed
+// These come from the Models module within the app
+
 @MainActor
 class ReceiptStoreCore: ObservableObject {
     @Published var receipts: [Receipt] = []
@@ -71,6 +74,64 @@ class ReceiptStoreCore: ObservableObject {
         receipts.filter { receipt in
             receipt.shopName.lowercased().contains(query.lowercased()) ||
             receipt.rawText.lowercased().contains(query.lowercased())
+        }
+    }
+
+    func update(_ cachedReceipt: CachedReceipt) async throws {
+        let context = coreDataStack.viewContext
+        guard let uuid = UUID(uuidString: cachedReceipt.driveFileId) else { return }
+
+        let request = Receipt.fetchRequest()
+        request.predicate = NSPredicate(format: "id == %@", uuid as CVarArg)
+
+        if let receipt = try context.fetch(request).first {
+            receipt.shopName = cachedReceipt.shopName
+            receipt.date = cachedReceipt.date
+            receipt.total = cachedReceipt.total as NSDecimalNumber?
+            receipt.currency = cachedReceipt.currency
+
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM"
+            receipt.quotaMonth = formatter.string(from: cachedReceipt.date)
+
+            coreDataStack.saveContext()
+        }
+        _ = try await fetchAllReceipts()
+    }
+
+    func grouped(searchText: String) -> [(title: String, receipts: [CachedReceipt])] {
+        let filtered = searchText.isEmpty
+            ? receipts
+            : searchReceipts(query: searchText)
+
+        let grouped = Dictionary(grouping: filtered) { receipt in
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MMMM yyyy"
+            return formatter.string(from: receipt.date)
+        }
+
+        return grouped.sorted { a, b in
+            guard let dateA = DateFormatter().date(from: a.key),
+                  let dateB = DateFormatter().date(from: b.key) else {
+                return false
+            }
+            return dateA > dateB
+        }.map { month, receipts in
+            let cached = receipts.map { receipt in
+                let lineItems = (receipt.lineItems as? Set<CDLineItem>)?
+                    .map { LineItem(name: $0.name, quantity: $0.quantity as Decimal?, unitPrice: $0.unitPrice as Decimal?, totalPrice: $0.totalPrice as Decimal?) }
+                    .sorted { $0.name < $1.name } ?? []
+                return CachedReceipt(
+                    driveFileId: receipt.id.uuidString,
+                    shopName: receipt.shopName,
+                    date: receipt.date,
+                    total: receipt.total as Decimal?,
+                    currency: receipt.currency,
+                    scannedAt: receipt.createdAt,
+                    lineItems: lineItems
+                )
+            }.sorted { $0.date > $1.date }
+            return (title: month, receipts: cached)
         }
     }
 }
