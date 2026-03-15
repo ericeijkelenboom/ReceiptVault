@@ -27,5 +27,10 @@ GoogleService-Info.plist
 backend/lambda/google-service-account.json
 backend/terraform/terraform.tfvars
 
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+
 # Git worktrees
 .worktrees/
