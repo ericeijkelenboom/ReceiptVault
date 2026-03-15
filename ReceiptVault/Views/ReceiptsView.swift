@@ -4,14 +4,12 @@ import PhotosUI
 struct ReceiptsView: View {
     @EnvironmentObject private var processingController: ProcessingController
     @EnvironmentObject private var receiptStore: ReceiptStoreCore
-    @EnvironmentObject private var authManager: AuthManager
     @StateObject private var quotaManager = QuotaManager()
     @StateObject private var storeKitManager = StoreKitManager.shared
     @State private var selectedItems: [PhotosPickerItem] = []
     @State private var showPhotoPicker = false
     @State private var showCamera = false
     @State private var showSettings = false
-    @State private var syncError: String?
     @State private var searchText = ""
     @State private var receiptToDelete: CachedReceipt?
 
@@ -31,7 +29,6 @@ struct ReceiptsView: View {
             .toolbarBackground(Color.brandPrimary.opacity(0.08), for: .navigationBar)
             .navigationDestination(for: CachedReceipt.self) { receipt in
                 ReceiptDetailView(receipt: receipt)
-                    .environmentObject(authManager)
             }
             .toolbar {
                 ToolbarItem(placement: .principal) {
@@ -100,22 +97,9 @@ struct ReceiptsView: View {
                     .background(Color(.systemGray6))
                 }
             }
-            // Auto-sync when already signed in on first appear (cache empty after reinstall)
-            .task {
-                if authManager.isSignedIn && receiptStore.receipts.isEmpty {
-                    await sync()
-                }
-            }
-            // Auto-sync when auth restore completes after view has already appeared
-            .onChange(of: authManager.isSignedIn) { _, isSignedIn in
-                if isSignedIn && receiptStore.receipts.isEmpty {
-                    Task { await sync() }
-                }
-            }
         }
         .sheet(isPresented: $showSettings) {
             SettingsView()
-                .environmentObject(authManager)
         }
         .photosPicker(isPresented: $showPhotoPicker, selection: $selectedItems, maxSelectionCount: 20, matching: .images)
         .sheet(isPresented: $showCamera) {
@@ -152,12 +136,11 @@ struct ReceiptsView: View {
     // MARK: - Sync
 
     private func sync() async {
-        guard authManager.isSignedIn else { return }
-        syncError = nil
+        // iCloud CloudKit handles sync automatically. This is a manual refresh.
         do {
             _ = try await receiptStore.fetchAllReceipts()
         } catch {
-            syncError = error.localizedDescription
+            print("Sync error: \(error.localizedDescription)")
         }
     }
 
@@ -198,13 +181,6 @@ struct ReceiptsView: View {
                         .multilineTextAlignment(.center)
                         .padding(.horizontal)
                 }
-                if let error = syncError {
-                    Text(error)
-                        .font(.footnote)
-                        .foregroundStyle(.red)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal)
-                }
             }
             .frame(maxWidth: .infinity, minHeight: UIScreen.main.bounds.height * 0.7)
         }
@@ -231,13 +207,6 @@ struct ReceiptsView: View {
             if let error = processingController.lastError {
                 Section {
                     Text(error.errorDescription ?? "Unknown error")
-                        .font(.footnote)
-                        .foregroundStyle(.red)
-                }
-            }
-            if let error = syncError {
-                Section {
-                    Text(error)
                         .font(.footnote)
                         .foregroundStyle(.red)
                 }
@@ -282,7 +251,7 @@ struct ReceiptsView: View {
                             try await receiptStore.deleteReceipt(id: uuid)
                         }
                     } catch {
-                        await MainActor.run { syncError = error.localizedDescription }
+                        print("Delete error: \(error.localizedDescription)")
                     }
                 }
             }
@@ -385,5 +354,4 @@ private struct CameraPickerView: UIViewControllerRepresentable {
     ReceiptsView()
         .environmentObject(ProcessingController())
         .environmentObject(ReceiptStore())
-        .environmentObject(AuthManager())
 }

@@ -2,18 +2,6 @@ import XCTest
 @testable import ReceiptVault
 
 class ReceiptParserTests: XCTestCase {
-    var parser: ReceiptParser!
-
-    override func setUp() {
-        super.setUp()
-        parser = ReceiptParser()
-    }
-
-    override func tearDown() {
-        parser = nil
-        super.tearDown()
-    }
-
     func test_parseImage_returnsReceiptData() async throws {
         // Note: This test requires a valid Lambda endpoint
         // For local testing, use mocked responses or skip this test

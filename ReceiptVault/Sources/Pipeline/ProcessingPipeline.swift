@@ -3,19 +3,18 @@ import UserNotifications
 
 @MainActor
 final class ProcessingPipeline {
-    private let authManager: AuthManager
     private let receiptStore: ReceiptStoreCore
     private let appGroupIdentifier = "group.com.ericeijkelenboom.receiptvault"
     private let pendingJobsKey = "pendingReceiptJobs"
 
     private var isProcessing = false
 
-    private let receiptParser = ReceiptParser()
+    private let receiptParser: ReceiptParser
     private let pdfBuilder = PDFBuilder()
 
-    init(authManager: AuthManager, receiptStore: ReceiptStoreCore) {
-        self.authManager = authManager
+    init(receiptStore: ReceiptStoreCore) {
         self.receiptStore = receiptStore
+        self.receiptParser = ReceiptParser()
     }
 
     // MARK: - Public
