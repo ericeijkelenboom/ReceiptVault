@@ -267,7 +267,6 @@ struct LineItem: Codable {
 // Stored in Core Data as CachedReceipt
 struct CachedReceipt {
     let id: UUID
-    let id: UUID
     let shopName: String
     let date: Date
     let total: Decimal?
