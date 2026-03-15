@@ -4,7 +4,7 @@ import UserNotifications
 @MainActor
 final class ProcessingPipeline {
     private let authManager: AuthManager
-    private let receiptStore: ReceiptStore
+    private let receiptStore: ReceiptStoreCore
     private let appGroupIdentifier = "group.com.ericeijkelenboom.receiptvault"
     private let pendingJobsKey = "pendingReceiptJobs"
 
@@ -12,10 +12,8 @@ final class ProcessingPipeline {
 
     private let receiptParser = ReceiptParser()
     private let pdfBuilder = PDFBuilder()
-    private lazy var driveUploader = DriveUploader(authManager: authManager)
-    private lazy var sheetsLogger = SheetsLogger(authManager: authManager)
 
-    init(authManager: AuthManager, receiptStore: ReceiptStore) {
+    init(authManager: AuthManager, receiptStore: ReceiptStoreCore) {
         self.authManager = authManager
         self.receiptStore = receiptStore
     }
@@ -78,38 +76,25 @@ final class ProcessingPipeline {
 
     private func runPipeline(for image: UIImage, onStep: (String) -> Void) async throws {
         onStep("Reading receipt…")
-        print("[ProcessingPipeline] Step 1/4 – calling ReceiptParser.parse(image:)")
+        print("[ProcessingPipeline] Step 1/3 – calling ReceiptParser.parse(image:)")
         let receiptData = try await receiptParser.parse(image: image)
-        print("[ProcessingPipeline] Step 1/4 complete – parsed receipt for shop: \(receiptData.shopName)")
+        print("[ProcessingPipeline] Step 1/3 complete – parsed receipt for shop: \(receiptData.shopName)")
 
         onStep("Building PDF…")
-        print("[ProcessingPipeline] Step 2/4 – building PDF")
+        print("[ProcessingPipeline] Step 2/3 – building PDF")
         let pdfData = try await pdfBuilder.build(image: image, receiptData: receiptData)
-        print("[ProcessingPipeline] Step 2/4 complete – PDF built (\(pdfData.count) bytes)")
+        print("[ProcessingPipeline] Step 2/3 complete – PDF built (\(pdfData.count) bytes)")
 
-        onStep("Uploading to Drive…")
-        print("[ProcessingPipeline] Step 3/4 – uploading PDF to Drive")
-        let uploadResult = try await driveUploader.upload(pdf: pdfData, receiptData: receiptData)
-        print("[ProcessingPipeline] Step 3/4 complete – fileId: \(uploadResult.fileId)")
-
-        onStep("Logging to index…")
-        print("[ProcessingPipeline] Step 4/4 – logging to Sheets index")
-        try await sheetsLogger.log(receiptData: receiptData, driveFileId: uploadResult.fileId, driveFilePath: uploadResult.filePath)
-        print("[ProcessingPipeline] Step 4/4 complete")
-
-        receiptStore.add(CachedReceipt(
-            driveFileId: uploadResult.fileId,
-            shopName: receiptData.shopName,
-            date: receiptData.date,
-            total: receiptData.total,
-            currency: receiptData.currency,
-            scannedAt: Date(),
-            lineItems: receiptData.lineItems
-        ))
+        onStep("Saving receipt…")
+        print("[ProcessingPipeline] Step 3/3 – saving to local storage with iCloud sync")
+        // Save to Core Data with iCloud CloudKit sync
+        // TODO: Store pdfData alongside receipt in Core Data
+        try await receiptStore.saveReceipt(data: receiptData, jpgPath: "")
+        print("[ProcessingPipeline] Step 3/3 complete")
 
         await notify(
             title: "Receipt saved ✓",
-            body: "Receipt from \(receiptData.shopName) saved to Google Drive."
+            body: "Receipt from \(receiptData.shopName) saved and syncing via iCloud."
         )
     }
 

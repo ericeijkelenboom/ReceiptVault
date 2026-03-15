@@ -7,7 +7,7 @@ import CoreData
 struct ReceiptVaultApp: App {
     @StateObject private var authManager = AuthManager()
     @StateObject private var processingController = ProcessingController()
-    @StateObject private var receiptStore = ReceiptStore()
+    @StateObject private var receiptStore = ReceiptStoreCore()
     @Environment(\.managedObjectContext) private var viewContext
 
     var body: some Scene {

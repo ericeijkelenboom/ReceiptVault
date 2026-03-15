@@ -24,12 +24,9 @@ exports.handler = async (event) => {
 
     // Step 1: Google Cloud Vision OCR
     const buffer = Buffer.from(imageBase64, 'base64');
-    const visionRequest = {
-      image: { content: buffer.toString('base64') },
-      features: [{ type: 'TEXT_DETECTION' }]
-    };
-
-    const visionResponse = await visionClient.documentTextDetection(visionRequest);
+    const visionResponse = await visionClient.textDetection({
+      image: { content: buffer }
+    });
     const ocrText = visionResponse[0].fullTextAnnotation?.text || '';
 
     if (!ocrText) {
@@ -65,7 +62,7 @@ Return this exact JSON structure:
 If any field cannot be determined, use null.`;
 
     const claudeResponse = await anthropic.messages.create({
-      model: 'claude-opus-4-20250805',
+      model: 'claude-opus-4-20250514',
       max_tokens: 1024,
       messages: [{ role: 'user', content: claudePrompt }]
     });
