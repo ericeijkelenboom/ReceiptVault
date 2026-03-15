@@ -41,7 +41,7 @@ resource "aws_lambda_function" "parse_receipt" {
   handler       = "parse-receipt.handler"
   runtime       = "nodejs20.x"
   timeout       = 60
-  memory_size   = 512
+  memory_size   = 256
 
   environment {
     variables = {

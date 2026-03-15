@@ -2,7 +2,20 @@
   "permissions": {
     "allow": [
       "Bash(xcodebuild:*)",
-      "Bash(xcodegen generate:*)"
+      "Bash(xcodegen generate:*)",
+      "Bash(git:*)",
+      "Bash(find:*)",
+      "Bash(chmod:*)",
+      "Bash(cd:*)",
+      "Bash(xmllint:*)",
+      "Bash(/Applications/Xcode.app/Contents/Developer/usr/bin/momc --action generate --swift-version 5.9 /Users/eric/code/ReceiptVault/.worktrees/implement-plans/ReceiptVault/ReceiptVault.xcdatamodeld /tmp/coredata_test 2>&1)",
+      "Bash(cat:*)",
+      "Bash(gh auth:*)",
+      "Bash(ls:*)",
+      "Bash(zip:*)",
+      "Bash(AWS_PROFILE=receipt-vault-deployer terraform plan)",
+      "Bash(AWS_PROFILE=receipt-vault-deployer terraform plan && AWS_PROFILE=receipt-vault-deployer terraform apply -auto-approve)",
+      "Bash(AWS_PROFILE=receipt-vault-deployer terraform destroy -auto-approve)"
     ]
   }
 }

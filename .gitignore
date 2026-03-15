@@ -24,6 +24,8 @@ DerivedData/
 Config.xcconfig
 *.xcconfig
 GoogleService-Info.plist
+backend/lambda/google-service-account.json
+backend/terraform/terraform.tfvars
 
 # Git worktrees
 .worktrees/

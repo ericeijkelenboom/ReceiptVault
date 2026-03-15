@@ -4,10 +4,7 @@ final class ReceiptParser {
     private let lambdaEndpoint: URL
 
     init() {
-        // Get Lambda endpoint from Info.plist (configured in project.yml)
-        let endpointString = Bundle.main.infoDictionary?["RECEIPT_PARSER_LAMBDA_ENDPOINT"] as? String
-            ?? "https://receipt-parser-lambda.example.com/parse-receipt"
-        self.lambdaEndpoint = URL(string: endpointString) ?? URL(fileURLWithPath: "")
+        self.lambdaEndpoint = URL(string: Config.lambdaEndpoint) ?? URL(fileURLWithPath: "")
     }
 
     func parse(image: UIImage) async throws -> ReceiptData {
