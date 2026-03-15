@@ -29,6 +29,7 @@ backend/terraform/terraform.tfvars
 
 # Terraform
 .terraform/
+terraform.tfstate*
 *.tfstate
 *.tfstate.*
 
