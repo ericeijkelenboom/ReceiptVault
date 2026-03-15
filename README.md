@@ -12,8 +12,6 @@ An iOS app for scanning and managing receipts with intelligent extraction, local
 3. Set up your environment (see _Development Setup_ below)
 4. Follow the workflow in [CLAUDE.md § Build & Commit](./CLAUDE.md)
 
-**First-time agent context:** This is NOT the original Google Drive/Sheets design. Architecture redesign (Mar 2026) moved to server-side credentials (Lambda) and local storage (Core Data + CloudKit). See [architectural decisions](./docs/superpowers/architecture.md) for rationale.
-
 ---
 
 ## What ReceiptVault Does
@@ -133,8 +131,7 @@ See [architectural decisions](./docs/superpowers/architecture.md) for full ratio
 ### Dependency Notes
 
 - **No third-party dependencies** — uses only Apple frameworks (SwiftUI, Core Data, CloudKit, URLSession)
-- **No Google SDK** — backend handles all credential management
-- **No Anthropic SDK** — app delegates to Lambda for Claude API calls
+- **No API SDKs** — app delegates all API calls to Lambda backend
 
 ---
 

@@ -10,7 +10,6 @@ final class ProcessingPipeline {
     private var isProcessing = false
 
     private let receiptParser: ReceiptParser
-    private let pdfBuilder = PDFBuilder()
 
     init(receiptStore: ReceiptStoreCore) {
         self.receiptStore = receiptStore
@@ -85,22 +84,15 @@ final class ProcessingPipeline {
     // MARK: - Shared pipeline
 
     private func runPipeline(for image: UIImage, onStep: (String) -> Void) async throws {
-        onStep("Reading receipt…")
-        print("[ProcessingPipeline] Step 1/3 – calling ReceiptParser.parse(image:)")
+        onStep("Extracting receipt data…")
+        print("[ProcessingPipeline] Step 1/2 – calling ReceiptParser.parse(image:)")
         let receiptData = try await receiptParser.parse(image: image)
-        print("[ProcessingPipeline] Step 1/3 complete – parsed receipt for shop: \(receiptData.shopName)")
-
-        onStep("Building PDF…")
-        print("[ProcessingPipeline] Step 2/3 – building PDF")
-        let pdfData = try await pdfBuilder.build(image: image, receiptData: receiptData)
-        print("[ProcessingPipeline] Step 2/3 complete – PDF built (\(pdfData.count) bytes)")
+        print("[ProcessingPipeline] Step 1/2 complete – parsed receipt for shop: \(receiptData.shopName)")
 
         onStep("Saving receipt…")
-        print("[ProcessingPipeline] Step 3/3 – saving to local storage with iCloud sync")
-        // Save to Core Data with iCloud CloudKit sync
-        // TODO: Store pdfData alongside receipt in Core Data
+        print("[ProcessingPipeline] Step 2/2 – saving to local storage with iCloud sync")
         try await receiptStore.saveReceipt(data: receiptData, jpgPath: "")
-        print("[ProcessingPipeline] Step 3/3 complete")
+        print("[ProcessingPipeline] Step 2/2 complete")
 
         await notify(
             title: "Receipt saved ✓",

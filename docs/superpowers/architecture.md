@@ -48,29 +48,22 @@ ReceiptVault is a **thin-client mobile app** backed by a **stateless Lambda func
 
 ---
 
-### Decision 2: Core Data + CloudKit (vs. Google Drive/Sheets)
+### Decision 2: Core Data + CloudKit Storage
 
-**What changed:** Replaced Google Drive + Sheets with Core Data + CloudKit.
+**What it is:** All receipt data stored locally in Core Data with CloudKit sync enabled.
 
 **Why:**
 - **Simplicity:** No OAuth flow, permission dialogs, or token refresh needed.
 - **Privacy:** Data encrypted in transit and at rest on iCloud; never touches our servers.
 - **Automatic sync:** Works across all user devices without any app logic.
-- **Zero backend:** No database, no storage API, no backend queries.
+- **Zero backend storage:** App has no central database; data lives on user's iCloud.
 - **Cost:** Free (included in iCloud); no API usage fees.
-- **User friction:** Invisible to user; leverages existing iCloud setup.
-
-**vs. Google Drive/Sheets:**
-- More complex (OAuth, scope management, token lifecycle)
-- Requires backend to manage Drive/Sheets API calls
-- More surface area for credential exposure
-- Higher cost at scale (millions of API calls)
-- User confusion about Drive/Sheets access permissions
+- **Offline-first:** Reads and writes work without network connectivity.
 
 **Implementation:**
-- Core Data schema with CloudKit sync enabled
-- `CachedReceipt` entity stores all receipt data
-- CloudKit automatically handles sync, conflict resolution, user's other devices
+- Core Data schema with CloudKit sync enabled (`NSPersistentCloudKitContainer`)
+- `CachedReceipt` entity stores all receipt data (shop, date, total, currency, items, text)
+- CloudKit automatically handles sync, conflict resolution, and cross-device availability
 
 ---
 
@@ -99,69 +92,6 @@ POST /parse-receipt
 - Generate PDFs (app could do this locally, or defer to future feature)
 - Send emails (could be added as Lambda trigger later)
 - Track user accounts (not needed; app uses iCloud identity)
-
----
-
-### Decision 4: Removed Modules
-
-#### AuthManager (removed Mar 2026)
-
-**Why removed:**
-- App no longer needs Google OAuth (no Drive/Sheets access needed)
-- All backend auth is server-side (Anthropic key in Lambda env vars)
-- Simpler codebase; fewer dependency injections
-
-**Impact:**
-- `ProcessingPipeline` no longer takes `authManager` parameter
-- `ProcessingController` no longer owns `AuthManager` instance
-- `ReceiptVaultApp` doesn't handle OAuth redirect URIs
-- Settings view no longer has sign-in/sign-out UI
-
-#### DriveUploader (removed Mar 2026)
-
-**Why removed:**
-- Receipts no longer uploaded to Google Drive
-- Core Data + CloudKit is the storage layer
-- Simplifies app (no Drive API dependency, no OAuth scopes)
-
-**What it did:**
-- Created folder structure in Drive: `Receipts/{ShopName}/{YYYY}/{MM}/`
-- Uploaded searchable PDFs with OCR layer
-- Maintained `manifest.json` index
-
-**How receipts are now stored:**
-- Core Data entity with CloudKit sync
-- Metadata stored as `CachedReceipt` (shop name, date, total, currency, line items, raw text)
-- No PDF generation at the moment (could be added later)
-
-#### SheetsLogger (removed Mar 2026)
-
-**Why removed:**
-- No need for central index (Core Data queries are local)
-- Removed Google Sheets API dependency
-- Eliminates OAuth scope complexity
-
-**What it did:**
-- Appended rows to central `ReceiptVault Index` sheet
-- Columns: date, shopName, total, currency, lineItems (JSON), driveFileId, driveFilePath, scannedAt
-
-**How tracking is now done:**
-- All receipts queryable from Core Data locally
-- CloudKit sync provides backup/restore across devices
-- Future: Could add cloud analytics by logging to Lambda or third-party service
-
-#### PDFBuilder (not removed, deprioritized)
-
-**Status:** Code exists but not used.
-
-**Why deprioritized:**
-- Core focus is receipt extraction, not PDF generation
-- Users can screenshot/export receipts from app later if needed
-- PDF generation could be a Lambda function if needed (Chromium, wkhtmltopdf, etc.)
-
-**Future possibility:**
-- Add "Export as PDF" feature (generate on Lambda, email to user)
-- Use service like Puppeteer or similar on backend
 
 ---
 
@@ -436,7 +366,6 @@ terraform apply
 
 ### What NOT to Build
 
-- **Sync to Google Drive:** CloudKit already syncs; adding Drive introduces complexity, security risk.
 - **User accounts:** Let iCloud handle it; no auth backend needed.
 - **Real-time sharing:** Cross-user sharing would require moving data off iCloud; not a priority.
 - **Client-side API keys:** Never. All keys server-side only.

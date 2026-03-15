@@ -39,7 +39,6 @@ These rules must always be followed, no exceptions.
   ```
 - **Lambda handles all Claude API calls server-side.** The app sends image base64 → Lambda returns `ReceiptData`.
 - **Core Data + CloudKit** for all storage (local + automatic iCloud sync).
-- **No app-level Google auth, Google Drive, or Google Sheets.** Those are removed.
 
 ---
 
@@ -60,17 +59,11 @@ An iOS app for managing receipts. Users add receipt photos via camera or photo l
 ## Current Architecture
 
 ### Modules
-- **ReceiptParser** — Isolated service that takes `UIImage` and returns `ReceiptData`. Calls Lambda endpoint at `Config.lambdaEndpoint` with image base64. **No local API calls.**
+- **ReceiptParser** — Isolated service that takes `UIImage` and returns `ReceiptData`. Calls Lambda endpoint at `Config.lambdaEndpoint` with image base64.
 - **ReceiptStoreCore** — Core Data + CloudKit storage. Handles all persistence and sync.
 - **ProcessingPipeline** — Orchestrates image processing: validates → calls ReceiptParser → saves to ReceiptStore.
 - **ProcessingController** — App-level controller for the pipeline. Manages UI state (loading, progress, errors).
 - **Config** — Stores Lambda endpoint URL and other non-secret configuration.
-
-**Removed modules (no longer needed):**
-- ~~AuthManager~~ — Google Sign-In not needed; all auth is server-side.
-- ~~DriveUploader~~ — Google Drive not used; using Core Data + CloudKit instead.
-- ~~SheetsLogger~~ — Google Sheets not used.
-- ~~PDFBuilder~~ — PDF generation not currently needed (receipts stored as metadata in Core Data).
 
 ### Key Design Principle
 
@@ -138,31 +131,11 @@ struct LineItem: Codable {
 
 ---
 
-## Removed Components
-
-**Why Google integrations were removed:**
-- Complexity: OAuth, token management, permission scopes
-- Security: Client-side credential handling
-- Maintenance: Google API changes, deprecated features
-- Cost: Google Drive/Sheets API calls from millions of devices
-- User friction: Sign-in flow, permissions dialogs
-
-**Why CloudKit instead:**
-- Automatic: Uses iCloud, zero user setup
-- Secure: End-to-end encrypted via iCloud
-- Private: Data stays on user's Apple account
-- Free: Included in iCloud (100GB+ for most users)
-- Simple: No backend auth needed
-- Sync: Works across all user devices automatically
-
----
-
 ## Secrets Management
 
 **What's NOT in the app:**
 - Anthropic API key ❌
 - AWS credentials ❌
-- Google OAuth credentials ❌
 
 **What IS in the app:**
 - Lambda endpoint URL (Config.xcconfig, gitignored) ✅

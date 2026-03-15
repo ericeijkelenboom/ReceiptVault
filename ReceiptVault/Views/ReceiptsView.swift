@@ -353,5 +353,5 @@ private struct CameraPickerView: UIViewControllerRepresentable {
 #Preview {
     ReceiptsView()
         .environmentObject(ProcessingController())
-        .environmentObject(ReceiptStore())
+        .environmentObject(ReceiptStoreCore())
 }
