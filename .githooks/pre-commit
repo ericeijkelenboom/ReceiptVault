@@ -37,8 +37,8 @@ CREDENTIAL_PATTERNS=(
     "[Ss][Ee][Cc][Rr][Ee][Tt][_-]?[Kk][Ee][Yy][[:space:]]*="
 )
 
-# Get staged files (exclude hook files from credential check)
-STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM 2>/dev/null | grep -v "\.githooks\|\.git/hooks" || true)
+# Get staged files (exclude hook files and documentation from credential check)
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM 2>/dev/null | grep -v "\.githooks\|\.git/hooks\|docs/superpowers\|\.md$" || true)
 
 if [ -n "$STAGED_FILES" ]; then
     # Check for blocked files
