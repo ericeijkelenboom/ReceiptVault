@@ -63,7 +63,7 @@ struct ReceiptEditView: View {
         let normalized = totalString.replacingOccurrences(of: ",", with: ".")
         let parsedTotal = Decimal(string: normalized)
         let updated = CachedReceipt(
-            driveFileId: original.driveFileId,
+            id: original.id,
             shopName: shopName.trimmingCharacters(in: .whitespaces),
             date: date,
             total: parsedTotal,
@@ -79,7 +79,7 @@ struct ReceiptEditView: View {
 #Preview {
     ReceiptEditView(
         receipt: CachedReceipt(
-            driveFileId: "preview",
+            id: UUID(),
             shopName: "Sports World",
             date: .now,
             total: 429.00,

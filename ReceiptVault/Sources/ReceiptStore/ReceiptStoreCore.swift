@@ -79,7 +79,7 @@ class ReceiptStoreCore: ObservableObject {
 
     func update(_ cachedReceipt: CachedReceipt) async throws {
         let context = coreDataStack.viewContext
-        guard let uuid = UUID(uuidString: cachedReceipt.driveFileId) else { return }
+        let uuid = cachedReceipt.id
 
         let request = Receipt.fetchRequest()
         request.predicate = NSPredicate(format: "id == %@", uuid as CVarArg)
@@ -122,7 +122,7 @@ class ReceiptStoreCore: ObservableObject {
                     .map { LineItem(name: $0.name, quantity: $0.quantity as Decimal?, unitPrice: $0.unitPrice as Decimal?, totalPrice: $0.totalPrice as Decimal?) }
                     .sorted { $0.name < $1.name } ?? []
                 return CachedReceipt(
-                    driveFileId: receipt.id.uuidString,
+                    id: receipt.id,
                     shopName: receipt.shopName,
                     date: receipt.date,
                     total: receipt.total as Decimal?,

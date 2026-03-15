@@ -102,7 +102,7 @@ struct LineItem: Codable {
 @NSManaged public var currency: String?
 @NSManaged public var lineItems: [LineItem]
 @NSManaged public var rawText: String
-@NSManaged public var driveFileId: String  // UUID of CloudKit record
+@NSManaged public var id: UUID
 ```
 
 ---

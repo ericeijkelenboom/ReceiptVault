@@ -247,9 +247,7 @@ struct ReceiptsView: View {
                 receiptToDelete = nil
                 Task {
                     do {
-                        if let uuid = UUID(uuidString: receipt.driveFileId) {
-                            try await receiptStore.deleteReceipt(id: uuid)
-                        }
+                        try await receiptStore.deleteReceipt(id: receipt.id)
                     } catch {
                         print("Delete error: \(error.localizedDescription)")
                     }

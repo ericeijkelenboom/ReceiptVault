@@ -110,9 +110,7 @@ struct ReceiptDetailView: View {
             Button(role: .destructive) {
                 Task {
                     do {
-                        if let uuid = UUID(uuidString: receipt.driveFileId) {
-                            try await receiptStore.deleteReceipt(id: uuid)
-                        }
+                        try await receiptStore.deleteReceipt(id: receipt.id)
                     } catch {
                         editError = error.localizedDescription
                     }
@@ -128,7 +126,7 @@ struct ReceiptDetailView: View {
 #Preview {
     NavigationStack {
         ReceiptDetailView(receipt: CachedReceipt(
-            driveFileId: "550e8400-e29b-41d4-a716-446655440000",
+            id: UUID(uuidString: "550e8400-e29b-41d4-a716-446655440000")!,
             shopName: "Whole Foods",
             date: Date(),
             total: 47.20,

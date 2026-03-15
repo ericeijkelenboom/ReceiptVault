@@ -192,12 +192,13 @@ CachedReceipt
 ├─ shopName: String
 ├─ date: Date
 ├─ total: NSDecimalNumber?
+├─ id: UUID
+├─ shopName: String
+├─ date: Date
+├─ total: Decimal?
 ├─ currency: String?
-├─ lineItems: [LineItem] (codable)
-├─ rawText: String
-├─ driveFileId: String (UUID of CloudKit sync)
-├─ createdAt: Date
-└─ updatedAt: Date
+├─ scannedAt: Date
+└─ lineItems: [LineItem]
 ```
 
 **CloudKit sync:**

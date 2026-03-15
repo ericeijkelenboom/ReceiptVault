@@ -267,15 +267,13 @@ struct LineItem: Codable {
 // Stored in Core Data as CachedReceipt
 struct CachedReceipt {
     let id: UUID
+    let id: UUID
     let shopName: String
     let date: Date
-    let total: NSDecimalNumber?
+    let total: Decimal?
     let currency: String?
-    let lineItems: [LineItem]  // stored as JSON
-    let rawText: String
-    let driveFileId: String    // CloudKit record ID
-    let createdAt: Date
-    let updatedAt: Date
+    let scannedAt: Date
+    let lineItems: [LineItem]
 }
 ```
 

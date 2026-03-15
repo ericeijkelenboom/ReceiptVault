@@ -20,7 +20,7 @@ class MockReceiptStore: ObservableObject {
             throw error
         }
         let cached = CachedReceipt(
-            driveFileId: UUID().uuidString,
+            id: UUID(),
             shopName: receiptData.shopName,
             date: receiptData.date,
             total: receiptData.total,
@@ -31,8 +31,8 @@ class MockReceiptStore: ObservableObject {
         receipts.append(cached)
     }
 
-    func deleteReceipt(id: String) async throws {
-        receipts.removeAll { $0.driveFileId == id }
+    func deleteReceipt(id: UUID) async throws {
+        receipts.removeAll { $0.id == id }
     }
 
     func searchReceipts(query: String) -> [CachedReceipt] {

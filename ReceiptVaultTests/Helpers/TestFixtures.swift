@@ -52,7 +52,7 @@ enum TestFixtures {
     )
 
     static let sampleCachedReceipt = CachedReceipt(
-        driveFileId: "file_123",
+        id: UUID(uuidString: "550e8400-e29b-41d4-a716-446655440000")!,
         shopName: "Whole Foods Market",
         date: Date(),
         total: 47.20,
