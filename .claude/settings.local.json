@@ -16,7 +16,8 @@
       "Bash(AWS_PROFILE=receipt-vault-deployer terraform plan)",
       "Bash(AWS_PROFILE=receipt-vault-deployer terraform plan && AWS_PROFILE=receipt-vault-deployer terraform apply -auto-approve)",
       "Bash(AWS_PROFILE=receipt-vault-deployer terraform destroy -auto-approve)",
-      "Bash(AWS_PROFILE=receipt-vault-deployer aws lambda update-function-code --function-name receipt-vault-parse-receipt --zip-file fileb://lambda-function.zip --region eu-west-1 2>&1 | grep -E \"CodeSha256|FunctionArn|LastModified\")"
+      "Bash(AWS_PROFILE=receipt-vault-deployer aws lambda update-function-code --function-name receipt-vault-parse-receipt --zip-file fileb://lambda-function.zip --region eu-west-1 2>&1 | grep -E \"CodeSha256|FunctionArn|LastModified\")",
+      "Bash(xcrun simctl:*)"
     ]
   }
 }

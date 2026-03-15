@@ -20,16 +20,19 @@ final class ProcessingPipeline {
 
     // MARK: - Public
 
-    func drainQueue() async {
+    func drainQueue() async throws {
         guard !isProcessing else { return }
         isProcessing = true
         defer { isProcessing = false }
 
-        guard let defaults = UserDefaults(suiteName: appGroupIdentifier) else { return }
+        guard let defaults = UserDefaults(suiteName: appGroupIdentifier) else {
+            throw ReceiptVaultError.parseFailure("Cannot access App Group storage")
+        }
         let jobs = defaults.stringArray(forKey: pendingJobsKey) ?? []
         guard !jobs.isEmpty else { return }
 
         var processed: Set<String> = []
+        var lastError: Error?
 
         for filename in jobs {
             do {
@@ -39,6 +42,7 @@ final class ProcessingPipeline {
                 print("[ProcessingPipeline] Finished queued file: \(filename)")
             } catch {
                 print("[ProcessingPipeline] Error processing queued file \(filename): \(error)")
+                lastError = error
                 await notify(
                     title: "Receipt failed",
                     body: error.localizedDescription
@@ -50,6 +54,13 @@ final class ProcessingPipeline {
             let remaining = jobs.filter { !processed.contains($0) }
             defaults.set(remaining, forKey: pendingJobsKey)
             deleteFile(filename: filename)
+        }
+
+        // If any file failed, throw the last error so it appears in the UI
+        if let lastError = lastError as? ReceiptVaultError {
+            throw lastError
+        } else if let lastError = lastError {
+            throw ReceiptVaultError.parseFailure("Failed to process receipt: \(lastError.localizedDescription)")
         }
     }
 

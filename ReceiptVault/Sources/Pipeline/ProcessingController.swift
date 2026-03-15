@@ -61,7 +61,7 @@ final class ProcessingController: ObservableObject {
 
     func drainQueue() async {
         guard let pipeline else {
-            print("[ProcessingController] No pipeline configured; cannot drain queue.")
+            lastError = .parseFailure("Processing pipeline not configured")
             return
         }
         guard !isProcessing else {
@@ -74,8 +74,14 @@ final class ProcessingController: ObservableObject {
         defer { isProcessing = false }
 
         print("[ProcessingController] Starting drainQueue() from App Group jobs…")
-        await pipeline.drainQueue()
-        print("[ProcessingController] drainQueue() completed.")
+        do {
+            try await pipeline.drainQueue()
+            print("[ProcessingController] drainQueue() completed.")
+        } catch let error as ReceiptVaultError {
+            lastError = error
+        } catch {
+            lastError = .parseFailure("Failed to process queued receipts: \(error.localizedDescription)")
+        }
     }
 
     // MARK: - Private
