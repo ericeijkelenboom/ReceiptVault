@@ -51,7 +51,7 @@ private func buildManagedObjectModel() -> NSManagedObjectModel {
     // Receipt Entity
     let receiptEntity = NSEntityDescription()
     receiptEntity.name = "Receipt"
-    receiptEntity.managedObjectClassName = "Receipt"
+    receiptEntity.managedObjectClassName = "ReceiptVault.Receipt"
 
     let idAttr = NSAttributeDescription()
     idAttr.name = "id"
@@ -107,7 +107,7 @@ private func buildManagedObjectModel() -> NSManagedObjectModel {
     // LineItem Entity
     let lineItemEntity = NSEntityDescription()
     lineItemEntity.name = "CDLineItem"
-    lineItemEntity.managedObjectClassName = "CDLineItem"
+    lineItemEntity.managedObjectClassName = "ReceiptVault.CDLineItem"
 
     let liIdAttr = NSAttributeDescription()
     liIdAttr.name = "id"
