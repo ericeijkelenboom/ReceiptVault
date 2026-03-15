@@ -3,16 +3,16 @@
 
 set -e
 
-echo "🧪 Running unit tests..."
+echo "Running unit tests..."
 xcodebuild -scheme ReceiptVault \
     -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
     -configuration Debug \
     test 2>&1 | tail -50
 
 if [ $? -ne 0 ]; then
-    echo "❌ Tests failed. Commit blocked."
+    echo "Tests failed. Commit blocked."
     exit 1
 fi
 
-echo "✅ Tests passed. Proceeding with commit."
+echo "Tests passed. Proceeding with commit."
 exit 0
