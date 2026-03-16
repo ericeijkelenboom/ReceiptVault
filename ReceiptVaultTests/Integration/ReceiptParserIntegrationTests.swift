@@ -93,21 +93,75 @@ class ReceiptParserIntegrationTests: XCTestCase {
             return
         }
 
+        // Set a timeout for this test
+        let timeout: TimeInterval = 30 // seconds
+        let deadline = Date().addingTimeInterval(timeout)
+
+        var result: ReceiptData?
+        var parseError: Error?
+
+        // Call parser with timeout
         do {
-            let data = try await parser.parse(image: image)
-
-            // Verify basic structure is returned
-            XCTAssertNotNil(data.shopName, "Shop name should be extracted")
-            XCTAssertNotNil(data.date, "Date should be extracted")
-            XCTAssertNotNil(data.rawText, "Raw text should be preserved")
-
-            print("✅ Foetex receipt parsed successfully: \(data.shopName)")
-            print("   Total: \(data.total?.description ?? "nil") \(data.currency ?? "")")
-            print("   Items: \(data.lineItems.count)")
-        } catch let error as ReceiptVaultError {
-            XCTFail("Lambda crashed on Foetex receipt: \(error)")
+            result = try await withTimeout(seconds: timeout) {
+                return try await self.parser.parse(image: image)
+            }
         } catch {
-            XCTFail("Unexpected error parsing Foetex receipt: \(error)")
+            parseError = error
+        }
+
+        // Check if we timed out
+        if Date() > deadline && parseError == nil {
+            XCTFail("Lambda request timed out after \(timeout) seconds")
+            print("⏱️ Timeout: Lambda did not respond within \(timeout)s")
+            return
+        }
+
+        // Handle any error
+        if let error = parseError {
+            if let vaultError = error as? ReceiptVaultError {
+                print("⚠️ Lambda error: \(vaultError)")
+                XCTFail("Lambda error on Foetex receipt: \(vaultError)")
+            } else {
+                print("⚠️ Unexpected error: \(error)")
+                XCTFail("Unexpected error parsing Foetex receipt: \(error)")
+            }
+            return
+        }
+
+        // Success case
+        guard let data = result else {
+            XCTFail("No result returned from Lambda")
+            return
+        }
+
+        XCTAssertNotNil(data.shopName, "Shop name should be extracted")
+        XCTAssertNotNil(data.date, "Date should be extracted")
+        XCTAssertNotNil(data.rawText, "Raw text should be preserved")
+
+        print("✅ Foetex receipt parsed successfully: \(data.shopName)")
+        print("   Total: \(data.total?.description ?? "nil") \(data.currency ?? "")")
+        print("   Items: \(data.lineItems.count)")
+    }
+
+    // Helper to add timeout to async operations
+    private func withTimeout<T>(seconds: TimeInterval, operation: @escaping () async throws -> T) async throws -> T {
+        return try await withThrowingTaskGroup(of: T.self) { group in
+            group.addTask {
+                try await operation()
+            }
+
+            group.addTask {
+                try await Task.sleep(nanoseconds: UInt64(seconds * 1_000_000_000))
+                throw ReceiptVaultError.parseFailure("Request timed out after \(seconds) seconds")
+            }
+
+            // Return first result (whichever completes first)
+            if let result = try await group.next() {
+                group.cancelAll()
+                return result
+            }
+
+            throw ReceiptVaultError.parseFailure("No result from timeout handler")
         }
     }
 
