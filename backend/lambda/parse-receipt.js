@@ -62,7 +62,7 @@ Return this exact JSON structure:
 If any field cannot be determined, use null.`;
 
     const claudeResponse = await anthropic.messages.create({
-      model: 'claude-opus-4-20250514',
+      model: 'claude-3-5-haiku-20241022',
       max_tokens: 1024,
       messages: [{ role: 'user', content: claudePrompt }]
     });
