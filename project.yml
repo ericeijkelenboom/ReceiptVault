@@ -69,6 +69,8 @@ targets:
     deploymentTarget: "17.0"
     sources:
       - path: ReceiptVaultTests
+    resources:
+      - path: ReceiptVaultTests/Fixtures
     info:
       path: ReceiptVaultTests/Info.plist
     dependencies:
