@@ -256,7 +256,7 @@ struct ReceiptsView: View {
             Button("Cancel", role: .cancel) { receiptToDelete = nil }
         } message: {
             if let receipt = receiptToDelete {
-                Text("\"\(receipt.shopName)\" will be permanently deleted from Drive.")
+                Text(receipt.deleteConfirmationMessage)
             }
         }
     }

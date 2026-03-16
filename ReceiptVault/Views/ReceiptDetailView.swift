@@ -127,13 +127,7 @@ struct ReceiptDetailView: View {
                 }
             }
         } message: {
-            let totalText = if let total = receipt.total, let currency = receipt.currency {
-                (total as NSDecimalNumber as Decimal).formatted(.currency(code: currency))
-            } else {
-                "No total"
-            }
-
-            Text("Are you sure you want to delete this receipt from \(receipt.shopName) on \(receipt.date.formatted(date: .abbreviated, time: .omitted)) for \(totalText)?")
+            Text(receipt.deleteConfirmationMessage)
         }
     }
 }

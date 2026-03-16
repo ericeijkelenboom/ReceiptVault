@@ -19,4 +19,13 @@ struct CachedReceipt: Codable, Identifiable, Hashable {
         self.scannedAt = scannedAt
         self.lineItems = lineItems
     }
+
+    var deleteConfirmationMessage: String {
+        let totalText = if let total = total, let currency = currency {
+            (total as NSDecimalNumber as Decimal).formatted(.currency(code: currency))
+        } else {
+            "No total"
+        }
+        return "Are you sure you want to delete this receipt from \(shopName) on \(date.formatted(date: .abbreviated, time: .omitted)) for \(totalText)?"
+    }
 }
