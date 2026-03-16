@@ -111,6 +111,11 @@ class ReceiptStoreCore: ObservableObject {
             ? receipts
             : searchReceipts(query: searchText)
 
+        // Handle empty receipts case to avoid accessing deleted Core Data objects
+        guard !filtered.isEmpty else {
+            return []
+        }
+
         let grouped = Dictionary(grouping: filtered) { receipt in
             let formatter = DateFormatter()
             formatter.dateFormat = "MMMM yyyy"
@@ -126,7 +131,15 @@ class ReceiptStoreCore: ObservableObject {
         }.map { month, receipts in
             let cached = receipts.map { receipt in
                 let lineItems = (receipt.lineItems as? Set<CDLineItem>)?
-                    .map { LineItem(name: $0.name, quantity: $0.quantity as Decimal?, unitPrice: $0.unitPrice as Decimal?, totalPrice: $0.totalPrice as Decimal?) }
+                    .map { cdItem in
+                        LineItem(
+                            name: cdItem.name,
+                            quantity: cdItem.quantity as Decimal?,
+                            unitPrice: cdItem.unitPrice as Decimal?,
+                            totalPrice: cdItem.totalPrice as Decimal?,
+                            id: cdItem.id
+                        )
+                    }
                     .sorted { $0.name < $1.name } ?? []
                 return CachedReceipt(
                     id: receipt.id,
