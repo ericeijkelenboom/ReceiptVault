@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ReceiptDetailView: View {
     @EnvironmentObject private var receiptStore: ReceiptStoreCore
+    @Environment(\.dismiss) private var dismiss
     @State private var receipt: CachedReceipt
     @State private var showEdit = false
     @State private var editError: String?
@@ -121,6 +122,7 @@ struct ReceiptDetailView: View {
                 Task {
                     do {
                         try await receiptStore.deleteReceipt(id: receipt.id)
+                        dismiss()
                     } catch {
                         editError = error.localizedDescription
                     }
