@@ -62,7 +62,7 @@ Return this exact JSON structure:
 If any field cannot be determined, use null.`;
 
     const claudeResponse = await anthropic.messages.create({
-      model: 'claude-3-5-haiku-20241022',
+      model: 'claude-haiku-4-5-20251001',
       max_tokens: 1024,
       messages: [{ role: 'user', content: claudePrompt }]
     });
@@ -70,9 +70,16 @@ If any field cannot be determined, use null.`;
     // Parse Claude response
     let receiptData;
     try {
-      const responseText = claudeResponse.content[0].type === 'text'
+      let responseText = claudeResponse.content[0].type === 'text'
         ? claudeResponse.content[0].text
         : '';
+
+      // Strip markdown code blocks if present (Haiku sometimes returns ```json...```)
+      const jsonMatch = responseText.match(/```(?:json)?\s*([\s\S]*?)```/);
+      if (jsonMatch) {
+        responseText = jsonMatch[1].trim();
+      }
+
       receiptData = JSON.parse(responseText);
     } catch (parseError) {
       return {
