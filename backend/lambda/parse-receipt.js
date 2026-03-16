@@ -75,9 +75,19 @@ If any field cannot be determined, use null.`;
         : '';
 
       // Strip markdown code blocks if present (Haiku sometimes returns ```json...```)
-      const jsonMatch = responseText.match(/```(?:json)?\s*([\s\S]*?)```/);
+      // Handle various markdown formats: ```json, ```JSON, ``` json, etc.
+      const jsonMatch = responseText.match(/```\s*(?:json|JSON)?\s*([\s\S]*?)```/);
       if (jsonMatch) {
         responseText = jsonMatch[1].trim();
+      }
+
+      // Also handle case where there's just backticks without closing
+      // (fallback for malformed responses)
+      if (responseText.trim().startsWith('```')) {
+        responseText = responseText
+          .replace(/^```\s*(?:json|JSON)?\s*/i, '')
+          .replace(/```\s*$/,'')
+          .trim();
       }
 
       receiptData = JSON.parse(responseText);
