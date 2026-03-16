@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 63;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -55,10 +55,10 @@
 		08C006736808E2EC31909181 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		0A6296E4CAC55A2C9CCE25C5 /* ReceiptParserIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptParserIntegrationTests.swift; sourceTree = "<group>"; };
 		18D820FE50613A28A81997B9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		2345AE07E722DBF91586BBDB /* ReceiptVaultTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ReceiptVaultTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2345AE07E722DBF91586BBDB /* ReceiptVaultTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReceiptVaultTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F82C7865DB4F3EE613942CA /* ReceiptParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptParserTests.swift; sourceTree = "<group>"; };
 		33984DD05D73275FAA351925 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		3574448459825C316DD2D166 /* ReceiptVault.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ReceiptVault.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3574448459825C316DD2D166 /* ReceiptVault.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReceiptVault.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		36E62A3DC4BCEC7680F64A54 /* ReceiptStoreCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptStoreCore.swift; sourceTree = "<group>"; };
 		39B4386EE4D5655BB7F5996B /* ReceiptDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptDetailView.swift; sourceTree = "<group>"; };
 		434EE012788CAF8D410B514A /* ReceiptStoreCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptStoreCoreTests.swift; sourceTree = "<group>"; };
@@ -313,11 +313,9 @@
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					2388413BB99D34CE8B69A417 = {
-						DevelopmentTeam = 4BAV7733D8;
 						ProvisioningStyle = Automatic;
 					};
 					884DF9523CDD72D71E8A11D1 = {
-						DevelopmentTeam = 4BAV7733D8;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -332,7 +330,6 @@
 			);
 			mainGroup = F7C07AFC7ADD3D6D31450708;
 			minimizedProjectReferenceProxies = 1;
-			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -422,7 +419,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 4BAV7733D8;
+				DEVELOPMENT_TEAM = KPFUVNMKM8;
 				INFOPLIST_FILE = ReceiptVaultTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -505,7 +502,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 4BAV7733D8;
+				DEVELOPMENT_TEAM = KPFUVNMKM8;
 				INFOPLIST_FILE = ReceiptVaultTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -527,7 +524,7 @@
 				CODE_SIGN_ENTITLEMENTS = ReceiptVault/ReceiptVault.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 4BAV7733D8;
+				DEVELOPMENT_TEAM = KPFUVNMKM8;
 				INFOPLIST_FILE = ReceiptVault/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -548,7 +545,7 @@
 				CODE_SIGN_ENTITLEMENTS = ReceiptVault/ReceiptVault.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 4BAV7733D8;
+				DEVELOPMENT_TEAM = KPFUVNMKM8;
 				INFOPLIST_FILE = ReceiptVault/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (

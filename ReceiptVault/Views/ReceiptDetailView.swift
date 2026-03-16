@@ -5,6 +5,7 @@ struct ReceiptDetailView: View {
     @State private var receipt: CachedReceipt
     @State private var showEdit = false
     @State private var editError: String?
+    @State private var showDeleteConfirmation = false
 
     init(receipt: CachedReceipt) {
         _receipt = State(initialValue: receipt)
@@ -77,7 +78,7 @@ struct ReceiptDetailView: View {
                 Text("No items extracted")
                     .foregroundStyle(.secondary)
             } else {
-                ForEach(receipt.lineItems, id: \.name) { item in
+                ForEach(receipt.lineItems, id: \.id) { item in
                     lineItemRow(item)
                 }
             }
@@ -108,6 +109,15 @@ struct ReceiptDetailView: View {
     private var actionsSection: some View {
         Section {
             Button(role: .destructive) {
+                showDeleteConfirmation = true
+            } label: {
+                Label("Delete Receipt", systemImage: "trash")
+                    .frame(maxWidth: .infinity, alignment: .center)
+            }
+        }
+        .alert("Delete Receipt?", isPresented: $showDeleteConfirmation) {
+            Button("Cancel", role: .cancel) { }
+            Button("Delete", role: .destructive) {
                 Task {
                     do {
                         try await receiptStore.deleteReceipt(id: receipt.id)
@@ -115,10 +125,15 @@ struct ReceiptDetailView: View {
                         editError = error.localizedDescription
                     }
                 }
-            } label: {
-                Label("Delete Receipt", systemImage: "trash")
-                    .frame(maxWidth: .infinity, alignment: .center)
             }
+        } message: {
+            let totalText = if let total = receipt.total, let currency = receipt.currency {
+                (total as NSDecimalNumber as Decimal).formatted(.currency(code: currency))
+            } else {
+                "No total"
+            }
+
+            Text("Are you sure you want to delete this receipt from \(receipt.shopName) on \(receipt.date.formatted(date: .abbreviated, time: .omitted)) for \(totalText)?")
         }
     }
 }
