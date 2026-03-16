@@ -148,6 +148,8 @@ private func buildManagedObjectModel() -> NSManagedObjectModel {
     let receiptRel = NSRelationshipDescription()
     receiptRel.name = "receipt"
     receiptRel.destinationEntity = receiptEntity
+    receiptRel.maxCount = 1  // Many-to-one: each lineItem has exactly one receipt
+    receiptRel.minCount = 0
     receiptRel.isOptional = true
     receiptRel.deleteRule = .nullifyDeleteRule
 
@@ -172,9 +174,32 @@ class CoreDataStack {
         let model = buildManagedObjectModel()
         let container = NSPersistentContainer(name: "ReceiptVault", managedObjectModel: model)
 
-        container.loadPersistentStores { _, error in
+        container.loadPersistentStores { description, error in
             if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
+                // Handle schema mismatch (migration error code 134140) by deleting incompatible store
+                if error.code == 134140 {
+                    // Delete the incompatible store so it can be recreated with new schema
+                    if let url = description.url {
+                        let fileManager = FileManager.default
+                        try? fileManager.removeItem(at: url)
+                        try? fileManager.removeItem(at: url.appendingPathExtension("shm"))
+                        try? fileManager.removeItem(at: url.appendingPathExtension("wal"))
+                        print("⚠️  Deleted incompatible Core Data store. Will recreate with new schema.")
+                    }
+                    // Retry loading with fresh store
+                    do {
+                        try container.persistentStoreCoordinator.addPersistentStore(
+                            ofType: NSSQLiteStoreType,
+                            configurationName: nil,
+                            at: description.url,
+                            options: nil
+                        )
+                    } catch {
+                        fatalError("Failed to load persistent store after migration: \(error)")
+                    }
+                } else {
+                    fatalError("Unresolved error \(error), \(error.userInfo)")
+                }
             }
         }
 
