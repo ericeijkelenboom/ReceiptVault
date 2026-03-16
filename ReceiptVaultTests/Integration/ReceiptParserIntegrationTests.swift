@@ -84,6 +84,33 @@ class ReceiptParserIntegrationTests: XCTestCase {
         }
     }
 
+    // MARK: - Foetex Receipt Test (Known Lambda Crash Case)
+
+    func test_parse_foetexReceipt_doesNotCrash() async throws {
+        // Load Foetex receipt that was previously causing Lambda crashes
+        guard let image = loadTestImage(named: "receipt-foetex") else {
+            XCTFail("Could not load Foetex test receipt image")
+            return
+        }
+
+        do {
+            let data = try await parser.parse(image: image)
+
+            // Verify basic structure is returned
+            XCTAssertNotNil(data.shopName, "Shop name should be extracted")
+            XCTAssertNotNil(data.date, "Date should be extracted")
+            XCTAssertNotNil(data.rawText, "Raw text should be preserved")
+
+            print("✅ Foetex receipt parsed successfully: \(data.shopName)")
+            print("   Total: \(data.total?.description ?? "nil") \(data.currency ?? "")")
+            print("   Items: \(data.lineItems.count)")
+        } catch let error as ReceiptVaultError {
+            XCTFail("Lambda crashed on Foetex receipt: \(error)")
+        } catch {
+            XCTFail("Unexpected error parsing Foetex receipt: \(error)")
+        }
+    }
+
     // MARK: - Error Handling Tests
 
     func test_parse_invalidImage_returnsError() async throws {
