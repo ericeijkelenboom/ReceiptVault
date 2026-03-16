@@ -140,6 +140,8 @@ private func buildManagedObjectModel() -> NSManagedObjectModel {
     let lineItemsRel = NSRelationshipDescription()
     lineItemsRel.name = "lineItems"
     lineItemsRel.destinationEntity = lineItemEntity
+    lineItemsRel.maxCount = 0  // 0 = unlimited, indicates to-many
+    lineItemsRel.minCount = 0
     lineItemsRel.isOptional = true
     lineItemsRel.deleteRule = .cascadeDeleteRule
 
