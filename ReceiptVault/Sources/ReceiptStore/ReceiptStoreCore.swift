@@ -27,7 +27,11 @@ class ReceiptStoreCore: ObservableObject {
 
     func saveReceipt(data: ReceiptData, jpgPath: String) async throws {
         let context = coreDataStack.viewContext
-        let receipt = NSEntityDescription.insertNewObject(forEntityName: "Receipt", into: context) as! Receipt
+
+        guard let receipt = NSEntityDescription.insertNewObject(forEntityName: "Receipt", into: context) as? Receipt else {
+            throw ReceiptVaultError.parseFailure("Failed to create Receipt entity in Core Data")
+        }
+
         receipt.id = UUID()
         receipt.shopName = data.shopName
         receipt.date = data.date
@@ -43,7 +47,10 @@ class ReceiptStoreCore: ObservableObject {
 
         let lineItems = NSMutableSet()
         for item in data.lineItems {
-            let lineItem = NSEntityDescription.insertNewObject(forEntityName: "CDLineItem", into: context) as! CDLineItem
+            guard let lineItem = NSEntityDescription.insertNewObject(forEntityName: "CDLineItem", into: context) as? CDLineItem else {
+                throw ReceiptVaultError.parseFailure("Failed to create LineItem entity in Core Data")
+            }
+
             lineItem.id = UUID()
             lineItem.name = item.name
             lineItem.quantity = item.quantity as NSDecimalNumber?
