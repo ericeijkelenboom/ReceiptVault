@@ -7,19 +7,18 @@ class ReceiptCoreDataPipelineTests: XCTestCase {
     var parser: ReceiptParser!
     var store: ReceiptStoreCore!
 
-    override func setUp() {
-        super.setUp()
-        // MainActor-isolated initialization needs to happen on main thread
-        DispatchQueue.main.sync {
+    override func setUp() async throws {
+        try await super.setUp()
+        await MainActor.run {
             self.parser = ReceiptParser()
-            self.store = ReceiptStoreCore()
+            self.store = ReceiptStoreCore(coreDataStack: CoreDataStack(inMemory: true))
         }
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         parser = nil
         store = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // MARK: - Full Pipeline Tests

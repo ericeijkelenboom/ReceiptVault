@@ -16,6 +16,8 @@ struct ReceiptVaultApp: App {
                 .environment(\.managedObjectContext, CoreDataStack.shared.viewContext)
                 .task {
                     guard processingController.pipeline == nil else { return }
+                    // Load persisted receipts immediately on launch
+                    _ = try? await receiptStore.fetchAllReceipts()
                     // Request notification permission once on first launch
                     _ = try? await UNUserNotificationCenter.current()
                         .requestAuthorization(options: [.alert, .sound])

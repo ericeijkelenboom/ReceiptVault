@@ -9,7 +9,11 @@ class ReceiptStoreCore: ObservableObject {
     @Published var receipts: [Receipt] = []
     @Published var isLoading = false
 
-    let coreDataStack = CoreDataStack.shared
+    let coreDataStack: CoreDataStack
+
+    init(coreDataStack: CoreDataStack = .shared) {
+        self.coreDataStack = coreDataStack
+    }
 
     func fetchAllReceipts() async throws -> [Receipt] {
         isLoading = true

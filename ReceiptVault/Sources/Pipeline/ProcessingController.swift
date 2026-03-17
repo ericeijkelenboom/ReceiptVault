@@ -13,38 +13,10 @@ final class ProcessingController: ObservableObject {
     private var queue: [UIImage] = []
 
     let quotaManager = QuotaManager()
-    let receiptStore = ReceiptStoreCore()
 
     // Clears the last error state.
     func clearError() {
         lastError = nil
-    }
-
-    // Process a receipt and save to Core Data with quota checking
-    func processReceipt(_ receiptData: ReceiptData, jpgPath: String) async {
-        isProcessing = true
-        defer { isProcessing = false }
-        clearError()
-
-        // Check quota
-        guard quotaManager.canAddReceipt() else {
-            lastError = .parseFailure("Free tier limit reached. Upgrade to add more receipts.")
-            return
-        }
-
-        do {
-            // Save to Core Data
-            try await receiptStore.saveReceipt(data: receiptData, jpgPath: jpgPath)
-
-            // Record quota usage
-            quotaManager.recordReceiptAdded()
-
-            print("[ProcessingController] Receipt saved to Core Data and quota recorded.")
-        } catch let error as ReceiptVaultError {
-            lastError = error
-        } catch {
-            lastError = .parseFailure("Failed to save receipt: \(error.localizedDescription)")
-        }
     }
 
     // Enqueues `image` for processing. If nothing is currently running,
@@ -54,8 +26,13 @@ final class ProcessingController: ObservableObject {
         pendingCount = queue.count
         if isProcessing {
             totalInBatch += 1  // extend the running batch
+            return
         }
-        guard !isProcessing else { return }
+        // Set isProcessing synchronously before starting the Task so that any
+        // subsequent calls to process(image:) that arrive before the Task begins
+        // (e.g. a duplicate onChange from PhotosPicker) see it as busy and only
+        // enqueue — they don't spin up a second processQueue() task.
+        isProcessing = true
         Task { await processQueue() }
     }
 
@@ -91,6 +68,7 @@ final class ProcessingController: ObservableObject {
             print("[ProcessingController] No pipeline configured; cannot process queue.")
             queue.removeAll()
             pendingCount = 0
+            isProcessing = false
             return
         }
 

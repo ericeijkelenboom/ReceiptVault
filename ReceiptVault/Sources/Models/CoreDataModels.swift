@@ -170,9 +170,21 @@ private func buildManagedObjectModel() -> NSManagedObjectModel {
 class CoreDataStack {
     static let shared = CoreDataStack()
 
+    private let inMemory: Bool
+
+    init(inMemory: Bool = false) {
+        self.inMemory = inMemory
+    }
+
     lazy var persistentContainer: NSPersistentContainer = {
         let model = buildManagedObjectModel()
         let container = NSPersistentContainer(name: "ReceiptVault", managedObjectModel: model)
+
+        if inMemory {
+            let description = NSPersistentStoreDescription()
+            description.type = NSInMemoryStoreType
+            container.persistentStoreDescriptions = [description]
+        }
 
         container.loadPersistentStores { description, error in
             if let error = error as NSError? {

@@ -4,17 +4,14 @@ import XCTest
 class ReceiptStoreCoreTests: XCTestCase {
     var store: ReceiptStoreCore!
 
-    override func setUp() {
-        super.setUp()
-        // MainActor-isolated initialization needs to happen on main thread
-        DispatchQueue.main.sync {
-            self.store = ReceiptStoreCore()
-        }
+    override func setUp() async throws {
+        try await super.setUp()
+        store = await MainActor.run { ReceiptStoreCore(coreDataStack: CoreDataStack(inMemory: true)) }
     }
 
-    override func tearDown() {
+    override func tearDown() async throws {
         store = nil
-        super.tearDown()
+        try await super.tearDown()
     }
 
     // MARK: - Save Receipt Tests
@@ -205,7 +202,7 @@ class ReceiptStoreCoreTests: XCTestCase {
     // MARK: - Data Integrity Tests
 
     func test_saveReceipt_nullableFieldsCanBeNil() async throws {
-        var receiptData = createDummyReceipt(
+        let receiptData = createDummyReceipt(
             shopName: "Minimal Store",
             total: nil,  // Optional
             currency: nil,  // Optional
