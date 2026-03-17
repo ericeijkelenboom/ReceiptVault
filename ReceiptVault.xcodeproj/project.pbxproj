@@ -27,6 +27,7 @@
 		99E54421AE6CB29179E763AC /* StoreKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D7F88E8E6FAC039514E1D0E /* StoreKitManager.swift */; };
 		9C7FCE8AADB7DA1F64F21A86 /* ReceiptVaultError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB09E8BBFD7F92810D878D4F /* ReceiptVaultError.swift */; };
 		AAA15E8FEB50CA73401075E4 /* ReceiptParserIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6296E4CAC55A2C9CCE25C5 /* ReceiptParserIntegrationTests.swift */; };
+		AE71034FCD5C2A89E84898DB /* AddReceiptSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E10EEBF66DE40233B39B2B82 /* AddReceiptSheet.swift */; };
 		B37365D06BD360DA0AADA4AE /* ReceiptParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F82C7865DB4F3EE613942CA /* ReceiptParserTests.swift */; };
 		BE9BD88042922BD51A20AB7B /* ReceiptDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B4386EE4D5655BB7F5996B /* ReceiptDetailView.swift */; };
 		C612C87CAAC1C6EEF4CFFAA8 /* ProcessingPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = A15F1EF69C25E71789CC5288 /* ProcessingPipeline.swift */; };
@@ -87,6 +88,7 @@
 		D4355F7B15264C7B3D65A1AA /* CachedReceipt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedReceipt.swift; sourceTree = "<group>"; };
 		DAD37240D14C29C9B08CDF3F /* ProcessingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessingController.swift; sourceTree = "<group>"; };
 		DAE524C073DE6860DA7CCE8A /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
+		E10EEBF66DE40233B39B2B82 /* AddReceiptSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddReceiptSheet.swift; sourceTree = "<group>"; };
 		EAFBFBCCD86CCBEAE272E859 /* LineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineItem.swift; sourceTree = "<group>"; };
 		FA0F6B7A1B27504F3A01D915 /* ReceiptsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -179,6 +181,7 @@
 		83E39BB009676231DAC6178E /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				E10EEBF66DE40233B39B2B82 /* AddReceiptSheet.swift */,
 				39B4386EE4D5655BB7F5996B /* ReceiptDetailView.swift */,
 				6BF70D6DF532EE236A849A50 /* ReceiptEditView.swift */,
 				70CCFE5455269A41E95ED2A1 /* ReceiptPDFViewer.swift */,
@@ -382,6 +385,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AE71034FCD5C2A89E84898DB /* AddReceiptSheet.swift in Sources */,
 				1EF122D4006918C44D9FE680 /* BrandColors.swift in Sources */,
 				66DB48E55CE7694AFB5A5EB7 /* CachedReceipt.swift in Sources */,
 				67B65D2AA5653CE314427392 /* Config.swift in Sources */,

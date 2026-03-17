@@ -11,6 +11,7 @@ struct ReceiptsView: View {
     @State private var showCamera = false
     @State private var searchText = ""
     @State private var receiptToDelete: CachedReceipt?
+    @State private var showAddSheet = false
 
     var body: some View {
         NavigationStack {
@@ -36,22 +37,17 @@ struct ReceiptsView: View {
                         .fontWeight(.semibold)
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Menu {
-                        Button {
-                            showCamera = true
-                        } label: {
-                            Label("Take Photo", systemImage: "camera")
-                        }
-                        .disabled(!UIImagePickerController.isSourceTypeAvailable(.camera))
-
-                        Button {
-                            showPhotoPicker = true
-                        } label: {
-                            Label("Choose from Library", systemImage: "photo.on.rectangle")
-                        }
+                    Button {
+                        showAddSheet = true
                     } label: {
-                        Image(systemName: "plus")
-                            .foregroundStyle(Color.brandPrimary)
+                        ZStack {
+                            Circle()
+                                .fill(Color.brandPrimary)
+                                .frame(width: 32, height: 32)
+                            Image(systemName: "plus")
+                                .font(.system(size: 14, weight: .bold))
+                                .foregroundStyle(.white)
+                        }
                     }
                 }
             }
@@ -90,6 +86,17 @@ struct ReceiptsView: View {
             }
         }
         .photosPicker(isPresented: $showPhotoPicker, selection: $selectedItems, maxSelectionCount: 20, matching: .images)
+        .sheet(isPresented: $showAddSheet) {
+            AddReceiptSheet(
+                onCamera: {
+                    guard UIImagePickerController.isSourceTypeAvailable(.camera) else { return }
+                    showCamera = true
+                },
+                onPhotoLibrary: {
+                    showPhotoPicker = true
+                }
+            )
+        }
         .sheet(isPresented: $showCamera) {
             CameraPickerView { image in
                 processingController.process(image: image)
