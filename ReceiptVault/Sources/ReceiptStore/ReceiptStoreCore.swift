@@ -91,18 +91,39 @@ class ReceiptStoreCore: ObservableObject {
         let request = Receipt.fetchRequest()
         request.predicate = NSPredicate(format: "id == %@", uuid as CVarArg)
 
-        if let receipt = try context.fetch(request).first {
-            receipt.shopName = cachedReceipt.shopName
-            receipt.date = cachedReceipt.date
-            receipt.total = cachedReceipt.total as NSDecimalNumber?
-            receipt.currency = cachedReceipt.currency
+        guard let receipt = try context.fetch(request).first else { return }
 
-            let formatter = DateFormatter()
-            formatter.dateFormat = "yyyy-MM"
-            receipt.quotaMonth = formatter.string(from: cachedReceipt.date)
+        // Update scalar fields
+        receipt.shopName = cachedReceipt.shopName
+        receipt.date = cachedReceipt.date
+        receipt.total = cachedReceipt.total as NSDecimalNumber?
+        receipt.currency = cachedReceipt.currency
 
-            coreDataStack.saveContext()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM"
+        receipt.quotaMonth = formatter.string(from: cachedReceipt.date)
+
+        // Replace line items: delete all existing, insert fresh set
+        if let existingItems = receipt.lineItems as? Set<CDLineItem> {
+            existingItems.forEach { context.delete($0) }
         }
+        let newItems = NSMutableSet()
+        for item in cachedReceipt.lineItems {
+            guard let cdItem = NSEntityDescription.insertNewObject(
+                forEntityName: "CDLineItem", into: context) as? CDLineItem else {
+                throw ReceiptVaultError.parseFailure("Failed to create CDLineItem")
+            }
+            cdItem.id = item.id
+            cdItem.name = item.name
+            cdItem.quantity = item.quantity as NSDecimalNumber?
+            cdItem.unitPrice = item.unitPrice as NSDecimalNumber?
+            cdItem.totalPrice = item.totalPrice as NSDecimalNumber?
+            cdItem.receipt = receipt
+            newItems.add(cdItem)
+        }
+        receipt.lineItems = newItems
+
+        coreDataStack.saveContext()
         _ = try await fetchAllReceipts()
     }
 
