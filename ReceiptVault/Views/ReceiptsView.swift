@@ -26,15 +26,21 @@ struct ReceiptsView: View {
                         placement: .navigationBarDrawer(displayMode: .always),
                         prompt: "Shop, item, or date")
             .navigationBarTitleDisplayMode(.inline)
-            .toolbarBackground(Color.brandPrimary.opacity(0.08), for: .navigationBar)
+            .toolbarBackground(Color(.systemBackground), for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
             .navigationDestination(for: CachedReceipt.self) { receipt in
                 ReceiptDetailView(receipt: receipt)
             }
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Text("Receipts")
-                        .font(.title3)
-                        .fontWeight(.semibold)
+                    HStack(spacing: 8) {
+                        Image(systemName: "doc.text.viewfinder")
+                            .foregroundStyle(Color.brandPrimary)
+                            .font(.system(size: 18, weight: .semibold))
+                        Text("Receipt Vault")
+                            .font(.title3)
+                            .fontWeight(.bold)
+                    }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
@@ -85,6 +91,7 @@ struct ReceiptsView: View {
                 }
             }
         }
+        .background(Color(.systemGroupedBackground))
         .photosPicker(isPresented: $showPhotoPicker, selection: $selectedItems, maxSelectionCount: 20, matching: .images)
         .sheet(isPresented: $showAddSheet) {
             AddReceiptSheet(
@@ -197,15 +204,19 @@ struct ReceiptsView: View {
                                 .foregroundStyle(.secondary)
                         }
                     }
+                    .listRowBackground(Color.clear)
                 }
             }
+
             if let error = processingController.lastError {
                 Section {
                     Text(error.errorDescription ?? "Unknown error")
                         .font(.footnote)
                         .foregroundStyle(.red)
+                        .listRowBackground(Color.clear)
                 }
             }
+
             let groups = receiptStore.grouped(searchText: searchText)
             if groups.isEmpty && !searchText.isEmpty {
                 ContentUnavailableView.search(text: searchText)
@@ -216,6 +227,13 @@ struct ReceiptsView: View {
                         NavigationLink(value: receipt) {
                             ReceiptRow(receipt: receipt)
                         }
+                        .listRowBackground(
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(Color(.systemBackground))
+                                .shadow(color: .black.opacity(0.06), radius: 6, y: 2)
+                                .padding(.vertical, 2)
+                        )
+                        .listRowSeparator(.hidden)
                         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                             Button(role: .destructive) {
                                 receiptToDelete = receipt
@@ -226,12 +244,16 @@ struct ReceiptsView: View {
                     }
                 } header: {
                     Text(group.title)
-                        .font(.subheadline)
+                        .font(.caption)
                         .fontWeight(.semibold)
-                        .textCase(nil)
+                        .foregroundStyle(.secondary)
+                        .textCase(.uppercase)
                 }
             }
         }
+        .listStyle(.plain)
+        .background(Color(.systemGroupedBackground))
+        .scrollContentBackground(.hidden)
         .refreshable { await sync() }
         .alert("Delete Receipt?", isPresented: Binding(
             get: { receiptToDelete != nil },
@@ -268,18 +290,24 @@ private struct ReceiptRow: View {
             VStack(alignment: .leading, spacing: 3) {
                 Text(receipt.shopName)
                     .font(.headline)
-                Text(receipt.date, format: .dateTime.day().month(.wide))
+                let count = receipt.lineItems.count
+                Text(count == 1 ? "1 item" : "\(count) items")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
             Spacer()
             if let total = receipt.total, let currency = receipt.currency {
-                Text(total as NSDecimalNumber as Decimal, format: .currency(code: currency))
-                    .font(.headline)
-                    .monospacedDigit()
+                HStack(spacing: 4) {
+                    Text(total as NSDecimalNumber as Decimal, format: .currency(code: currency))
+                        .font(.headline)
+                        .monospacedDigit()
+                    Image(systemName: "chevron.right")
+                        .font(.caption)
+                        .foregroundStyle(Color(.tertiaryLabel))
+                }
             }
         }
-        .padding(.vertical, 2)
+        .padding(.vertical, 6)
     }
 }
 
