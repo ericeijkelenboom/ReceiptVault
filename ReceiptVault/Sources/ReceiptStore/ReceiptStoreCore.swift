@@ -75,6 +75,9 @@ class ReceiptStoreCore: ObservableObject {
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
 
         if let receipt = try context.fetch(request).first {
+            // Remove from in-memory array synchronously before deleting, so SwiftUI
+            // can't re-render and access the now-faulted Core Data object.
+            receipts.removeAll { $0.id == id }
             context.delete(receipt)
             coreDataStack.saveContext()
         }
