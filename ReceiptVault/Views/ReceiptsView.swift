@@ -297,14 +297,9 @@ private struct ReceiptRow: View {
             }
             Spacer()
             if let total = receipt.total, let currency = receipt.currency {
-                HStack(spacing: 4) {
-                    Text(total as NSDecimalNumber as Decimal, format: .currency(code: currency))
-                        .font(.headline)
-                        .monospacedDigit()
-                    Image(systemName: "chevron.right")
-                        .font(.caption)
-                        .foregroundStyle(Color(.tertiaryLabel))
-                }
+                Text(total as NSDecimalNumber as Decimal, format: .currency(code: currency))
+                    .font(.headline)
+                    .monospacedDigit()
             }
         }
         .padding(.vertical, 6)
