@@ -46,7 +46,7 @@ struct ReceiptDetailView: View {
                 }
             }
         }
-        .alert("Error", isPresented: .constant(editError != nil), actions: {
+        .alert("Error", isPresented: Binding(get: { editError != nil }, set: { if !$0 { editError = nil } }), actions: {
             Button("OK") { editError = nil }
         }, message: {
             Text(editError ?? "")
