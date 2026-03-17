@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 63;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -36,7 +36,7 @@
 		DC9F62BDC328AAD8F0EF45FF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4E14D4F5E82FE995DC8CAA65 /* Assets.xcassets */; };
 		DDE985560BEDF7990DAE4DB7 /* ReceiptStoreCoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 434EE012788CAF8D410B514A /* ReceiptStoreCoreTests.swift */; };
 		DE363AB3051DE3B6408325C8 /* TestFixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5D354E46A9441EB175E9E1 /* TestFixtures.swift */; };
-		E64698C823ADBB60C53A1647 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33984DD05D73275FAA351925 /* SettingsView.swift */; };
+		E33FB648EFD44269D9237D48 /* receipt-foetex.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 176F5A03C6035FB203E707BD /* receipt-foetex.jpeg */; };
 		EA3345E79DC3E14EFAF31969 /* ReceiptsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0F6B7A1B27504F3A01D915 /* ReceiptsView.swift */; };
 		F5910914E24EE3DDFAA29513 /* ReceiptVaultApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D641B1F69B92F53FE251AD6 /* ReceiptVaultApp.swift */; };
 /* End PBXBuildFile section */
@@ -54,11 +54,11 @@
 /* Begin PBXFileReference section */
 		08C006736808E2EC31909181 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		0A6296E4CAC55A2C9CCE25C5 /* ReceiptParserIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptParserIntegrationTests.swift; sourceTree = "<group>"; };
+		176F5A03C6035FB203E707BD /* receipt-foetex.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "receipt-foetex.jpeg"; sourceTree = "<group>"; };
 		18D820FE50613A28A81997B9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		2345AE07E722DBF91586BBDB /* ReceiptVaultTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReceiptVaultTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2345AE07E722DBF91586BBDB /* ReceiptVaultTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ReceiptVaultTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F82C7865DB4F3EE613942CA /* ReceiptParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptParserTests.swift; sourceTree = "<group>"; };
-		33984DD05D73275FAA351925 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		3574448459825C316DD2D166 /* ReceiptVault.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReceiptVault.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3574448459825C316DD2D166 /* ReceiptVault.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ReceiptVault.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		36E62A3DC4BCEC7680F64A54 /* ReceiptStoreCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptStoreCore.swift; sourceTree = "<group>"; };
 		39B4386EE4D5655BB7F5996B /* ReceiptDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptDetailView.swift; sourceTree = "<group>"; };
 		434EE012788CAF8D410B514A /* ReceiptStoreCoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptStoreCoreTests.swift; sourceTree = "<group>"; };
@@ -183,7 +183,6 @@
 				6BF70D6DF532EE236A849A50 /* ReceiptEditView.swift */,
 				70CCFE5455269A41E95ED2A1 /* ReceiptPDFViewer.swift */,
 				FA0F6B7A1B27504F3A01D915 /* ReceiptsView.swift */,
-				33984DD05D73275FAA351925 /* SettingsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -233,6 +232,7 @@
 		D3E00EB2C536EBF915769478 /* Fixtures */ = {
 			isa = PBXGroup;
 			children = (
+				176F5A03C6035FB203E707BD /* receipt-foetex.jpeg */,
 				4B663B1463F3B49FCAAB480A /* receipt-rewe-172.50.jpeg */,
 			);
 			path = Fixtures;
@@ -313,9 +313,11 @@
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					2388413BB99D34CE8B69A417 = {
+						DevelopmentTeam = 4BAV7733D8;
 						ProvisioningStyle = Automatic;
 					};
 					884DF9523CDD72D71E8A11D1 = {
+						DevelopmentTeam = 4BAV7733D8;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -330,6 +332,7 @@
 			);
 			mainGroup = F7C07AFC7ADD3D6D31450708;
 			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -352,6 +355,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E33FB648EFD44269D9237D48 /* receipt-foetex.jpeg in Resources */,
 				6FB2B54CA68B278199A3DDC5 /* receipt-rewe-172.50.jpeg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -398,7 +402,6 @@
 				F5910914E24EE3DDFAA29513 /* ReceiptVaultApp.swift in Sources */,
 				9C7FCE8AADB7DA1F64F21A86 /* ReceiptVaultError.swift in Sources */,
 				EA3345E79DC3E14EFAF31969 /* ReceiptsView.swift in Sources */,
-				E64698C823ADBB60C53A1647 /* SettingsView.swift in Sources */,
 				99E54421AE6CB29179E763AC /* StoreKitManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -419,7 +422,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = KPFUVNMKM8;
+				DEVELOPMENT_TEAM = 4BAV7733D8;
 				INFOPLIST_FILE = ReceiptVaultTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -502,7 +505,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = KPFUVNMKM8;
+				DEVELOPMENT_TEAM = 4BAV7733D8;
 				INFOPLIST_FILE = ReceiptVaultTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -524,7 +527,7 @@
 				CODE_SIGN_ENTITLEMENTS = ReceiptVault/ReceiptVault.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = KPFUVNMKM8;
+				DEVELOPMENT_TEAM = 4BAV7733D8;
 				INFOPLIST_FILE = ReceiptVault/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -545,7 +548,7 @@
 				CODE_SIGN_ENTITLEMENTS = ReceiptVault/ReceiptVault.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = KPFUVNMKM8;
+				DEVELOPMENT_TEAM = 4BAV7733D8;
 				INFOPLIST_FILE = ReceiptVault/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
